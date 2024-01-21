@@ -1,0 +1,31 @@
+{
+  "name": "babynames",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "lint": "vue-cli-service lint",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@jamescoyle/vue-icon": "^0.1.2",
+    "@mdi/js": "^7.4.47",
+    "axios": "^1.6.5",
+    "bulma": "^0.9.4",
+    "howler": "^2.2.4",
+    "ionicons": "^7.2.2",
+    "qs": "^6.11.2",
+    "vue": "^3.3.11",
+    "vue-router": "^4.2.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.5.2",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "eslint": "^8.49.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "http-proxy-middleware": "^2.0.6",
+    "vite": "^5.0.10"
+  },
+  "type": "module"
+}

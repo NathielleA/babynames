@@ -1,5 +1,4 @@
 import api from './api.js'
-import auth from './auth.js';
 
 
 export default{
@@ -11,8 +10,7 @@ export default{
         "lon" : lon,
         "page" : page
     }
-        let code = import.meta.env.VITE_AZURE_POST_ACTION_CODE;
-        const url = `/postAction?code=${code}`;
-        return api.post(url,data,auth);
+        const url = `/postAction`;
+        return api.post(url,data);
     }
 }

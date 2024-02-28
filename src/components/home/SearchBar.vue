@@ -15,6 +15,7 @@ export default {
         search() {
             // Adicione a lógica de pesquisa aqui (pode redirecionar para uma página de resultados, etc.)
             console.log('Pesquisar por:', this.querys);
+            
             this.$router.push(`/search/${this.querys}`)
         },
         async postAction(){
@@ -25,9 +26,6 @@ export default {
             console.log(e)
           }
         }
-    },
-    beforeUnmount(){
-      this.postAction()
     }
   
 };

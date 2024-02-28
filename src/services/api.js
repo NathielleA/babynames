@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default axios.create({
-    baseURL : import.meta.env.VITE_API,
+    baseURL : "https://adam-serveless-babynames.vercel.app/",
     timeout : 5000,
     headers : {
     'Accept': 'application/json', // Exemplo de cabeçalho, ajuste conforme necessário

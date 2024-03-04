@@ -30,7 +30,7 @@ export default {
 
 <style>
 .container-verde {
-  border: 1px solid #47bed2; /* Ajuste a espessura da borda conforme necessário */
+  border: 1px solid transparent; /* Ajuste a espessura da borda conforme necessário */
   background-color: transparent;
 }
 

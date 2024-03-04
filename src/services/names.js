@@ -1,12 +1,10 @@
 import api from './api.js'
-import auth from './auth.js'
+import { API_BASE_URL } from './config.js';
 
 export default{
     getNames : (name) => {
-        let code = import.meta.env.VITE_AZURE_GET_NAMES_CODE
-        console.log(code)
-        const url = `/getNames?code=${code}==&name=${name}`;
-        return api.get(url,auth)
+        const url = `${API_BASE_URL}/getNames?name=${name}`;
+        return api.get(url)
     }
 
 }

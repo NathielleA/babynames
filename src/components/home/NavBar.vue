@@ -2,19 +2,19 @@
   <nav class="navbar is-flex" role="navigation" aria-label="main navigation" id="navback">
     <div id="navbarBasicExample" class="navbar-menu">
       <div class="navbar-start">
-        <a class="navbar-item">
+        <router-link to="/" class="navbar-item">
           Home
-        </a>
-        <a class="navbar-item">
+        </router-link>
+        <router-link to="/" class="navbar-item">
           Info
-        </a>
+        </router-link>
       </div>
 
       <div class="navbar-end">
         <div class="navbar-brand">
-          <a class="navbar-item" href="https://bulma.io">
+          <router-link class="navbar-item" to="/">
             <img src="../../assets/warfare.png" width="112" height="28">
-          </a>
+          </router-link>
         </div>
       </div>
     </div>

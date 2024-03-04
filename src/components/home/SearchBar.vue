@@ -15,6 +15,7 @@ export default {
         search() {
             // Adicione a lógica de pesquisa aqui (pode redirecionar para uma página de resultados, etc.)
             console.log('Pesquisar por:', this.querys);
+            
             this.$router.push(`/search/${this.querys}`)
         },
         async postAction(){
@@ -25,9 +26,6 @@ export default {
             console.log(e)
           }
         }
-    },
-    beforeUnmount(){
-      this.postAction()
     }
   
 };
@@ -56,8 +54,8 @@ export default {
         <div class="block">
           <div class="content has-text-centered" style="margin-top: 20%;">
           <p>
-            <strong>Hera</strong> by <a href="https://jgthms.com">Lara Esquivel and João B. Rocha-Junior</a>. The source code is licensed
-            <a href="http://opensource.org/licenses/mit-license.php">Open Source</a>. The website is project from <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">ADAM UEFS</a>.
+            <strong>Hera</strong> by <a href="https://github.com/laraesquivel/babynames">Lara Esquivel and João B. Rocha-Junior</a>. The source code is licensed
+            <a href="http://opensource.org/licenses/mit-license.php">Open Source</a>. The website is project from <a href="https://sites.google.com/uefs.br/adam/home">ADAM UEFS</a>.
           </p>
     </div>
       </div>

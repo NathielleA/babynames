@@ -19,7 +19,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://adambabynames3.azurewebsites.net/api',  // Substitua pelo endereço do seu servidor
+        target: 'https://adam-serveless-babynames.vercel.app/',  // Substitua pelo endereço do seu servidor
         changeOrigin: true,
         ws : true,
         rewrite: (path) => path.replace(/^\/api/, ''),

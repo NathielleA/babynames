@@ -1,6 +1,5 @@
 import api from './api.js'
-import auth from './auth.js';
-
+import { API_BASE_URL } from './config.js';
 
 export default{
     postAction : (item,action,userId,lat,lon,page) =>{
@@ -11,8 +10,7 @@ export default{
         "lon" : lon,
         "page" : page
     }
-        let code = import.meta.env.VITE_AZURE_POST_ACTION_CODE;
-        const url = `/postAction?code=${code}`;
-        return api.post(url,data,auth);
+        const url = `${API_BASE_URL}/postAction`;
+        return api.post(url,data,);
     }
 }

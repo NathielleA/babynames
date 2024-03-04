@@ -17,8 +17,7 @@ export default {
         <div class="notification container-verde">
         <div class="content is-small">
           <h1>{{ name }}</h1>
-            <button class="button is-info is-inverted">Nomes Alternativos</button>
-            <h4>Avalie a nossa recomendação!</h4>
+
             <div class="block">
                 <MyThumbUp :name="this.name" style="margin-right: 10px;"/>
                 <MyThumbDown :name="this.name"/>
@@ -31,7 +30,7 @@ export default {
 
 <style>
 .container-verde {
-  border: 1px solid #47bed2; /* Ajuste a espessura da borda conforme necessário */
+  border: 1px solid transparent; /* Ajuste a espessura da borda conforme necessário */
   background-color: transparent;
 }
 

@@ -9,9 +9,9 @@ export default {
 
   methods: {
     async search() {
-      const novoValorDaBusca = this.querys;
+      //const novoValorDaBusca = this.querys;
 
-      window.location.href = `/search/${novoValorDaBusca}`;
+     // window.location.href = `/search/${novoValorDaBusca}`;
 
     },
   },

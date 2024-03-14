@@ -1,5 +1,5 @@
 <script>
-import action from '@/services/action';
+import { mapGetters,mapActions } from 'vuex';
 
 export default {
     data() {
@@ -7,24 +7,22 @@ export default {
             querys: '',
         };
     },
+    computed : {
+      ...mapGetters(['getName']),
+      name(){
+        return this.getName
+      }
+    },
     props : ['lat','lon','userId'],
+
     methods: {
-        updateQuery() {
-            // Pode adicionar lógica adicional aqui, se necessário
-        },
+        ...mapActions(['setNameQuery']),
         search() {
             // Adicione a lógica de pesquisa aqui (pode redirecionar para uma página de resultados, etc.)
             console.log('Pesquisar por:', this.querys);
-            
-            this.$router.push(`/search/${this.querys}`)
-        },
-        async postAction(){
-          try{
-              let response = await action.postAction(this.querys,2,this.userId,this.lat,this.lon,1)
-              console.log(response)
-          }catch(e){
-            console.log(e)
-          }
+
+            this.setNameQuery(this.querys);
+            this.$router.push(`/search`)
         }
     }
   

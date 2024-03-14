@@ -1,4 +1,6 @@
 <script>
+import { mapGetters,mapActions } from 'vuex';
+
 export default {
   data() {
     return {
@@ -7,13 +9,19 @@ export default {
     };
   },
 
+  computed:{
+    ...mapGetters(['getName']),
+    name(){
+      return this.getName;
+    }
+  },
+
   methods: {
-    async search() {
-      //const novoValorDaBusca = this.querys;
-
-     // window.location.href = `/search/${novoValorDaBusca}`;
-
-    },
+    ...mapActions(['setNameQuery']),
+    search() {      
+      this.setNameQuery(this.querys);
+      this.$emit('search',this.querys);
+    }
   },
 }
 </script>

@@ -67,7 +67,7 @@ export default {
     <NavBar/>
     <div class="container is-fluid" style="overflow: hidden; position: fixed;">
       <div class="column is-offset-1 is-10 is-offset-1" style="min-height: 100vh;">
-        <SearchBar :lat="this.lat" :lon="this.lon" :user-id="this.userId"/>
+        <SearchBar :user-id="this.userId"/>
       </div>
     </div>
     <RouterView/>

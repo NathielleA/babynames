@@ -12,13 +12,11 @@ export default {
     data() {
         return {
             responseData: null,
-            lat : null,
-            lon : null,
             userId : null
         };
     },
     computed : {
-      ...mapGetters(['getName','getSimiliarNames','getRecommededNames']),
+      ...mapGetters(['getName','getSimiliarNames','getRecommededNames', 'getLat','getLon']),
       name(){
         return this.getName;
       },
@@ -27,29 +25,18 @@ export default {
       },
       recommendedNames(){
         return this.getRecommededNames;
+      },
+      lat(){
+        return this.getLat;
+      },
+      lon(){
+        return this.getLon;
       }
 
     },
     methods: {
-      ...mapActions(['getNewNames']),
-    /*
-        async getasyncNames() {
-            console.log('getasyncNames called');
-            try {
-                let n = this.$route.params.name;
-                let response = await names.getNames(n,);
+      ...mapActions(['getNewNames','getPosix']),
 
-                this.responseData = response.data.data;
-                this.name = this.responseData.name;
-                this.similiarNames = this.responseData.similiarNames;
-                console.log(this.responseData)
-            }
-            catch (error) {
-                console.error('Error fetching names:', error);
-            }
-        },
-
-*/
         async checkUserID() {
               const userLocalStorage = localStorage.getItem("userID");
 
@@ -65,24 +52,6 @@ export default {
               }
             },
 
-        async getLoc(){
-          this.checkUserID();
-            if (navigator.geolocation){
-              navigator.geolocation.getCurrentPosition(
-                  (position) => {
-                    this.lat = position.coords.latitude;
-                    this.lon = position.coords.longitude;
-                    console.log(this.lat + this.lon)
-                  },
-                  (error) => {
-                    console.error("Erro ao obter localização:", error.message);
-                  }
-                );
-              } else {
-                console.error("Geolocalização não é suportada neste navegador.");
-              }
-        },
-
       async saveUserIDOnServer(userID) {
         try {
           let response = await users.setUserId(userID);
@@ -97,7 +66,7 @@ export default {
         try{
        // console.log("This is thumpub" + this.lat);
         const userLocalStorage = localStorage.getItem("userID");
-        let response = await action.postAction(this.$route.params.name,2,userLocalStorage,this.lat,this.lon,0);
+        let response = await action.postAction(this.name,2,userLocalStorage,this.lat,this.lon,0);
         console.log(response)
           }catch(e){
             console.log(e)
@@ -110,13 +79,10 @@ export default {
     },
     created() {
       
-        console.log(this.$route.params.name);
-       // this.checkUserID();
-        //this.getLoc()
-        //this.getasyncNames();
-        let n = this.$route.params.name;
-        this.getNewNames(n)
-
+      this.checkUserID();
+      this.getPosix()
+      this.getNewNames()
+      this.postSearchAction();
     },
     mounted(){
       //this.postSearchAction();
@@ -130,7 +96,7 @@ export default {
   <div>
     <NavBar class="is-hidden-mobile"/>
     <div class="container is-fluid" style="overflow: hidden;">
-      <MyTopSearchBar style="margin-bottom: 10px;"/>
+      <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;"/>
       <MySearchMainResult :name="this.name" :similiarNames="this.similiarNames" style="margin-top: 10px; margin-bottom: 10px;"/>
       <ul style="list-style: none; padding: 0;">
         <li v-for="(name,index) in recommendedNames" :key="index" style="margin-bottom: 10px;">

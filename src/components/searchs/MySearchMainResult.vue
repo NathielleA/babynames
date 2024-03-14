@@ -4,7 +4,11 @@
 export default {
   name: 'SeuComponente', // Substitua 'SeuComponente' pelo nome desejado
 
-  props: ['name', 'similiarNames']
+  props: ['name', 'similiarNames'],
+
+  created(){
+    console.log(this.similiarNames);
+  }
 }
 </script>
 
@@ -23,7 +27,7 @@ export default {
       <nav class="breadcrumb has-succeeds-separator" aria-label="breadcrumbs">
         <ul>
           <li><a href="#" style="text-decoration: none;">Nomes Alternativos</a></li>
-          <li v-for="alternativeName in similiarNames" :key="alternativeName">{{ alternativeName }}</li>
+          <li v-for="(alternativeName,index) in similiarNames" :key="index">{{ alternativeName }}</li>
         </ul>
       </nav>
     </div>

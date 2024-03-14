@@ -11,6 +11,7 @@ export default{
         "page" : page
     }
         const url = `${API_BASE_URL}/postAction`;
+        console.log(data)
         return api.post(url,data,);
     }
 }

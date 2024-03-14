@@ -3,8 +3,10 @@ import MyTopSearchBar from '@/components/searchs/MyTopSearchBar.vue';
 import NavBar from '@/components/home/NavBar.vue';
 import MySearchNameResult from '@/components/searchs/MySearchNameResult.vue'
 import MySearchMainResult from '@/components/searchs/MySearchMainResult.vue'
-import names from '../services/names'
+//import names from '../services/names'
 import users from '@/services/users';
+import action from '@/services/action';
+import { mapGetters,mapActions } from 'vuex';
 
 export default {
     data() {
@@ -15,15 +17,31 @@ export default {
             userId : null
         };
     },
-    methods: {
+    computed : {
+      ...mapGetters(['getName','getSimiliarNames','getRecommededNames']),
+      name(){
+        return this.getName;
+      },
+      similiarNames(){
+        return this.getSimiliarNames;
+      },
+      recommendedNames(){
+        return this.getRecommededNames;
+      }
 
+    },
+    methods: {
+      ...mapActions(['getNewNames']),
+    /*
         async getasyncNames() {
             console.log('getasyncNames called');
             try {
                 let n = this.$route.params.name;
-                let response = await names.getNames(n);
+                let response = await names.getNames(n,);
 
                 this.responseData = response.data.data;
+                this.name = this.responseData.name;
+                this.similiarNames = this.responseData.similiarNames;
                 console.log(this.responseData)
             }
             catch (error) {
@@ -31,7 +49,7 @@ export default {
             }
         },
 
-
+*/
         async checkUserID() {
               const userLocalStorage = localStorage.getItem("userID");
 
@@ -74,6 +92,18 @@ export default {
         }
     },
 
+    async postSearchAction() {
+        // Altera o estado de 'isClicked' quando o botão é clicado
+        try{
+       // console.log("This is thumpub" + this.lat);
+        const userLocalStorage = localStorage.getItem("userID");
+        let response = await action.postAction(this.$route.params.name,2,userLocalStorage,this.lat,this.lon,0);
+        console.log(response)
+          }catch(e){
+            console.log(e)
+          }
+      },
+
     generateUserID() {
       return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     },
@@ -81,9 +111,17 @@ export default {
     created() {
       
         console.log(this.$route.params.name);
-        this.checkUserID();
-        this.getasyncNames();
+       // this.checkUserID();
+        //this.getLoc()
+        //this.getasyncNames();
+        let n = this.$route.params.name;
+        this.getNewNames(n)
+
     },
+    mounted(){
+      //this.postSearchAction();
+    },
+  
     components: { NavBar, MyTopSearchBar, MySearchNameResult, MySearchMainResult}
 };
 </script>
@@ -93,10 +131,10 @@ export default {
     <NavBar class="is-hidden-mobile"/>
     <div class="container is-fluid" style="overflow: hidden;">
       <MyTopSearchBar style="margin-bottom: 10px;"/>
-      <MySearchMainResult :name="responseData.name" :similiarNamesNames="responseData.similiarNames" style="margin-top: 10px; margin-bottom: 10px;"/>
+      <MySearchMainResult :name="this.name" :similiarNames="this.similiarNames" style="margin-top: 10px; margin-bottom: 10px;"/>
       <ul style="list-style: none; padding: 0;">
-        <li v-for="name in responseData.recommendedNames" :key="name" style="margin-bottom: 10px;">
-          <MySearchNameResult :name="name"  :alternativeName="responseData.alternativeNames"/>
+        <li v-for="(name,index) in recommendedNames" :key="index" style="margin-bottom: 10px;">
+          <MySearchNameResult :name="name"/>
         </li>
       </ul>
     </div>

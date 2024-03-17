@@ -4,7 +4,7 @@
 
 
 //Dev url
-export const API_BASE_URL = "adam-serveless-babynames-j3a1vdba7-adam-babys-projects.vercel.app"
+export const API_BASE_URL = "https://adam-serveless-babynames-git-dev-adam-babys-projects.vercel.app/?vercelToolbarCode=jU7O7f-70w64OAX"
 
 //LocalHost Url
 

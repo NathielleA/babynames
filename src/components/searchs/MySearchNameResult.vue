@@ -8,7 +8,7 @@ export default {
     MyThumbDown,
     MyThumbUp
   },
-  props: ['name', 'closersNames', 'recommendedNames']
+  props: ['name']
 }
 </script>
 
@@ -20,7 +20,7 @@ export default {
 
             <div class="block">
                 <MyThumbUp :name="this.name" style="margin-right: 10px;"/>
-                <MyThumbDown :name="this.name"/>
+                <MyThumbDown :name="this.name" />
             </div>
 
   </div>

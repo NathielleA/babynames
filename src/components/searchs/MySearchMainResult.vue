@@ -6,9 +6,7 @@ export default {
 
   props: ['name', 'similiarNames'],
 
-  created(){
-    console.log(this.similiarNames);
-  }
+  
 }
 </script>
 

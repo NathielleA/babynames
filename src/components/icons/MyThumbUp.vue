@@ -10,7 +10,8 @@
   import SvgIcon from '@jamescoyle/vue-icon';
   import { mdiThumbUpOutline } from '@mdi/js';
   import action from '@/services/action';
-  
+  import { mapGetters } from 'vuex';
+
   export default {
     name: "MyThumbUp",
     components: {
@@ -25,6 +26,11 @@
       }
     },
     props : ['name'],
+    computed : {
+      ...mapGetters(['getName']),
+      relationalName(){
+        return this.getName;
+      }},
     created(){
       if (navigator.geolocation){
         navigator.geolocation.getCurrentPosition(
@@ -48,7 +54,7 @@
         try{
        // console.log("This is thumpub" + this.lat);
         const userLocalStorage = localStorage.getItem("userID");
-        let response = await action.postAction(this.name,1,userLocalStorage,this.lat,this.lon,2);
+        let response = await action.postAction(this.name,1,userLocalStorage,this.lat,this.lon,2,this.relationalName);
         console.log(response)
           }catch(e){
             console.log(e)

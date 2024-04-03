@@ -99,7 +99,7 @@ export default {
       <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;"/>
       <MySearchMainResult :name="this.name" :similiarNames="this.similiarNames" style="margin-top: 10px; margin-bottom: 10px;"/>
       <ul  class="is-compact"  style="list-style: none; padding: 0; margin: 0;">
-        <li v-for="(name,index) in recommendedNames" :key="index" style="margin-bottom: 0px !important;">
+        <li v-for="(name,index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
           <MySearchNameResult :name="name"/>
         </li>
       </ul>

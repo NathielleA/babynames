@@ -8,6 +8,8 @@ export default createStore({
     recommendedNames : [],
     lat : null,
     lon : null,
+    origin : null,
+    meaning : null
   },
   getters: {
     getName : state => state.name,
@@ -15,6 +17,8 @@ export default createStore({
     getRecommededNames : state => state.recommendedNames,
     getLat : state => state.lat,
     getLon : state => state.lon,
+    getOrigin : state => state.origin,
+    getMeaning : state => state.meaning
 
   },
   mutations: {
@@ -34,6 +38,12 @@ export default createStore({
     },
     setLon(state,lon){
       state.lon = lon;
+    },
+    setOrigin(state, origin){
+      state.origin = origin;
+    },
+    setMeaning(state, meaning){
+      state.meaning = meaning;
     }
   },
   actions: {
@@ -49,10 +59,14 @@ export default createStore({
           let n = response.data.data.name;
           let similiarNames = response.data.data.similiarNames;
           let recommendedNames = response.data.data.recommendedNames;
+          let origin = response.data.data.origin;
+          let meaning = response.data.data.meaning;
 
           commit('setName',n);
           commit('setSimiliarNames',similiarNames);
           commit('setRecommendedNames',recommendedNames);
+          commit('setOrigin', origin);
+          commit('setMeaning', meaning)
       }
       catch (error) {
           console.error('Error fetching names:', error);

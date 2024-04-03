@@ -1,5 +1,5 @@
 <template>
-    <button class="button is-icon is-borderless" @click="handleButtonClick">
+    <button class="button is-small is-icon is-borderless" @click="handleButtonClick">
       <span class="icon" :class="{ 'clicked': isClicked }">
         <svg-icon type="mdi" :path="path"></svg-icon>
       </span>

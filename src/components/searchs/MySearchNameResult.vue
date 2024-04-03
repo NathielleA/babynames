@@ -1,12 +1,14 @@
 <script>
 import MyThumbDown from "../icons/MyThumbDown.vue";
 import MyThumbUp from "@/components/icons/MyThumbUp.vue";
+import MySearchAnimatedButton from '@/components/searchs/MySearchAnimatedButton.vue'
 
 export default {
   name: 'MySearchNameResult',
   components: {
     MyThumbDown,
-    MyThumbUp
+    MyThumbUp,
+    MySearchAnimatedButton
   },
   props: ['name']
 }
@@ -15,9 +17,13 @@ export default {
 <template>
     <div class="container is-fluid">
         <div class="notification container-verde">
-        <div class="content is-small">
-          <h1>{{ name }}</h1>
+        <div class="level is-small">
+          <section class='hero'>
+              <p class="hero-subtitle">{{ name }}</p>
+              <MySearchAnimatedButton :query="this.name"/>
+              
 
+          </section>
             <div class="block">
                 <MyThumbUp :name="this.name" style="margin-right: 10px;"/>
                 <MyThumbDown :name="this.name" />

@@ -22,7 +22,7 @@ export default {
           Mais informações:
         </p> -->
       </div>
-      <nav class="breadcrumb has-succeeds-separator" aria-label="breadcrumbs">
+      <nav class="breadcrumb has-succeeds" aria-label="breadcrumbs">
         <ul>
           <li><a href="#" style="text-decoration: none;">Nomes Alternativos</a></li>
           <li v-for="(alternativeName,index) in similiarNames" :key="index">{{ alternativeName }}</li>
@@ -42,5 +42,35 @@ export default {
 /* Estilo adicional para a cor do botão ao passar o mouse */
 .is-custom-color:hover {
   background-color: #420024; /* Substitua pela cor desejada ao passar o mouse */
+}
+
+nav {
+  overflow: hidden;
+}
+
+/* Estilo para a lista dentro do nav */
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Estilo para os itens da lista */
+nav ul li {
+  float: left;
+  padding-left: 10px;
+}
+
+/* Estilo para os links dentro dos itens */
+nav ul li a {
+  display: block;
+  padding: 8px 16px;
+  text-decoration: none;
+  color: black;
+}
+
+/* Estilo para o hover dos links */
+nav ul li a:hover {
+  background-color: #ddd;
 }
 </style>

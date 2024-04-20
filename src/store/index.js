@@ -1,16 +1,20 @@
 import { createStore } from 'vuex'
 import names from '@/services/names'
+import createPersistedState from 'vuex-persistedstate';
 
 export default createStore({
   state: {
     name : null,
+    id :  null,
     similiarNames : [],
     recommendedNames : [],
     lat : null,
     lon : null,
     origin : null,
-    meaning : null
+    meaning : null,
+    mainResultID : null
   },
+  plugins : [createPersistedState()],
   getters: {
     getName : state => state.name,
     getSimiliarNames : state => state.similiarNames,
@@ -18,8 +22,9 @@ export default createStore({
     getLat : state => state.lat,
     getLon : state => state.lon,
     getOrigin : state => state.origin,
-    getMeaning : state => state.meaning
-
+    getMeaning : state => state.meaning,
+    getID : state => state.id,
+    getMainResultID : state => state.id
   },
   mutations: {
     setName(state, name){
@@ -44,6 +49,12 @@ export default createStore({
     },
     setMeaning(state, meaning){
       state.meaning = meaning;
+    },
+    setID(state,id){
+      state.id = id;
+    },
+    setMainResultID(state, mainResultID){
+        state.mainResultID = mainResultID;
     }
   },
   actions: {
@@ -61,12 +72,14 @@ export default createStore({
           let recommendedNames = response.data.data.recommendedNames;
           let origin = response.data.data.origin;
           let meaning = response.data.data.meaning;
+          let id = response.data.id;
 
           commit('setName',n);
           commit('setSimiliarNames',similiarNames);
           commit('setRecommendedNames',recommendedNames);
           commit('setOrigin', origin);
           commit('setMeaning', meaning)
+          commit('setID',id)
       }
       catch (error) {
           console.error('Error fetching names:', error);

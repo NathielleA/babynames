@@ -51,14 +51,14 @@
          // setTimeout(() => {
           //  this.showMessage = false;
           //}, 2000); // Tempo para mostrar a mensagem antes de desaparecer
-        }, 2000); // Tempo simulado da requisição
+        }); // Tempo simulado da requisição
       },
 
       async getNames(){
         try {
           //let n = this.$route.params.name;
           let response = await names.getNames(this.query);
-          console.log(response.data.data.similiarNames)
+          console.log(response.data.data)
           this.n = response.data.data.name;
           this.similiarNames = response.data.data.similiarNames;
           this.recommendedNames = response.data.data.recommendedNames;

@@ -16,7 +16,7 @@ export default {
         };
     },
     computed : {
-      ...mapGetters(['getName','getSimiliarNames','getRecommededNames', 'getLat','getLon']),
+      ...mapGetters(['getName','getSimiliarNames','getRecommededNames', 'getLat','getLon','getID']),
       name(){
         return this.getName;
       },
@@ -31,11 +31,14 @@ export default {
       },
       lon(){
         return this.getLon;
+      },
+      ID(){
+        return this.getID;
       }
 
     },
     methods: {
-      ...mapActions(['getNewNames','getPosix']),
+      ...mapActions(['getNewNames','getPosix','setMainResultID']),
 
         async checkUserID() {
               const userLocalStorage = localStorage.getItem("userID");
@@ -73,6 +76,11 @@ export default {
           }
       },
 
+    async searchRecommendedNames(){
+      this.getNewNames();
+      this.setMainResultID(this.ID)
+    },
+
     generateUserID() {
       return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     },
@@ -83,6 +91,7 @@ export default {
       this.getPosix()
       this.getNewNames()
       this.postSearchAction();
+      this.setMainResultID(this.ID);
     },
     mounted(){
       //this.postSearchAction();

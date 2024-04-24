@@ -4,20 +4,34 @@
 import MySearchAnimatedButton from '@/components/searchs/MySearchAnimatedButton.vue'
 import { mapGetters } from 'vuex';
 import action from '@/services/action';
+import MySearchDropDownUpButton from '@/components/searchs/MySearchDropDownUpButton.vue'
+import names from "@/services/names";
 
 export default {
   name: 'MySearchNameResult',
   components: {
    // MyThumbDown,
    // MyThumbUp,
-    MySearchAnimatedButton
+    MySearchAnimatedButton,
+    MySearchDropDownUpButton
   },
   data(){
     return{
       isClicked : false,
       lat : null,
       lon : null,
-      isActive : false
+      isActive : false,
+      isVisible : false,
+
+
+      isLoading: false,
+        showMessage: false,
+        similiarNames : [],
+        recommendedNames : [],
+        origin : '',
+        meaning : '',
+        id : null,
+        n : null
     }
 
 
@@ -44,6 +58,39 @@ export default {
       setTimeout(() => {
         this.isActive = false; // Retorna ao tamanho original após 1 segundo (1000 milissegundos)
       }, 1000);
+    },
+    toggleText() {
+        this.isVisible = !this.isVisible;
+      },
+
+    showText(){
+      this.getNewNames()
+    },
+
+    async getNewNames(){
+      console.log('getasyncNames called');
+      try {
+          //let n = this.$route.params.name;
+          let response = await names.getNames(this.name);
+          console.log(response)
+          this.n = response.data.data.name;
+          this.similiarNames = response.data.data.similiarNames;
+          this.recommendedNames = response.data.data.recommendedNames;
+          this.origin = response.data.data.origin;
+          this.meaning = response.data.data.meaning;
+          this.id = response.data.id;
+          this.showMessage = true
+
+
+          
+      }
+      catch (error) {
+          console.error('Error fetching names:', error);
+      }
+    },
+
+    hideText(){
+      this.showMessage = false
     }
     
   },
@@ -76,10 +123,10 @@ export default {
         <div class="notification container-verde">
         <div class="level is-small">
           <section class='hero'>
-              <a class="hero-subtitle link" :class="{active : isActive}"  @click="reaction">{{ name }}</a>
-              <MySearchAnimatedButton :query="this.name"/>
+            
+              <block><a class="hero-subtitle link" :class="{active : isActive}"  @click="reaction">{{ name }}</a><MySearchDropDownUpButton @icon-changed="showText"  @icon-changed2="hideText"/></block>
+              <MySearchAnimatedButton  :showMessage="this.showMessage" :Names="this.similiarNames" :origin="this.origin" :meaning="this.meaning"/>
               
-
           </section>
           <!--
             <div class="block">
@@ -108,7 +155,7 @@ export default {
   display: inline-block;
  /* padding: 10px 20px;*/
   text-decoration: none;
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease;
   font-family: Arial, sans-serif; /* Fonte padrão */
 }
 

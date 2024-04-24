@@ -22,10 +22,10 @@ export default {
           Mais informações:
         </p> -->
       </div>
-      <nav class="breadcrumb has-succeeds" aria-label="breadcrumbs">
+      <nav>
         <ul>
-          <li><a href="#" style="text-decoration: none;">Nomes Alternativos</a></li>
-          <li v-for="(alternativeName,index) in similiarNames" :key="index">{{ alternativeName }}</li>
+          <li>Nomes Similares: </li>
+          <li v-for="(alternativeName,index) in similiarNames" :key="index"><p v-if="index!=0"> &#8829;{{ alternativeName }}</p> <p v-else>{{ alternativeName }}</p></li>
         </ul>
       </nav>
     </div>

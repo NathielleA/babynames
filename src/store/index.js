@@ -12,7 +12,7 @@ export default createStore({
     lon : null,
     origin : null,
     meaning : null,
-    mainResultID : null
+    mainResultID : null,
   },
   plugins : [createPersistedState()],
   getters: {

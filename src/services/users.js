@@ -1,11 +1,10 @@
 import api from './api.js'
-
+import { API_BASE_URL } from './config.js';
 
 export default{
     setUserId : (userId) =>{
         let data = {'userId' : userId};
-        let code = import.meta.env.VITE_AZURE_POST_NEW_USER_CODE;
-        const url = `/postNewUser?code=${code}`;
+        const url = `${API_BASE_URL}/postNewUser`;
         return api.post(url,data)
     }
 }

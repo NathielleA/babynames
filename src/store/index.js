@@ -58,6 +58,11 @@ export default createStore({
     }
   },
   actions: {
+
+    setNameQuery2({commit}, name){
+      commit('setName',name);
+    },
+
     async setNameQuery({commit},name){
       commit('setName',name);
     },
@@ -101,6 +106,7 @@ export default createStore({
           console.error("Geolocalização não é suportada neste navegador.");
         }
     },
+
 
 
   },

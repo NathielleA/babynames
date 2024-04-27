@@ -37,6 +37,7 @@ export default {
   },
   props: ['name'],
   methods: {
+
     async reaction(){
         // Altera o estado de 'isClicked' quando o botão é clicado
         this.isClicked = !this.isClicked;
@@ -46,6 +47,7 @@ export default {
         const userLocalStorage = localStorage.getItem("userID");
         let response = await action.postAction(this.name,1,userLocalStorage,this.lat,this.lon,2,this.relationalNameID);
         console.log(response)
+        //this.$emit('clickName',this.name);
           }catch(e){
             console.log(e)
           }

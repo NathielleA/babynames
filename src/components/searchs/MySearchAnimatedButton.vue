@@ -4,7 +4,7 @@
           <span>
             <p>
               Veja mais informações
-            <span class="icon is-medium" icon-text custom-span>
+            <span  style="cursor: pointer;" class="icon is-medium" icon-text custom-span>
               <i class="fas">  
                 <svg xmlns="http://www.w3.org/2000/svg"  v-if="!this.iconChanged" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
               </i> 
@@ -34,7 +34,7 @@
               <strong><small>Origem: {{ this.origin }}</small></strong> 
             </p>
             <p v-if="this.origin">
-              <small class="is-size-7 has-text-grey-light">Nomes Similares: </small><small class="is-size-7 has-text-grey-light" v-for="(name,index) in this.Names" :key="index">{{"\t"}}{{name}} |</small>
+              <small class="is-size-7 has-text-grey-light">Nomes Similares: </small><small class="is-size-7 has-text-grey-light" v-for="(nameS,index) in this.similiarNames" :key="index">{{"\t"}}{{nameS}} |</small>
               <br />
             </p>
             <p v-if="this.meaning">

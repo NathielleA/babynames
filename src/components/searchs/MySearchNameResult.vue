@@ -4,8 +4,7 @@
 import MySearchAnimatedButton from '@/components/searchs/MySearchAnimatedButton.vue'
 import { mapGetters } from 'vuex';
 import action from '@/services/action';
-import MySearchDropDownUpButton from '@/components/searchs/MySearchDropDownUpButton.vue'
-import names from "@/services/names";
+//import MySearchDropDownUpButton from '@/components/searchs/MySearchDropDownUpButton.vue'
 
 export default {
   name: 'MySearchNameResult',
@@ -13,7 +12,7 @@ export default {
    // MyThumbDown,
    // MyThumbUp,
     MySearchAnimatedButton,
-    MySearchDropDownUpButton
+    
   },
   data(){
     return{
@@ -52,8 +51,7 @@ export default {
           }
     },
     toggleActiveLink() {
-      const audio = new Audio('/clickconfirm.wav'); // Substitua pelo caminho correto do seu arquivo de som
-      audio.play();
+     
       this.isActive = !this.isActive;
       setTimeout(() => {
         this.isActive = false; // Retorna ao tamanho original após 1 segundo (1000 milissegundos)
@@ -65,28 +63,6 @@ export default {
 
     showText(){
       this.getNewNames()
-    },
-
-    async getNewNames(){
-      console.log('getasyncNames called');
-      try {
-          //let n = this.$route.params.name;
-          let response = await names.getNames(this.name);
-          console.log(response)
-          this.n = response.data.data.name;
-          this.similiarNames = response.data.data.similiarNames;
-          this.recommendedNames = response.data.data.recommendedNames;
-          this.origin = response.data.data.origin;
-          this.meaning = response.data.data.meaning;
-          this.id = response.data.id;
-          this.showMessage = true
-
-
-          
-      }
-      catch (error) {
-          console.error('Error fetching names:', error);
-      }
     },
 
     hideText(){
@@ -124,8 +100,8 @@ export default {
         <div class="level is-small">
           <section class='hero'>
             
-              <block><a class="hero-subtitle link" :class="{active : isActive}"  @click="reaction">{{ name }}</a><MySearchDropDownUpButton @icon-changed="showText"  @icon-changed2="hideText"/></block>
-              <MySearchAnimatedButton  :showMessage="this.showMessage" :Names="this.similiarNames" :origin="this.origin" :meaning="this.meaning"/>
+              <block><a class="hero-subtitle link" :class="{active : isActive}"  @click="reaction">{{ name }}</a></block>
+              <MySearchAnimatedButton  :showMessage="this.showMessage" :query="this.name"/>
               
           </section>
           <!--

@@ -25,7 +25,7 @@ export default {
       <nav>
         <ul>
           <li>Nomes Similares: </li>
-          <li v-for="(alternativeName,index) in similiarNames" :key="index"><p v-if="index!=0"> &#8829;{{ alternativeName }}</p> <p v-else>{{ alternativeName }}</p></li>
+          <li v-for="(alternativeName,index) in similiarNames" :key="index"><p v-if="index!=0"> &#10171; {{ alternativeName }}</p> <p v-else>{{ alternativeName }}</p></li>
         </ul>
       </nav>
     </div>

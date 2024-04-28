@@ -7,7 +7,7 @@ import MySearchMainResult from '@/components/searchs/MySearchMainResult.vue'
 import users from '@/services/users';
 import action from '@/services/action';
 import { mapGetters,mapActions } from 'vuex';
-
+import MyChat from '@/components/searchs/MyChat.vue'
 export default {
     data() {
         return {
@@ -98,7 +98,7 @@ export default {
       //this.postSearchAction();
     },
   
-    components: { NavBar, MyTopSearchBar, MySearchNameResult, MySearchMainResult}
+    components: { NavBar, MyTopSearchBar, MySearchNameResult, MySearchMainResult, MyChat}
 };
 </script>
 
@@ -114,6 +114,7 @@ export default {
         </li>
       </ul>
     </div>
+    <MyChat/>
     <footer class="myfooter">
   <div class="content has-text-centered">
     <p>

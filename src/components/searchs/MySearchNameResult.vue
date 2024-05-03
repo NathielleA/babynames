@@ -2,9 +2,7 @@
 //import MyThumbDown from "../icons/MyThumbDown.vue";
 //import MyThumbUp from "@/components/icons/MyThumbUp.vue";
 import MySearchAnimatedButton from '@/components/searchs/MySearchAnimatedButton.vue'
-import { mapGetters } from 'vuex';
-import action from '@/services/action';
-//import MySearchDropDownUpButton from '@/components/searchs/MySearchDropDownUpButton.vue'
+import { mapGetters,mapActions } from 'vuex';
 
 export default {
   name: 'MySearchNameResult',
@@ -35,23 +33,25 @@ export default {
 
 
   },
+  computed:{
+    ...mapGetters(['getName','getMainResultID']),
+    getname(){
+      return this.getName;
+    },
+    relationalNameID(){
+        return this.getMainResultID;
+      }
+  },
   props: ['name'],
   methods: {
 
-    async reaction(){
-        // Altera o estado de 'isClicked' quando o botão é clicado
-        this.isClicked = !this.isClicked;
-        this.toggleActiveLink()
-        try{
-       // console.log("This is thumpub" + this.lat);
-        const userLocalStorage = localStorage.getItem("userID");
-        let response = await action.postAction(this.name,1,userLocalStorage,this.lat,this.lon,2,this.relationalNameID);
-        console.log(response)
-        //this.$emit('clickName',this.name);
-          }catch(e){
-            console.log(e)
-          }
+    ...mapActions(['setNameQuery','getNewNames']),
+    search() {      
+      this.setNameQuery(this.name);
+      this.$emit('search',this.name);
+      this.getNewNames();
     },
+
     toggleActiveLink() {
      
       this.isActive = !this.isActive;
@@ -72,11 +72,6 @@ export default {
     }
     
   },
-  computed : {
-      ...mapGetters(['getMainResultID']),
-      relationalNameID(){
-        return this.getMainResultID;
-      }},
     created(){
       if (navigator.geolocation){
         navigator.geolocation.getCurrentPosition(
@@ -102,7 +97,7 @@ export default {
         <div class="level is-small">
           <section class='hero'>
             
-              <block><a class="hero-subtitle link" :class="{active : isActive}"  @click="reaction">{{ name }}</a></block>
+              <block><a class="hero-subtitle link" :class="{active : isActive}"  @click="search()">{{ name }}</a></block>
               <MySearchAnimatedButton  :showMessage="this.showMessage" :query="this.name"/>
               
           </section>

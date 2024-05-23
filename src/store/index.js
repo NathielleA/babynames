@@ -71,17 +71,19 @@ export default createStore({
       try {
           //let n = this.$route.params.name;
           let response = await names.getNames(this.state.name);
-          //console.log(response.data.data.similiarNames)
-          let n = response.data.data.name;
-          let similiarNames = response.data.data.similiarNames;
-          let recommendedNames = response.data.data.recommendedNames;
-          let origin = response.data.data.origin;
-          let meaning = response.data.data.meaning;
+          console.log(response.data[0].name)
+          
+          let n = response.data[0].name;
+          let associedDetails = response.data[0].associedDetails;
+          let similiarNames = response.data[0].similiarNames;
+          //let recommendedNames = response.data[0].recommendedNames;
+          let origin = response.data[0].origin;
+          let meaning = response.data[0].meaning;
           let id = response.data.id;
 
           commit('setName',n);
           commit('setSimiliarNames',similiarNames);
-          commit('setRecommendedNames',recommendedNames);
+          commit('setRecommendedNames',associedDetails);
           commit('setOrigin', origin);
           commit('setMeaning', meaning)
           commit('setID',id)

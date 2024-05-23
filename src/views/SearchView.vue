@@ -12,7 +12,8 @@ export default {
     data() {
         return {
             responseData: null,
-            userId : null
+            userId : null,
+            posix : 0,
         };
     },
     computed : {
@@ -110,7 +111,7 @@ export default {
       <MySearchMainResult :name="this.name" :similiarNames="this.similiarNames" style="margin-top: 10px; margin-bottom: 10px;"/>
       <ul  class="is-compact"  style="list-style: none; padding: 0; margin: 0;">
         <li v-for="(name,index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
-          <MySearchNameResult :name="name"/>
+          <MySearchNameResult :name="name" :indice="index"/>
         </li>
       </ul>
     </div>

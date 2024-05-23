@@ -2,14 +2,20 @@
   <div>
     <span v-if="!showMessage" @click="showText">
           <span>
-            <p>
-              Veja mais informações
+            
+            <p v-if="this.meaning">
+              {{ this.meaning.slice(0,200) }}...
             <span  style="cursor: pointer;" class="icon is-medium" icon-text custom-span>
               <i class="fas">  
                 <svg xmlns="http://www.w3.org/2000/svg"  v-if="!this.iconChanged" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
               </i> 
             </span>
             </p>
+            <p v-else>
+              Não temos informações ainda sobre esse nome
+            </p>
+
+
           </span>
           </span>
           
@@ -50,7 +56,7 @@
   <script>
 
   //import { mapGetters,mapActions } from 'vuex';
-  import names from '@/services/names';
+  //import names from '@/services/names';
   //import { watch } from 'vue';
 //  import { mapGetters } from 'vuex';
 
@@ -68,22 +74,24 @@
     },*/
 
     watch : {
-      '$store.state.name'(novoValor){
-        console.log(novoValor);
-        this.clear();
+      '$store.state.recommendedNames'(novoValor){
+        if (novoValor){
+          this.clear();
+
+          console.log("Olhem o array " + novoValor);
+          this.origin = novoValor[this.indice].origin;
+          this.meaning = novoValor[this.indice].meaning;
+          this.similiarNames = novoValor[this.indice].similiarNames;}
       },
     },
     data() {
       return {
-        showMessage : false,
-        message : !this.showMessage ? "Veja mais informaçãoes" : '',
-        similiarNames : [],
-        recommendedNames : [],
         origin : '',
         meaning : '',
-        id : ''
-
-
+        similiarNames : '',
+        showMessage : false,
+        message : !this.showMessage ? "Veja mais informaçãoes" : '',
+  
       };
     },
 
@@ -92,7 +100,7 @@
         let count = 0;
         this.showMessage = !this.showMessage;
         if (count == 0){
-          this.getInfoAboutNames();
+          //this.getInfoAboutNames();
           count+=1
         }
         else{
@@ -102,32 +110,17 @@
       },
 
       async getInfoAboutNames(){
-        try{
-          let response = await names.getNames(this.query);
-          //console.log(response.data.data.similiarNames)
-          this.similiarNames = response.data.data.similiarNames;
-          this.recommendedNames = response.data.data.recommendedNames;
-          this.origin = response.data.data.origin;
-          this.meaning = response.data.data.meaning;
-          this.id = response.data.id;
-        }
-        catch(error){
-          console.log(error)
-        }
+ 
       },
 
       clear(){
-        this.similiarNames = [];
-          this.recommendedNames = [];
-          this.origin = '';
-          this.meaning = '';
-          this.id = '';
+        
           this.showMessage = false
         }
       },
     
   
-    props:["query"],
+    props:["indice"],
 
   };
   </script>

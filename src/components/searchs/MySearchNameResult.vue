@@ -42,13 +42,13 @@ export default {
         return this.getMainResultID;
       }
   },
-  props: ['name'],
+  props: ['name','indice'],
   methods: {
 
     ...mapActions(['setNameQuery','getNewNames']),
     search() {      
-      this.setNameQuery(this.name);
-      this.$emit('search',this.name);
+      this.setNameQuery(this.name.name);
+      this.$emit('search',this.name.name);
       this.getNewNames();
     },
 
@@ -97,8 +97,9 @@ export default {
         <div class="level is-small">
           <section class='hero'>
             
-              <block><a class="hero-subtitle link" :class="{active : isActive}"  @click="search()">{{ name }}</a></block>
-              <MySearchAnimatedButton  :showMessage="this.showMessage" :query="this.name"/>
+              <block><a class="hero-subtitle link" :class="{active : isActive}"  @click="search()">{{ name.name }}</a>
+                <MySearchAnimatedButton :indice="this.indice"  />
+              </block>
               
           </section>
           <!--

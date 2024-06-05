@@ -1,6 +1,8 @@
 import { createStore } from 'vuex'
 import names from '@/services/names'
+import action from '@/services/action';
 import createPersistedState from 'vuex-persistedstate';
+import users from '@/services/users';
 
 export default createStore({
   state: {
@@ -13,8 +15,17 @@ export default createStore({
     origin : null,
     meaning : null,
     mainResultID : null,
+    action_identifier : null,
+    userToken : null,
+    userObjectId : null,
+    page : 0,
+    relationalNameID : null,
+    relationalName : null,
+    clickedName : 0
+
   },
   plugins : [createPersistedState()],
+
   getters: {
     getName : state => state.name,
     getSimiliarNames : state => state.similiarNames,
@@ -24,7 +35,13 @@ export default createStore({
     getOrigin : state => state.origin,
     getMeaning : state => state.meaning,
     getID : state => state.id,
-    getMainResultID : state => state.id
+    getMainResultID : state => state.id,
+    action_identifier : state => state.action_identifier,
+    userToken : state => state.userToken,
+    userObjectId : state => state.userObjectId,
+    getPage : state => state.page,
+    getRelationaName : state => state.relationalName,
+    getRelationalNameID : state => state.relationalNameID
   },
   mutations: {
     setName(state, name){
@@ -55,7 +72,30 @@ export default createStore({
     },
     setMainResultID(state, mainResultID){
         state.mainResultID = mainResultID;
+    },
+
+    setActionIdentifier(state, action_identifier){
+      state.action_identifier = action_identifier;
+    },
+    setUserToken(state, userToken){
+      state.userToken = userToken;
+    },
+    setUserTokenID(state, userObjectId){
+      state.userObjectId = userObjectId;
+    },
+    setPage(state, page) {
+      state.page = page;
+    },
+    setRelationalName (state, relationalName){
+      state.relationalName = relationalName;
+    },
+    setRelationalNameID(state, relationalNameID){
+      state.relationalNameID = relationalNameID;
+    },
+    setClickedName(state,clickedName){
+      state.clickedName = clickedName
     }
+
   },
   actions: {
 
@@ -66,19 +106,30 @@ export default createStore({
     async setNameQuery({commit},name){
       commit('setName',name);
     },
-    async getNewNames({commit}){
+    async getNewNames({dispatch}){
+     // await dispatch('updateRelationalName');
+      await dispatch('updateNames');
+      await dispatch('postNewAction');
+
+    },
+
+    async updateNames({commit}){
       console.log('getasyncNames called');
       try {
           //let n = this.$route.params.name;
-          let response = await names.getNames(this.state.name);
-          console.log(response.data[0].name)
+          //let response = await names.getNames(this.state.name);
+          commit('setRelationalNameID', this.state.id);
+          commit('setRelationalName', this.state.name);
+
+          let response = await names.getNames(this.state.name)
+          console.log(response)
           
-          let n = response.data[0].name;
-          let associedDetails = response.data[0].associedDetails;
-          let similiarNames = response.data[0].similiarNames;
+          let n = response.data.name;
+          let associedDetails = response.data.associedDetails;
+          let similiarNames = response.data.similiarNames;
           //let recommendedNames = response.data[0].recommendedNames;
-          let origin = response.data[0].origin;
-          let meaning = response.data[0].meaning;
+          let origin = response.data.origin;
+          let meaning = response.data.meaning;
           let id = response.data.id;
 
           commit('setName',n);
@@ -87,10 +138,25 @@ export default createStore({
           commit('setOrigin', origin);
           commit('setMeaning', meaning)
           commit('setID',id)
-      }
+         }
       catch (error) {
           console.error('Error fetching names:', error);
       }
+    },
+
+    async postNewAction() {
+
+      try{
+        let response = await action.postAction(this.state.name,
+          this.state.id,this.state.clickedName, this.state.userObjectId,this.state.lat, this.state.lon,
+          this.state.page,this.state.relationalNameID, this.state.relationalName
+        );
+        console.log(response)
+      }
+      catch(error){
+        console.log(error)
+      }
+
     },
 
     async getPosix({commit}){
@@ -109,9 +175,33 @@ export default createStore({
         }
     },
 
+    async getUser({commit}){
+
+          const userLocalStorage = localStorage.getItem("userID");
+          const newUserID = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15); //Corrigir metodo posteriormennte
+
+          if (userLocalStorage === null) {
+            localStorage.setItem("userID", newUserID);
+            console.log("Novo usuário criado! ID: " + newUserID);
+            commit('setUserToken', newUserID)
+          } else {
+            console.log("Usuário reconhecido! ID: " + userLocalStorage);
+            commit('setUserToken',userLocalStorage);
+          
+          }
+          try {
+            let response = await users.setUserId(this.state.userToken);
+            console.log(response.data._id);
+            commit('setUserTokenID', response.data._id)
+          } catch (error) {
+            console.log(error);
+          }      
+
+    },
+
+
 
 
   },
-  modules: {
-  }
+
 })

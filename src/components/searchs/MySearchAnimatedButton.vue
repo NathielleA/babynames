@@ -3,8 +3,8 @@
     <span v-if="!showMessage" @click="showText">
           <span>
             
-            <p v-if="this.meaning">
-              {{ this.meaning.slice(0,200) }}...
+            <p v-if="this.meaning" class="">
+              {{ this.meaning.slice(0,80) }}...
             <span  style="cursor: pointer;" class="icon is-medium" icon-text custom-span>
               <i class="fas">  
                 <svg xmlns="http://www.w3.org/2000/svg"  v-if="!this.iconChanged" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
@@ -12,7 +12,7 @@
             </span>
             </p>
             <p v-else>
-              Não temos informações ainda sobre esse nome
+              Não temos informações ainda sobre esse nome, mas talvez tenhamos recomendações &#x1F603;
             </p>
 
 
@@ -39,10 +39,11 @@
             <p v-if="this.origin">
               <strong><small>Origem: {{ this.origin }}</small></strong> 
             </p>
+            <!--
             <p v-if="this.origin">
               <small class="is-size-7 has-text-grey-light">Nomes Similares: </small><small class="is-size-7 has-text-grey-light" v-for="(nameS,index) in this.similiarNames" :key="index">{{"\t"}}{{nameS}} |</small>
               <br />
-            </p>
+            </p> -->
             <p v-if="this.meaning">
               <small>{{ this.meaning }}</small>
               </p>
@@ -133,6 +134,11 @@
   .fade-enter, .fade-leave-to /* .fade-leave-active abaixo da versão 2.1.8 */ {
     opacity: 0;
   }
+
+  p {
+    font-size: 14px; /* Ou qualquer tamanho desejado */
+}
+
   .button-custom {
     border: none;
     background-color: transparent;

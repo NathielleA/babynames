@@ -17,8 +17,9 @@ export default {
   },
 
   methods: {
-    ...mapActions(['setNameQuery']),
+    ...mapActions(['setNameQuery' ]),
     search() {      
+      this.$store.commit('setClickedName', 0 );
       this.setNameQuery(this.querys);
       this.$emit('search',this.querys);
     }

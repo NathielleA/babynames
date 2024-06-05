@@ -1,6 +1,6 @@
 //Prod url
 
-export const API_BASE_URL = "https://adam-serveless-babynames.vercel.app";
+//export const API_BASE_URL = "https://adam-serveless-babynames.vercel.app";
 
 
 //Dev url
@@ -8,4 +8,4 @@ export const API_BASE_URL = "https://adam-serveless-babynames.vercel.app";
 
 //LocalHost Url
 
-//export const API_BASE_URL = "http://localhost:8000"
+export const API_BASE_URL = "http://localhost:8000"

@@ -48,6 +48,7 @@ export default {
     ...mapActions(['setNameQuery','getNewNames']),
     search() {      
       this.setNameQuery(this.name.name);
+      this.$store.commit('setClickedName',1);
       this.$emit('search',this.name.name);
       this.getNewNames();
     },
@@ -73,20 +74,7 @@ export default {
     
   },
     created(){
-      if (navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            this.lat = position.coords.latitude;
-            this.lon = position.coords.longitude;
-            
-          },
-          (error) => {
-            console.error("Erro ao obter localização:", error.message);
-          }
-        );
-      } else {
-        console.error("Geolocalização não é suportada neste navegador.");
-      }
+
     },
 }
 </script>

@@ -10,7 +10,7 @@ export default{
         "lat" :lat,
         "lon" : lon,
         "page" : page,
-        "ralationalName" : relationalName,
+        "relationalName" : relationalName,
         "relationalNameID" : relationalItemID
     }
         const url = `${API_BASE_URL}/postAction`;

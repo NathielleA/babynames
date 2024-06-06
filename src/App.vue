@@ -13,6 +13,7 @@ export default {
     this.$store.dispatch('getUser');
     this.$store.dispatch('getPosix');
     this.$store.commit('setClickedName', 0);
+    this.$store.commit('setPage', 0);
   },
 };
 </script>

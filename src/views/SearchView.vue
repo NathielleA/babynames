@@ -5,7 +5,6 @@ import MySearchNameResult from '@/components/searchs/MySearchNameResult.vue'
 import MySearchMainResult from '@/components/searchs/MySearchMainResult.vue'
 //import names from '../services/names'
 import users from '@/services/users';
-import action from '@/services/action';
 import { mapGetters,mapActions } from 'vuex';
 //import MyChat from '@/components/searchs/MyChat.vue'
 export default {
@@ -65,21 +64,10 @@ export default {
         }
     },
 
-    async postSearchAction() {
-        // Altera o estado de 'isClicked' quando o botão é clicado
-        try{
-       // console.log("This is thumpub" + this.lat);
-        const userLocalStorage = localStorage.getItem("userID");
-        let response = await action.postAction(this.name,2,userLocalStorage,this.lat,this.lon,0);
-        console.log(response)
-          }catch(e){
-            console.log(e)
-          }
-      },
+
 
     async searchRecommendedNames(){
       this.getNewNames();
-      this.setMainResultID(this.ID)
     },
 
     generateUserID() {
@@ -89,11 +77,9 @@ export default {
     },
     created() {
       
-      this.checkUserID();
-      this.getPosix()
+      this.$store.commit('setPage',1);
+
       this.getNewNames()
-      this.postSearchAction();
-      this.setMainResultID(this.ID);
     },
     mounted(){
       //this.postSearchAction();

@@ -5,7 +5,7 @@ export default{
     postAction : (item, nameID,action,userId,lat,lon,page,relationalItemID,relationalName) =>{
         let data = {"name":item,
         "nameID" : nameID,
-        "tokenId" : userId,
+        "userId" : userId,
         "action" : action,
         "lat" :lat,
         "lon" : lon,

@@ -7,6 +7,7 @@ import users from '@/services/users';
 export default createStore({
   state: {
     name : null,
+    before_name : null,
     id :  null,
     similiarNames : [],
     recommendedNames : [],
@@ -94,6 +95,9 @@ export default createStore({
     },
     setClickedName(state,clickedName){
       state.clickedName = clickedName
+    },
+    setBeforeName(state, before_name){
+      state.before_name = before_name;
     }
 
   },
@@ -119,7 +123,7 @@ export default createStore({
           //let n = this.$route.params.name;
           //let response = await names.getNames(this.state.name);
           commit('setRelationalNameID', this.state.id);
-          commit('setRelationalName', this.state.name);
+          commit('setRelationalName', this.state.before_name);
 
           let response = await names.getNames(this.state.name)
           console.log(response)
@@ -133,6 +137,7 @@ export default createStore({
           let id = response.data.id;
 
           commit('setName',n);
+          commit('setBeforeName',n);
           commit('setSimiliarNames',similiarNames);
           commit('setRecommendedNames',associedDetails);
           commit('setOrigin', origin);

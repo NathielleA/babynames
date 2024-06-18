@@ -12,26 +12,13 @@
             </span>
             </p>
             <p v-else>
-              Não temos informações ainda sobre esse nome, mas talvez tenhamos recomendações &#x1F603;
             </p>
 
 
           </span>
           </span>
           
-          <span v-else @click="showText">
-            <span>
-              <p>Oculte informações
 
-                <span class = "icon is-medium" icon-text custom-span>
-                  <i class="fas">
-                    <svg xmlns="http://www.w3.org/2000/svg"  height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/></svg>
-                  </i>
-                </span>
-              </p>
-              
-            </span>
-          </span>
       <transition name="fade">
       <div v-if="showMessage">    
         <div class="media-content">
@@ -44,12 +31,27 @@
               <small class="is-size-7 has-text-grey-light">Nomes Similares: </small><small class="is-size-7 has-text-grey-light" v-for="(nameS,index) in this.similiarNames" :key="index">{{"\t"}}{{nameS}} |</small>
               <br />
             </p> -->
-            <p v-if="this.meaning">
+            <p v-if="this.meaning" >
               <small>{{ this.meaning }}</small>
+              
+
+              <span @click="showText" class = "icon is-medium" icon-text custom-span>
+                  <i class="fas">
+                    <svg xmlns="http://www.w3.org/2000/svg"  height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/></svg>
+                  </i>
+                </span>
+
               </p>
+
+              
+
+
+
           </div>
         </div>
+        
 </div>
+
       </transition>
     </div>
   </template>
@@ -82,7 +84,9 @@
           console.log("Olhem o array " + novoValor);
           this.origin = novoValor[this.indice].origin;
           this.meaning = novoValor[this.indice].meaning;
-          this.similiarNames = novoValor[this.indice].similiarNames;}
+          this.similiarNames = novoValor[this.indice].similiarNames;
+         // this.recommendNames = novoValor[this.indice].recommendNames;
+        }
       },
     },
     data() {
@@ -90,6 +94,7 @@
         origin : '',
         meaning : '',
         similiarNames : '',
+      //  recommendNames : [],
         showMessage : false,
         message : !this.showMessage ? "Veja mais informaçãoes" : '',
   

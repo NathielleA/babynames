@@ -5,9 +5,10 @@
         <router-link to="/" class="navbar-item">
           Home
         </router-link>
+        <!--
         <router-link to="/" class="navbar-item">
           Info
-        </router-link>
+        </router-link> -->
       </div>
 
       <div class="navbar-end">

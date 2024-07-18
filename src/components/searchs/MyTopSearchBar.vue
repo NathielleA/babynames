@@ -22,6 +22,7 @@ export default {
       this.$store.commit('setClickedName', 0 );
       this.setNameQuery(this.querys);
       this.$emit('search',this.querys);
+      this.querys = ''
     }
   },
 }

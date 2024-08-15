@@ -12,6 +12,7 @@ export default {
   beforeCreate(){
     this.$store.dispatch('getUser');
     this.$store.dispatch('getPosix');
+    this.$store.dispatch('getPhrases');
     this.$store.commit('setClickedName', 0);
     this.$store.commit('setPage', 0);
   },

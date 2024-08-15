@@ -22,7 +22,9 @@ export default createStore({
     page : 0,
     relationalNameID : null,
     relationalName : null,
-    clickedName : 0
+    clickedName : 0,
+    actualPhrase : null,
+    otherPhrases : null
 
   },
   plugins : [createPersistedState()],
@@ -42,7 +44,9 @@ export default createStore({
     userObjectId : state => state.userObjectId,
     getPage : state => state.page,
     getRelationaName : state => state.relationalName,
-    getRelationalNameID : state => state.relationalNameID
+    getRelationalNameID : state => state.relationalNameID,
+    getActualPhrase : state => state.actualPhrase,
+    getOtherPhrases : state =>state.otherPhrases
   },
   mutations: {
     setName(state, name){
@@ -98,6 +102,12 @@ export default createStore({
     },
     setBeforeName(state, before_name){
       state.before_name = before_name;
+    },
+    setPhrase(state, phrase){
+      state.actualPhrase = phrase;
+    },
+    setOtherPhrase(state, others){
+      state.otherPhrases = others;
     }
 
   },
@@ -203,6 +213,24 @@ export default createStore({
           }      
 
     },
+
+    async getPhrases({commit}){
+      let userId = this.state.userToken;
+      let phrase = this.state.actualPhrase;
+      if (!phrase){
+      let numeroAleatorio = Math.floor(Math.random() * 10);
+      try{
+        let response = await users.getUserId(userId);
+        console.log(response)
+        let frase = response.data.phrases[numeroAleatorio];
+        commit('setPhrase',frase);
+        commit('setOtherPhrase',response.data.phrases)
+      }
+      catch(error){
+        console.log(error)
+      }}
+      
+    }
 
 
 

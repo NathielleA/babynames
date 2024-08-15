@@ -6,5 +6,10 @@ export default{
         let data = {'userId' : userId};
         const url = `${API_BASE_URL}/user`;
         return api.post(url,data)
+    },
+
+    getUserId : (userId) =>{
+        const url = `${API_BASE_URL}/getUser?userId=${userId}`;
+        return api.get(url)
     }
 }

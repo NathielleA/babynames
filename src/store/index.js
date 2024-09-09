@@ -229,6 +229,14 @@ export default createStore({
       catch(error){
         console.log(error)
       }}
+      else{
+        console.log('aqui estou')
+        let numeroAleatorio = Math.floor(Math.random() * 10);
+        console.log(numeroAleatorio);
+        let frase = this.state.otherPhrases[numeroAleatorio];
+        console.log(frase)
+        commit('setPhrase',frase);
+      }
       
     }
 

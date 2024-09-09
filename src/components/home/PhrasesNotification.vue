@@ -4,15 +4,13 @@
     @mousedown="startDrag" 
     @mouseup="stopDrag" 
     @mouseleave="stopDrag"
+    v-if="this.isVisible"
     :style="{ top: top + 'px', left: left + 'px' }">
     <!-- Conteúdo do componente -->
      <article class="message is-info">    
-      <div class="message-header">  Podemos ajudar?  <button class="delete" aria-label="delete"></button>
+      <div class="message-header">  Olá, eu sou Hera.  <button @click="close" class="delete" aria-label="delete"></button>
       </div>
-      <div class="message-body"><p>{{ phrase.Frase }}</p>
-        <button class="button is-rounded" style="margin-top: 10px;">Sim😊</button>
-        <button class="button is-rounded" style="margin-top: 10px;margin-left: 5px;">Não
-          😢</button>
+      <div class="message-body"><a @click="callstate" style="text-decoration: none;">{{ phrase.Frase }}</a>
       </div>
      </article>
   </div>
@@ -29,6 +27,7 @@ export default {
       left: window.innerWidth - 350, // Inicialmente na parte direita
       offsetX: 0,
       offsetY: 0,
+      isVisible : true
     };
   },
   computed:{
@@ -54,8 +53,12 @@ export default {
       this.isDragging = false;
       window.removeEventListener('mousemove', this.onDrag);
     },
-    closeNotification() {
-      this.$emit('close');
+    close() {
+      console.log('close')
+      this.isVisible = false;
+    },
+    callstate(){
+
     }
   }
 };
@@ -72,7 +75,7 @@ export default {
   cursor: move;
   user-select: none;
   width: 300px; /* Define uma largura fixa */
-  height: 200px; /* Define uma altura fixa */
+  height: 150px; /* Define uma altura fixa */
   overflow: hidden; /* Garante que o conteúdo não extrapole o tamanho da div */
 }
 </style>

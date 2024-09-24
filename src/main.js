@@ -20,4 +20,4 @@ app.mount('#app')
 // });
 
 // Usa o router 
-app.use(router).mount('#app');
+//app.use(router).mount('#app');

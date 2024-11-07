@@ -6,6 +6,7 @@ export default {
     return {
       querys: '',
       componentKey : 0,
+      placeholderBase: 'Digite o nome para pesquisar', // Placeholder padrão
     };
   },
 
@@ -13,6 +14,13 @@ export default {
     ...mapGetters(['getName']),
     name(){
       return this.getName;
+    },
+
+    // Placeholder dinâmico
+    placeholderText() {
+      return this.querys
+        ? `Pesquisando por: ${this.querys}` // Mostrar o texto digitado
+        : this.name || this.placeholderBase; // Mostrar `name` ou o padrão
     }
   },
 
@@ -26,6 +34,7 @@ export default {
     }
   },
 }
+
 </script>
 
 <template>
@@ -44,7 +53,12 @@ export default {
               <img src="../../assets/warfare.png">
             </figure>
           </a>
-          <input class="input is-rounded ml-3-desktop is-extra-small-mobile" type="text" v-model="querys" placeholder="Pesquise um nome">
+          <input 
+            class="input is-rounded ml-3-desktop is-extra-small-mobile" 
+            type="text" 
+            v-model="querys" 
+            :placeholder="placeholderText"
+          />
           <button class="button is-custom-color is-extra-small-mobile is-rounded ml-2" @click="search">
             <span class="icon">
               <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
@@ -68,5 +82,11 @@ export default {
 /* Estilo adicional para a cor do botão ao passar o mouse */
 .is-custom-color:hover {
   background-color: #420024; /* Substitua pela cor desejada ao passar o mouse */
+}
+
+.input.is-rounded::placeholder {
+  color: #444; /* Cor mais escura */
+  font-weight: bold; /* Faz o texto mais destacado */
+  opacity: 1; /* Totalmente visível */
 }
 </style>

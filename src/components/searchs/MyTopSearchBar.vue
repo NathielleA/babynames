@@ -86,7 +86,6 @@ export default {
 
 .input.is-rounded::placeholder {
   color: #444; /* Cor mais escura */
-  font-weight: bold; /* Faz o texto mais destacado */
-  opacity: 1; /* Totalmente visível */
+  font-weight: normal; /* Faz o texto mais destacado */
 }
 </style>

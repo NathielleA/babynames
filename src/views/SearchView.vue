@@ -2,7 +2,7 @@
 import MyTopSearchBar from '@/components/searchs/MyTopSearchBar.vue';
 import NavBar from '@/components/home/NavBar.vue';
 import MySearchNameResult from '@/components/searchs/MySearchNameResult.vue'
-import MySearchMainResult from '@/components/searchs/MySearchMainResult.vue'
+//import MySearchMainResult from '@/components/searchs/MySearchMainResult.vue'
 //import names from '../services/names'
 import users from '@/services/users';
 import { mapGetters,mapActions } from 'vuex';
@@ -85,7 +85,7 @@ export default {
       //this.postSearchAction();
     },
   
-    components: { NavBar, MyTopSearchBar, MySearchNameResult, MySearchMainResult}
+    components: { NavBar, MyTopSearchBar, MySearchNameResult}
 };
 </script>
 
@@ -94,7 +94,7 @@ export default {
     <NavBar class="is-hidden-mobile"/>
     <div class="container is-fluid" style="overflow: hidden;">
       <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;"/>
-      <!-- <MySearchMainResult :name="this.name" :similiarNames="this.similiarNames" style="margin-top: 10px; margin-bottom: 10px;"/> -->
+      <h1> Nomes recomendados para <b>{{name}}</b>:</h1>
       <ul  class="is-compact"  style="list-style: none; padding: 0; margin: 0;">
         <li v-for="(name,index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
           <MySearchNameResult :name="name" :indice="index"/>

@@ -85,9 +85,9 @@ export default {
         <div class="level is-small">
           <section class='hero'>
             
-              <block><a class="hero-subtitle link" :class="{active : isActive}"  @click="search()">{{ name.name }}</a>
+              <div><a class="hero-subtitle link" :class="{active : isActive}"  @click="search()">{{ name.name }}</a>
                 <MySearchAnimatedButton :indice="this.indice"  />
-              </block>
+              </div>
               
           </section>
           <!--

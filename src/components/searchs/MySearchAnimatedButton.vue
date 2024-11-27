@@ -84,7 +84,7 @@
           console.log("Olhem o array " + novoValor);
           this.origin = novoValor[this.indice].origin;
           this.meaning = novoValor[this.indice].meaning;
-          this.similiarNames = novoValor[this.indice].similiarNames;
+          //this.similiarNames = novoValor[this.indice].similiarNames;
          // this.recommendNames = novoValor[this.indice].recommendNames;
         }
       },
@@ -93,9 +93,10 @@
       return {
         origin : '',
         meaning : '',
-        similiarNames : '',
+        //similiarNames : '',
       //  recommendNames : [],
         showMessage : false,
+        iconChanged: false,
         message : !this.showMessage ? "Veja mais informaçãoes" : '',
   
       };

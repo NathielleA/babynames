@@ -22,7 +22,7 @@ export default {
       iconChanged: false,
 
 
-      isLoading: false,
+      isLoading: false, 
         showMessage: false,
         similiarNames : [],
         recommendedNames : [],

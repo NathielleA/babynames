@@ -19,6 +19,7 @@ export default {
       lon : null,
       isActive : false,
       isVisible : false,
+      iconChanged: false,
 
 
       isLoading: false,

@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import names from '@/services/names'
+import newNames from '@/services/names'
 import action from '@/services/action';
 import createPersistedState from 'vuex-persistedstate';
 import users from '@/services/users';
@@ -135,7 +135,7 @@ export default createStore({
           commit('setRelationalNameID', this.state.id);
           commit('setRelationalName', this.state.before_name);
 
-          let response = await names.getNames(this.state.name)
+          let response = await newNames.getNames(this.state.name)
           console.log(response)
           
           let n = response.data.name;

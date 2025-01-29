@@ -140,7 +140,7 @@ export default createStore({
           
           let n = response.data.name;
           let associedDetails = response.data.associedDetails;
-          let similiarNames = response.data.similiarNames;
+          //let similiarNames = response.data.similiarNames;
           //let recommendedNames = response.data[0].recommendedNames;
           let origin = response.data.origin;
           let meaning = response.data.meaning;
@@ -148,7 +148,7 @@ export default createStore({
 
           commit('setName',n);
           commit('setBeforeName',n);
-          commit('setSimiliarNames',similiarNames);
+          //commit('setSimiliarNames',similiarNames);
           commit('setRecommendedNames',associedDetails);
           commit('setOrigin', origin);
           commit('setMeaning', meaning)

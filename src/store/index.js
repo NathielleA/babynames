@@ -9,7 +9,7 @@ export default createStore({
     name : null,
     before_name : null,
     id :  null,
-    similiarNames : [],
+    // similiarNames : [],
     recommendedNames : [],
     lat : null,
     lon : null,
@@ -31,7 +31,7 @@ export default createStore({
 
   getters: {
     getName : state => state.name,
-    getSimiliarNames : state => state.similiarNames,
+    // getSimiliarNames : state => state.similiarNames,
     getRecommededNames : state => state.recommendedNames,
     getLat : state => state.lat,
     getLon : state => state.lon,
@@ -52,9 +52,9 @@ export default createStore({
     setName(state, name){
       state.name = name;
     },
-    setSimiliarNames(state,similiarNames){
-      state.similiarNames = similiarNames;
-    },
+    // setSimiliarNames(state,similiarNames){
+    //   state.similiarNames = similiarNames;
+    // },
     setRecommendedNames(state, recommendedNames){
       console.log(recommendedNames);
       state.recommendedNames = recommendedNames;

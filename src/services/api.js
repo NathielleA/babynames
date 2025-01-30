@@ -1,9 +1,11 @@
 import axios from "axios";
 
 export default axios.create({
-    timeout : 9000,
-    headers : {
-    'Accept': 'application/json', // Exemplo de cabeçalho, ajuste conforme necessário
+    baseURL: "https://adam-serveless-babynames.vercel.app",
+    timeout: 9000,
+    withCredentials: true, // Permite cookies e credenciais
+    headers: {
+        'Accept': 'application/json',
     }
 
 });

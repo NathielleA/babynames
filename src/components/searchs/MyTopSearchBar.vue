@@ -56,7 +56,8 @@ export default {
           <input 
             class="input is-rounded ml-3-desktop is-extra-small-mobile" 
             type="text" 
-            v-model="querys" 
+            v-model="querys"
+            @keypress.enter="search"
             placeholder="Digite o nome para pesquisar"
           />
           <button class="button is-custom-color is-extra-small-mobile is-rounded ml-2" @click="search">
@@ -84,8 +85,5 @@ export default {
   background-color: #420024; /* Substitua pela cor desejada ao passar o mouse */
 }
 
-.input.is-rounded::placeholder {
-  color: #444; /* Cor mais escura */
-  font-weight: normal; /* Faz o texto mais destacado */
-}
+
 </style>

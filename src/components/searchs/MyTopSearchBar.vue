@@ -57,7 +57,7 @@ export default {
             class="input is-rounded ml-3-desktop is-extra-small-mobile" 
             type="text" 
             v-model="querys" 
-            :placeholder="placeholderText"
+            placeholder="Digite o nome para pesquisar"
           />
           <button class="button is-custom-color is-extra-small-mobile is-rounded ml-2" @click="search">
             <span class="icon">

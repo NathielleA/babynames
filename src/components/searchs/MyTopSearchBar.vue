@@ -58,7 +58,7 @@ export default {
             type="text" 
             v-model="querys"
             @keypress.enter="search"
-            placeholder="Digite o nome para pesquisar"
+            placeholder="Digite um nome"
           />
           <button class="button is-custom-color is-extra-small-mobile is-rounded ml-2" @click="search">
             <span class="icon">

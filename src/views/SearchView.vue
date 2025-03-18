@@ -104,7 +104,7 @@ export default {
     <footer class="myfooter">
   <div class="content has-text-centered">
     <p>
-      <strong>Hera</strong> by <a href="https://github.com/laraesquivel/babynames">Lara Esquivel and João B. Rocha-Junior</a>. The source code is licensed
+      <strong>Hera</strong> by <a href="https://github.com/laraesquivel/babynames">Lara Esquivel, Nathielle C. Alves and João B. Rocha-Junior</a>. The source code is licensed
       <a href="http://opensource.org/licenses/mit-license.php">Open Source</a>. The website is project from <a href="https://sites.google.com/uefs.br/adam/home">ADAM UEFS</a>.
     </p>
   </div>

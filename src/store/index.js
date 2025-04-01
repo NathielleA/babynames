@@ -223,7 +223,7 @@ export default createStore({
         let response = await users.getUserId(userId);
         console.log(response)
         let frase = response.data.phrases[numeroAleatorio];
-        commit('setPhrase',frase);
+        commit('setPhrase', frase);
         commit('setOtherPhrase',response.data.phrases)
       }
       catch(error){
@@ -235,7 +235,7 @@ export default createStore({
         console.log(numeroAleatorio);
         let frase = this.state.otherPhrases[numeroAleatorio];
         console.log(frase)
-        commit('setPhrase',frase);
+        commit('setPhrase', frase);
       }
       
     }

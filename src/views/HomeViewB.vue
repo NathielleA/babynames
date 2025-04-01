@@ -4,7 +4,7 @@ import NavBar from '../components/home/NavBar.vue';
 import PhrasesNotification from '@/components/home/PhrasesNotification.vue';
 
 export default {
-  components: { SearchBar, NavBar,PhrasesNotification },
+  components: { SearchBar, NavBar, PhrasesNotification },
 };
 </script>
 

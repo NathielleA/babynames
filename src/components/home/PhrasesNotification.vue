@@ -10,7 +10,7 @@
      <article class="message is-info">    
       <div class="message-header">  Olá, eu sou Hera.  <button @click="close" class="delete" aria-label="delete"></button>
       </div>
-      <div class="message-body"><a @click="callstate" style="text-decoration: none;">{{ phrase.frase }}</a>
+      <div class="message-body"><a @click="callstate" style="text-decoration: none;">{{ phrase }}</a>
       </div>
      </article>
   </div>

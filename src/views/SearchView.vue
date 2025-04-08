@@ -100,8 +100,8 @@ export default {
           <MySearchNameResult :name="name" :indice="index"/>
         </li>
       </ul>
-      
-      <PhrasesNotification class="pn"/>
+
+      <!-- <PhrasesNotification class="pn"/> -->
 
     </div>
     <footer class="myfooter">

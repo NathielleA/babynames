@@ -98,9 +98,9 @@ export default {
       <ul  class="is-compact"  style="list-style: none; padding: 0; margin: 0;">
         <li v-for="(name,index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
           <MySearchNameResult :name="name" :indice="index"/>
-          <PhrasesNotification class="pn"/>
         </li>
       </ul>
+      <PhrasesNotification class="pn"/>
     </div>
     <footer class="myfooter">
   <div class="content has-text-centered">

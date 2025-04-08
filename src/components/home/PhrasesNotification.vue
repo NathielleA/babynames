@@ -8,9 +8,18 @@
     :style="{ top: top + 'px', left: left + 'px' }">
     <!-- Conteúdo do componente -->
      <article class="message is-info">    
-      <div class="message-header">  Olá, eu sou Hera.  <button @click="close" class="delete" aria-label="delete"></button>
+      <div class="message-header">  
+        Olá, eu sou Hera.  
+        <button @click="close" class="delete" aria-label="delete"></button>
       </div>
-      <div class="message-body"><a @click="callstate" style="text-decoration: none;">{{ phrase }}</a>
+      <div class="message-body">
+        <p><strong>Token do Usuário:</strong> {{ token }}</p>
+        <p><strong>ID do Usuário:</strong> {{ objectId }}</p>
+        <p><strong>Latitude:</strong> {{ latitude }}</p>
+        <p><strong>Longitude:</strong> {{ longitude }}</p>
+        <p><strong>Assinatura:</strong> {{ assignature || 'Não disponível' }}</p>
+        <p><strong>Frase:</strong> {{ phrase }}</p>
+        <a @click="callstate" style="text-decoration: none;">{{ phrase }}</a>
       </div>
      </article>
   </div>
@@ -30,11 +39,26 @@ export default {
       isVisible : true
     };
   },
-  computed:{
-    ...mapGetters(['getActualPhrase']),
-    phrase(){
+  computed: {
+    ...mapGetters(['getActualPhrase', 'userToken', 'userObjectId', 'getLat', 'getLon', 'getUserAssignature']), // Adicione os getters de latitude e longitude
+    phrase() {
       return this.getActualPhrase;
-    }
+    },
+    token() {
+      return this.userToken; // Retorna o token do usuário
+    },
+    objectId() {
+    return this.userObjectId; // Retorna o ID do objeto do usuário
+    },
+    latitude() {
+      return this.getLat; // Retorna a latitude do usuário
+    },
+    longitude() {
+      return this.getLon; // Retorna a longitude do usuário
+    },
+    assignature() {
+    return this.getUserAssignature; // Retorna a assinatura do usuário
+    },
   },
   methods: {
     startDrag(event) {
@@ -59,7 +83,10 @@ export default {
     },
     callstate(){
 
-    }
+    },
+    created() {
+      this.$store.dispatch('fetchUserAssignature'); // Busca a assinatura do usuário
+    },
   }
 };
 </script>
@@ -75,7 +102,7 @@ export default {
   cursor: move;
   user-select: none;
   width: 300px; /* Define uma largura fixa */
-  height: 150px; /* Define uma altura fixa */
+
   overflow: hidden; /* Garante que o conteúdo não extrapole o tamanho da div */
 }
 </style>

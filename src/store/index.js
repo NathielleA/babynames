@@ -19,6 +19,7 @@ export default createStore({
     action_identifier : null,
     userToken : null,
     userObjectId : null,
+    userAssignature: null, // Adiciona o estado para a assinatura do usuário
     page : 0,
     relationalNameID : null,
     relationalName : null,
@@ -42,6 +43,7 @@ export default createStore({
     action_identifier : state => state.action_identifier,
     userToken : state => state.userToken,
     userObjectId : state => state.userObjectId,
+    getUserAssignature: (state) => state.userAssignature, // Getter para a assinatura do usuário
     getPage : state => state.page,
     getRelationaName : state => state.relationalName,
     getRelationalNameID : state => state.relationalNameID,
@@ -87,6 +89,9 @@ export default createStore({
     },
     setUserTokenID(state, userObjectId){
       state.userObjectId = userObjectId;
+    },
+    setUserAssignature(state, assignature) {
+      state.userAssignature = assignature; // Atualiza o estado com a assinatura
     },
     setPage(state, page) {
       state.page = page;
@@ -212,6 +217,16 @@ export default createStore({
             console.log(error);
           }      
 
+    },
+
+    async fetchUserAssignature({ commit, state }) {
+      try {
+        const response = await users.getUserId(state.userToken); // Faz a requisição ao servidor
+        const assignature = response.data.assignature; // Obtém a assinatura do usuário
+        commit('setUserAssignature', assignature); // Atualiza o estado Vuex
+      } catch (error) {
+        console.error('Erro ao buscar a assinatura do usuário:', error);
+      }
     },
 
     async getPhrases({commit}){

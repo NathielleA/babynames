@@ -2,7 +2,7 @@
 import MyTopSearchBar from '@/components/searchs/MyTopSearchBar.vue';
 import NavBar from '@/components/home/NavBar.vue';
 import MySearchNameResult from '@/components/searchs/MySearchNameResult.vue'
-import MySearchMainResult from '@/components/searchs/MySearchMainResult.vue'
+// import MySearchMainResult from '@/components/searchs/MySearchMainResult.vue'
 import PhrasesNotification from '@/components/home/PhrasesNotification.vue';
 
 //import names from '../services/names'
@@ -87,7 +87,7 @@ export default {
       //this.postSearchAction();
     },
   
-    components: { NavBar, MyTopSearchBar, MySearchNameResult, MySearchMainResult,  PhrasesNotification}
+    components: { NavBar, MyTopSearchBar, MySearchNameResult,  PhrasesNotification}
 };
 </script>
 

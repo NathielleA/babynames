@@ -3,6 +3,8 @@ import MyTopSearchBar from '@/components/searchs/MyTopSearchBar.vue';
 import NavBar from '@/components/home/NavBar.vue';
 import MySearchNameResult from '@/components/searchs/MySearchNameResult.vue'
 import MySearchMainResult from '@/components/searchs/MySearchMainResult.vue'
+import PhrasesNotification from '@/components/home/PhrasesNotification.vue';
+
 //import names from '../services/names'
 import users from '@/services/users';
 import { mapGetters,mapActions } from 'vuex';
@@ -85,7 +87,7 @@ export default {
       //this.postSearchAction();
     },
   
-    components: { NavBar, MyTopSearchBar, MySearchNameResult, MySearchMainResult}
+    components: { NavBar, MyTopSearchBar, MySearchNameResult, MySearchMainResult,  PhrasesNotification}
 };
 </script>
 
@@ -95,23 +97,21 @@ export default {
     <div class="container is-fluid" style="overflow: hidden;">
       <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;"/>
       <h1> Nomes recomendados para <b>{{name}}</b>:</h1>
-      <ul class="is-compact" style="list-style: none; padding: 0; margin: 0;">
-        <li v-for="(name, index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
+      <ul  class="is-compact"  style="list-style: none; padding: 0; margin: 0;">
+        <li v-for="(name,index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
           <MySearchNameResult :name="name" :indice="index"/>
         </li>
       </ul>
-
-      <!-- Ensure PhrasesNotification is registered and properly used -->
-      <PhrasesNotification v-if="recommendedNames.length > 0" class="pn"/>
+      <PhrasesNotification class="pn"/>
     </div>
     <footer class="myfooter">
-      <div class="content has-text-centered">
-        <p>
-          <strong>Hera</strong> by <a href="https://github.com/laraesquivel/babynames">Lara Esquivel, Nathielle C. Alves and João B. Rocha-Junior</a>. The source code is licensed
-          <a href="http://opensource.org/licenses/mit-license.php">Open Source</a>. The website is project from <a href="https://sites.google.com/uefs.br/adam/home">ADAM UEFS</a>.
-        </p>
-      </div>
-    </footer>
+  <div class="content has-text-centered">
+    <p>
+      <strong>Hera</strong> by <a href="https://github.com/laraesquivel/babynames">Lara Esquivel, Nathielle C. Alves and João B. Rocha-Junior</a>. The source code is licensed
+      <a href="http://opensource.org/licenses/mit-license.php">Open Source</a>. The website is project from <a href="https://sites.google.com/uefs.br/adam/home">ADAM UEFS</a>.
+    </p>
+  </div>
+</footer>
   </div>
 </template>
 

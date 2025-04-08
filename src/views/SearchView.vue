@@ -101,7 +101,7 @@ export default {
         </li>
       </ul>
 
-      <!-- <PhrasesNotification class="pn"/> -->
+      <PhrasesNotification class="pn"/>
 
     </div>
     <footer class="myfooter">

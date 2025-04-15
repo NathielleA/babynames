@@ -5,7 +5,7 @@
     @mouseup="stopDrag" 
     @mouseleave="stopDrag"
     v-if="this.isVisible"
-    :style="{ top: top + 'px', left: left + 'px' }">
+    :style="draggingStyle">
     <!-- Conteúdo do componente -->
      <article class="message is-info">    
       <div class="message-header">  
@@ -32,8 +32,8 @@ export default {
   data() {
     return {
       isDragging: false,
-      top: window.innerHeight - 250, // Inicialmente na parte inferior
-      left: window.innerWidth - 350, // Inicialmente na parte direita
+      top: null, // Inicialmente na parte inferior
+      left: null, // Inicialmente na parte direita
       offsetX: 0,
       offsetY: 0,
       isVisible : true
@@ -41,6 +41,23 @@ export default {
   },
   computed: {
     ...mapGetters(['getActualPhrase', 'userToken', 'userObjectId', 'getLat', 'getLon', 'getUserAssignature']), // Adicione os getters de latitude e longitude
+    
+    draggingStyle() {
+      if (this.top !== null && this.left !== null) {
+        return {
+          top: this.top + 'px',
+          left: this.left + 'px',
+          position: 'fixed'
+        };
+      }
+      // Posição padrão no canto inferior direito
+      return {
+        bottom: '20px',
+        right: '20px',
+        position: 'fixed'
+      };
+    },
+
     phrase() {
       return this.getActualPhrase;
     },
@@ -62,10 +79,21 @@ export default {
   },
   methods: {
     startDrag(event) {
+        if (this.top === null || this.left === null) {
+        const rect = event.currentTarget.getBoundingClientRect();
+        this.top = rect.top;
+        this.left = rect.left;
+      }
+
       this.isDragging = true;
       this.offsetX = event.clientX - this.left;
       this.offsetY = event.clientY - this.top;
       window.addEventListener('mousemove', this.onDrag);
+
+      // this.isDragging = true;
+      // this.offsetX = event.clientX - this.left;
+      // this.offsetY = event.clientY - this.top;
+      // window.addEventListener('mousemove', this.onDrag);
     },
     onDrag(event) {
       if (this.isDragging) {
@@ -93,16 +121,14 @@ export default {
 
 <style scoped>
 .phrases-notification {
-  position: fixed;
   z-index: 1000;
-  background-color: transparent; /* Torna o fundo transparente */
+  background-color: transparent;
   padding: 10px;
-  border-radius: 0; /* Remove o arredondamento das bordas */
-  box-shadow: none; /* Remove a sombra da caixa */
   cursor: move;
   user-select: none;
-  width: 300px; /* Define uma largura fixa */
-
-  overflow: hidden; /* Garante que o conteúdo não extrapole o tamanho da div */
+  width: 300px;
+  max-width: 90vw;
+  overflow: hidden;
 }
+
 </style>

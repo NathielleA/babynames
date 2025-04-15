@@ -115,7 +115,32 @@ export default {
     created() {
       this.$store.dispatch('fetchUserAssignature'); // Busca a assinatura do usuário
     },
-  }
+
+    handleResize() {
+      // margem mínima visível
+
+      const outOfBounds =
+        this.left + 100 > window.innerWidth || // passou pra direita
+        this.top + 100 > window.innerHeight || // passou pra baixo
+        this.left < -100 || // muito à esquerda
+        this.top < -100;    // muito acima
+
+      if (outOfBounds) {
+        // Reseta pra canto inferior direito
+        this.top = null;
+        this.left = null;
+      }
+    },
+  },
+
+  mounted() {
+    window.addEventListener('resize', this.handleResize);
+  },
+
+  beforeUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+    
 };
 </script>
 

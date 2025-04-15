@@ -17,7 +17,7 @@
         <p><strong>ID do Usuário:</strong> {{ objectId }}</p>
         <p><strong>Latitude:</strong> {{ latitude }}</p>
         <p><strong>Longitude:</strong> {{ longitude }}</p>
-        <p><strong>Assinatura:</strong> {{ assignature || 'Não disponível' }}</p>
+        <p><strong>Assinatura:</strong> {{ assignature }}</p>
         <p><strong>Frase:</strong> {{ phrase }}</p>
         <a @click="callstate" style="text-decoration: none;">{{ phrase }}</a>
       </div>

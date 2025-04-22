@@ -18,7 +18,7 @@
         <p><strong>Latitude:</strong> {{ latitude }}</p>
         <p><strong>Longitude:</strong> {{ longitude }}</p>
         <p><strong>Assinatura:</strong> {{ assignature }}</p>
-        <p><strong>Frase:</strong> {{ frase }}</p>
+        <p><strong>Frase:</strong> {{ frase.Frase }}</p>
         <!-- <a @click="callstate" style="text-decoration: none;">{{ phrase }}</a> -->
       </div>
      </article>

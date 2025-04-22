@@ -248,11 +248,11 @@ export default createStore({
         console.log(error)
       }}
       else{
-        console.log('aqui estou')
+        console.log(phrase.length)
         let numeroAleatorio = Math.floor(Math.random() * phrase.length);
         console.log(numeroAleatorio);
         let frase = this.state.otherPhrases[numeroAleatorio];
-        console.log(frase)
+        console.log("Frase: ", frase)
         commit('setPhrase', frase);
       }
       

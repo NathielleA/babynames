@@ -113,6 +113,7 @@ export default {
 
     },
     created() {
+      this.$store.dispatch('getUserAssignature'); // Busca a assinatura do usuário
       this.$store.dispatch("getPhrases");
     },
 

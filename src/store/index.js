@@ -235,10 +235,12 @@ export default createStore({
     async getPhrases({commit}){
       let userId = this.state.userToken;
       let phrase = this.state.actualPhrase;
+      console
       if (!phrase){
-      let numeroAleatorio = Math.floor(Math.random() * phrase.length);
+      
       try{
         let response = await users.getUserId(userId);
+        let numeroAleatorio = Math.floor(Math.random() * response.data.phrases.length);
         let frase = response.data.phrases[numeroAleatorio];
         console.log("Frase: ", frase)
         commit('setPhrase', frase);
@@ -248,9 +250,8 @@ export default createStore({
         console.log(error)
       }}
       else{
-        console.log(phrase.length)
-        let numeroAleatorio = Math.floor(Math.random() * phrase.length);
-        console.log(numeroAleatorio);
+        let numeroAleatorio = Math.floor(Math.random() * this.state.otherPhrases.length);
+        // console.log(numeroAleatorio);
         let frase = this.state.otherPhrases[numeroAleatorio];
         console.log("Frase: ", frase)
         commit('setPhrase', frase);

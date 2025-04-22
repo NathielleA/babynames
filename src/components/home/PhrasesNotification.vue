@@ -112,10 +112,7 @@ export default {
     callstate(){
 
     },
-    created() {
-      this.$store.dispatch('getUserAssignature'); // Busca a assinatura do usuário
-      this.$store.dispatch("getPhrases");
-    },
+
 
     handleResize() {
       // margem mínima visível
@@ -133,6 +130,11 @@ export default {
       }
     },
   },
+
+  created() {
+      this.$store.dispatch('fetchUserAssignature'); // Busca a assinatura do usuário
+      this.$store.dispatch("getPhrases");
+    },
 
   mounted() {
     window.addEventListener('resize', this.handleResize);

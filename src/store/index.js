@@ -220,7 +220,7 @@ export default createStore({
     },
 
     async fetchUserAssignature({ commit }) {
-      console.log("eu aqui estou")
+      console.log("processando assinatura")
       try {
         
         let userId = this.state.userToken;

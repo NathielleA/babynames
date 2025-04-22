@@ -234,6 +234,7 @@ export default createStore({
 
     async getPhrases({commit}){
       let userId = this.state.userToken;
+      console.log(userId)
       let phrase = this.state.actualPhrase;
       if (!phrase){
       let numeroAleatorio = Math.floor(Math.random() * 10);

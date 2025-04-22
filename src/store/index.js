@@ -43,7 +43,7 @@ export default createStore({
     action_identifier : state => state.action_identifier,
     userToken : state => state.userToken,
     userObjectId : state => state.userObjectId,
-    getUserAssignature: (state) => state.userAssignature, // Getter para a assinatura do usuário
+    getUserAssignature: state => state.userAssignature, // Getter para a assinatura do usuário
     getPage : state => state.page,
     getRelationaName : state => state.relationalName,
     getRelationalNameID : state => state.relationalNameID,
@@ -221,8 +221,8 @@ export default createStore({
 
     async fetchUserAssignature({ commit, state }) {
       try {
-        const response = await users.getUserId(state.userToken); // Faz a requisição ao servidor
-        const assignature = response.data.assignature; // Obtém a assinatura do usuário
+        let response = await users.getUserId(state.userToken); // Faz a requisição ao servidor
+        let assignature = response.data.assignature; // Obtém a assinatura do usuário
         commit('setUserAssignature', assignature); // Atualiza o estado Vuex
       } catch (error) {
         console.error('Erro ao buscar a assinatura do usuário:', error);

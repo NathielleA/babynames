@@ -236,10 +236,10 @@ export default createStore({
       let userId = this.state.userToken;
       let phrase = this.state.actualPhrase;
       if (!phrase){
-      // let numeroAleatorio = Math.floor(Math.random() * 10);
+      let numeroAleatorio = Math.floor(Math.random() * phrase.length);
       try{
         let response = await users.getUserId(userId);
-        let frase = response.data.phrases[0];
+        let frase = response.data.phrases[numeroAleatorio];
         console.log("Frase: ", frase)
         commit('setPhrase', frase);
         commit('setOtherPhrase',response.data.phrases)
@@ -249,7 +249,7 @@ export default createStore({
       }}
       else{
         console.log('aqui estou')
-        let numeroAleatorio = Math.floor(Math.random() * 10);
+        let numeroAleatorio = Math.floor(Math.random() * phrase.length);
         console.log(numeroAleatorio);
         let frase = this.state.otherPhrases[numeroAleatorio];
         console.log(frase)

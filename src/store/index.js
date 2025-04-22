@@ -223,6 +223,7 @@ export default createStore({
       try {
         let response = await users.getUserId(state.userToken); // Faz a requisição ao servidor
         let assignature = response.data.assignature; // Obtém a assinatura do usuário
+        console.log(assignature)
         commit('setUserAssignature', assignature); // Atualiza o estado Vuex
       } catch (error) {
         console.error('Erro ao buscar a assinatura do usuário:', error);

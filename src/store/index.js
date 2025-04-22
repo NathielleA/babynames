@@ -238,6 +238,7 @@ export default createStore({
         let response = await users.getUserId(userId);
         console.log(response)
         let frase = response.data.phrases[numeroAleatorio];
+        console.log(frase)
         commit('setPhrase', frase);
         commit('setOtherPhrase',response.data.phrases)
       }

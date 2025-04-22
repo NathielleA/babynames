@@ -219,9 +219,10 @@ export default createStore({
 
     },
 
-    async fetchUserAssignature({ commit, state }) {
+    async fetchUserAssignature({ commit }) {
       try {
-        let response = await users.getUserId(state.userToken); // Faz a requisição ao servidor
+        let userId = this.state.userToken;
+        let response = await users.getUserId(userId); // Faz a requisição ao servidor
         let assignature = response.data.assignature; // Obtém a assinatura do usuário
         console.log("Assinatura do usuário: ", assignature.data.assignature)
         commit('setUserAssignature', assignature); // Atualiza o estado Vuex
@@ -237,9 +238,8 @@ export default createStore({
       let numeroAleatorio = Math.floor(Math.random() * 10);
       try{
         let response = await users.getUserId(userId);
-        console.log("Frase: ", response)
         let frase = response.data.phrases[numeroAleatorio];
-        console.log(frase)
+        console.log("Frase: ", frase)
         commit('setPhrase', frase);
         commit('setOtherPhrase',response.data.phrases)
       }

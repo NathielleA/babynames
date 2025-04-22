@@ -240,7 +240,7 @@ export default createStore({
       try{
         let response = await users.getUserId(userId);
         let frase = response.data.phrases[numeroAleatorio];
-        console.log("Frase: ", frase)
+        console.log("Frase: ", response)
         commit('setPhrase', frase);
         commit('setOtherPhrase',response.data.phrases)
       }

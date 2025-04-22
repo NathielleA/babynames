@@ -19,7 +19,7 @@
         <p><strong>Longitude:</strong> {{ longitude }}</p>
         <p><strong>Assinatura:</strong> {{ assignature }}</p>
         <p><strong>Frase:</strong> {{ frase }}</p>
-        <a @click="callstate" style="text-decoration: none;">{{ phrase }}</a>
+        <!-- <a @click="callstate" style="text-decoration: none;">{{ phrase }}</a> -->
       </div>
      </article>
   </div>
@@ -114,6 +114,7 @@ export default {
     },
     created() {
       this.$store.dispatch('fetchUserAssignature'); // Busca a assinatura do usuário
+      this.$store.dispatch("getPhrases");
     },
 
     handleResize() {

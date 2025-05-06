@@ -18,7 +18,11 @@
         <p><strong>Latitude:</strong> {{ latitude }}</p>
         <p><strong>Longitude:</strong> {{ longitude }}</p>
         <p><strong>Assinatura:</strong> {{ assignature }}</p>
-        <p><strong>Frase:</strong> {{ phrase.Frase }}</p>
+        <p><strong>Frase:</strong> 
+          <a @click="goToPhraseRecommendations" style="cursor: pointer; text-decoration: underline;">
+            {{ phrase.Frase }}
+          </a>
+        </p>
         <!-- <a @click="callstate" style="text-decoration: none;">{{ phrase }}</a> -->
       </div>
      </article>

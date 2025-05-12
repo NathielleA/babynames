@@ -83,10 +83,10 @@ export default {
   },
   methods: {
     goToPhraseRecommendations() {
-      if (this.phrase && this.phrase.Frase) {
+      if (this.phrase && this.phrase) {
         this.$router.push({
           name: 'RecommendationPage',
-          query: { phrase: this.phrase.Frase } // envia a frase como parâmetro de URL
+          query: { phrase: this.phrase } // envia a frase como parâmetro de URL
         });
       }
     },

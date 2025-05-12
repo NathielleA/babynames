@@ -82,6 +82,15 @@ export default {
     },
   },
   methods: {
+    goToPhraseRecommendations() {
+      if (this.phrase && this.phrase.Frase) {
+        this.$router.push({
+          name: 'RecommendationPage',
+          query: { phrase: this.phrase.Frase } // envia a frase como parâmetro de URL
+        });
+      }
+    },
+
     startDrag(event) {
         if (this.top === null || this.left === null) {
         const rect = event.currentTarget.getBoundingClientRect();

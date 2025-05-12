@@ -100,19 +100,23 @@ export default {
 </script>
 
 <template>
-    <div v-if="phrases && phrases.associedNames">
-    <h2>Recomendações para a frase: <b>{{ phrases.Frase }}</b></h2>
-    <ul style="list-style: none; padding: 0;">
-        <li 
-        v-for="(name, nameIndex) in phrases.associedNames" 
-        :key="nameIndex"
-        style="margin-bottom: 5px;"
-        >
-        {{ name }}
-        </li>
-    </ul>
-    </div>
-
+    <div>
+      <NavBar class="is-hidden-mobile"/>
+      <div v-if="phrases && phrases.associedNames">
+        <h2>Recomendações para a frase: <b>{{ phrases.Frase }}</b></h2>
+        <ul style="list-style: none; padding: 0;">
+            <li 
+            v-for="(name, nameIndex) in phrases.associedNames" 
+            :key="nameIndex"
+            style="margin-bottom: 5px;"
+            >
+            {{ name }}
+            </li>
+        </ul>
+        </div>
+  
+        <PhrasesNotification class="pn"/>
+      </div>
   
       <footer class="myfooter">
         <div class="content has-text-centered">

@@ -84,6 +84,9 @@ export default {
     created() {
         this.$store.commit('setPage', 1);
         this.getNewNames();
+        const phrase = this.$route.query.phrase;
+        console.log('Frase recebida:', phrase);
+
     },
     components: {
         NavBar,

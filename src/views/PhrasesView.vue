@@ -102,18 +102,22 @@ export default {
 <template>
     <div>
       <NavBar class="is-hidden-mobile"/>
-      <div v-if="phrases && phrases.associedNames">
-        <h2>Recomendações para a frase: <b>{{ phrases.Frase }}</b></h2>
-        <ul style="list-style: none; padding: 0;">
-            <li 
-            v-for="(name, nameIndex) in phrases.associedNames" 
-            :key="nameIndex"
-            style="margin-bottom: 5px;"
-            >
-            {{ name }}
-            </li>
-        </ul>
+      <div class="container is-fluid" style="overflow: hidden;">
+        <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;" />
+        
+        <div v-if="phrases && phrases.associedNames">
+            <h2>Recomendações para a frase: <b>{{ phrases.Frase }}</b></h2>
+            <ul style="list-style: none; padding: 0;">
+                <li 
+                v-for="(name, nameIndex) in phrases.associedNames" 
+                :key="nameIndex"
+                style="margin-bottom: 5px;"
+                >
+                {{ name }}
+                </li>
+            </ul>
         </div>
+
   
         <PhrasesNotification class="pn"/>
       </div>

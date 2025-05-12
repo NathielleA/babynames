@@ -87,6 +87,9 @@ export default {
         const phrase = this.$route.query.phrase;
         console.log('Frase recebida:', phrase);
 
+        const phraseQuery = this.$route.query.phrase;
+        console.log('Frase recebida via URL:', phraseQuery);
+
     },
     components: {
         NavBar,
@@ -97,26 +100,19 @@ export default {
 </script>
 
 <template>
-    <div>
-      <NavBar class="is-hidden-mobile"/>
-      <div class="container is-fluid" style="overflow: hidden;">
-        <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;" />
-        
-        <div v-for="(phrase, index) in phrases" :key="index" style="margin-bottom: 20px;">
-          <h2>Recomendações para frase: <b>{{ phrase.text }}</b></h2>
-          <ul style="list-style: none; padding: 0;">
-            <li 
-              v-for="(name, nameIndex) in phrase.associedNames" 
-              :key="nameIndex"
-              style="margin-bottom: 5px;"
-            >
-              {{ name }}
-            </li>
-          </ul>
-        </div>
-  
-        <PhrasesNotification class="pn"/>
-      </div>
+    <div v-if="phrases && phrases.associedNames">
+    <h2>Recomendações para a frase: <b>{{ phrases.Frase }}</b></h2>
+    <ul style="list-style: none; padding: 0;">
+        <li 
+        v-for="(name, nameIndex) in phrases.associedNames" 
+        :key="nameIndex"
+        style="margin-bottom: 5px;"
+        >
+        {{ name }}
+        </li>
+    </ul>
+    </div>
+
   
       <footer class="myfooter">
         <div class="content has-text-centered">

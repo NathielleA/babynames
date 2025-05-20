@@ -104,9 +104,9 @@ export default {
       <NavBar class="is-hidden-mobile"/>
       <div class="container is-fluid" style="overflow: hidden;">
         <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;" />
+        <h2>Recomendações para a frase: <b>{{ phrases.Frase }}</b></h2>
         
         <div v-if="phrases && phrases.associedNames">
-            <h2>Recomendações para a frase: <b>{{ phrases.Frase }}</b></h2>
             <ul style="list-style: none; padding: 0;">
                 <li 
                 v-for="(name, nameIndex) in phrases.associedNames" 

@@ -11,8 +11,10 @@ export default {
             responseData: null,
             userId: null,
             posix: 0,
+            fraseAtual: null,
         };
     },
+    
     computed: {
         ...mapGetters([
           'getName',
@@ -90,6 +92,11 @@ export default {
         const phraseQuery = this.$route.query.phrase;
         console.log('Frase recebida via URL:', phraseQuery);
 
+        const frase = this.$route.query.phrase;
+        if (frase) {
+            this.fraseAtual = JSON.parse(decodeURIComponent(frase)); // se estiver passada como JSON codificado
+            console.log("Frase atual:", this.fraseAtual);
+        }
     },
     components: {
         NavBar,
@@ -104,18 +111,14 @@ export default {
       <NavBar class="is-hidden-mobile"/>
       <div class="container is-fluid" style="overflow: hidden;">
         <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;" />
-        <h2>Recomendações para a frase: <b>{{ phrases.Frase }}</b></h2>
-        
-        <div v-if="phrases && phrases.associedNames">
-            <ul style="list-style: none; padding: 0;">
-                <li 
-                v-for="(name, nameIndex) in phrases.associedNames" 
-                :key="nameIndex"
-                style="margin-bottom: 5px;"
-                >
-                {{ name }}
-                </li>
-            </ul>
+        <h2>Recomendações para a frase: <b>{{ fraseAtual?.Frase }}</b></h2>
+
+        <div v-if="fraseAtual?.associedNames?.length">
+        <ul>
+            <li v-for="(name, i) in fraseAtual.associedNames" :key="i">
+            {{ name }}
+            </li>
+        </ul>
         </div>
 
   

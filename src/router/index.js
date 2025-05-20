@@ -57,7 +57,7 @@ const router = createRouter({
     {
       path: '/phrase-recommendations',
       name: 'RecommendationPage',
-      component: () => import('../views/PhrasesView.vue') // ajuste o caminho se for diferente
+      component: () => import('../views/PhrasesView.vue')
     },
     
     {

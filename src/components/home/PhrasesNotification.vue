@@ -20,7 +20,7 @@
         <p><strong>Assinatura:</strong> {{ assignature }}</p>
         <p><strong>Frase: </strong> 
           <a @click="goToPhraseRecommendations" style="cursor: pointer; text-decoration: underline;">
-            {{ phrase }}
+            {{ phrase.Frase }}
           </a>
         </p>
         <!-- <a @click="callstate" style="text-decoration: none;">{{ phrase }}</a> -->

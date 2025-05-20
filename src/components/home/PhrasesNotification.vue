@@ -19,10 +19,16 @@
         <p><strong>Longitude:</strong> {{ longitude }}</p>
         <p><strong>Assinatura:</strong> {{ assignature }}</p>
         <p><strong>Frase: </strong> 
-          <a @click="goToPhraseRecommendations" style="cursor: pointer; text-decoration: underline;">
-            {{ phrase.Frase }}
-          </a>
+          <template v-if="phrase && phrase.Frase">
+            <a @click="goToPhraseRecommendations" style="cursor: pointer; text-decoration: underline;">
+              {{ phrase.Frase }}
+            </a>
+          </template>
+          <template v-else>
+            Nenhuma frase associada ainda.
+          </template>
         </p>
+
         <!-- <a @click="callstate" style="text-decoration: none;">{{ phrase }}</a> -->
       </div>
      </article>

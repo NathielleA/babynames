@@ -86,17 +86,22 @@ export default {
     created() {
         this.$store.commit('setPage', 1);
         this.getNewNames();
-        const phrase = this.$route.query.phrase;
-        console.log('Frase recebida:', phrase);
-
         const phraseQuery = this.$route.query.phrase;
-        console.log('Frase recebida via URL:', phraseQuery);
+        console.log('Frase recebida:', phraseQuery);
 
-        const frase = this.$route.query.phrase;
-        if (frase) {
-            this.fraseAtual = JSON.parse(decodeURIComponent(frase)); // se estiver passada como JSON codificado
-            console.log("Frase atual:", this.fraseAtual);
+        if (phraseQuery) {
+            try {
+            const parsedPhrase = JSON.parse(decodeURIComponent(phraseQuery));
+            this.$store.commit('setPhrase', parsedPhrase); // se estiver usando Vuex
+            } catch (e) {
+            console.error("Erro ao decodificar a frase:", e);
+            }
         }
+        // const frase = this.$route.query.phrase;
+        // if (frase) {
+        //     this.fraseAtual = JSON.parse(decodeURIComponent(frase)); // se estiver passada como JSON codificado
+        //     console.log("Frase atual:", this.fraseAtual);
+        // }
     },
     components: {
         NavBar,

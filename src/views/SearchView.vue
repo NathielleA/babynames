@@ -42,7 +42,7 @@ export default {
     methods: {
       ...mapActions(['getNewNames','getPosix','setMainResultID','setNameQuery']),
 
-        async checkUserID() {
+      async checkUserID() {
               const userLocalStorage = localStorage.getItem("userID");
 
               if (userLocalStorage === null) {
@@ -55,7 +55,7 @@ export default {
                 console.log("Usuário reconhecido! ID: " + userLocalStorage);
                 this.userId = userLocalStorage;
               }
-            },
+        },
 
       async saveUserIDOnServer(userID) {
         try {
@@ -64,9 +64,31 @@ export default {
         } catch (error) {
           console.log(error);
         }
-    },
+      },
 
+      async updateUserAssignature() {
+            try {
+            const userId = localStorage.getItem("userID");
+            if (!userId) return;
+            const response = await fetch(`https://adam-serveless-babynames.vercel.app/update_user_assignature?userId=${userId}`);
+            const data = await response.json();
+            console.log("Assinatura atualizada:", data);
+            } catch (error) {
+            console.error("Erro ao atualizar assinatura:", error);
+            }
+        },
 
+        async updateUserPhrases() {
+            try {
+            const userId = localStorage.getItem("userID");
+            if (!userId) return;
+            const response = await fetch(`https://adam-serveless-babynames.vercel.app/update_user_phrases?userId=${userId}`);
+            const data = await response.json();
+            console.log("Frases atualizadas:", data);
+            } catch (error) {
+            console.error("Erro ao atualizar frases:", error);
+            }
+        },
 
     async searchRecommendedNames(){
       this.getNewNames();
@@ -82,6 +104,10 @@ export default {
       this.$store.commit('setPage',1);
 
       this.getNewNames()
+
+      // Atualiza assinatura e frases sempre que carregar a página
+        this.updateUserAssignature();
+        this.updateUserPhrases();
     },
     mounted(){
       //this.postSearchAction();

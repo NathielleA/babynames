@@ -23,7 +23,7 @@ export default {
           'getLat',
           'getLon',
           'getID',
-          'getPhrase' 
+          'getPhrase'
         ]),
         name() {
             return this.getName;
@@ -82,6 +82,30 @@ export default {
             return Math.random().toString(36).substring(2, 15) +
                    Math.random().toString(36).substring(2, 15);
         },
+
+        async updateUserAssignature() {
+            try {
+            const userId = localStorage.getItem("userID");
+            if (!userId) return;
+            const response = await fetch(`https://adam-serveless-babynames.vercel.app/update_user_assignature?userId=${userId}`);
+            const data = await response.json();
+            console.log("Assinatura atualizada:", data);
+            } catch (error) {
+            console.error("Erro ao atualizar assinatura:", error);
+            }
+        },
+
+        async updateUserPhrases() {
+            try {
+            const userId = localStorage.getItem("userID");
+            if (!userId) return;
+            const response = await fetch(`https://adam-serveless-babynames.vercel.app/update_user_phrases?userId=${userId}`);
+            const data = await response.json();
+            console.log("Frases atualizadas:", data);
+            } catch (error) {
+            console.error("Erro ao atualizar frases:", error);
+            }
+        }
     },
     created() {
         this.$store.commit('setPage', 1);
@@ -91,10 +115,10 @@ export default {
 
         if (phraseQuery) {
             try {
-            const parsedPhrase = JSON.parse(decodeURIComponent(phraseQuery));
-            this.$store.commit('setPhrase', parsedPhrase); // se estiver usando Vuex
+                const parsedPhrase = JSON.parse(decodeURIComponent(phraseQuery));
+                this.$store.commit('setPhrase', parsedPhrase); // se estiver usando Vuex
             } catch (e) {
-            console.error("Erro ao decodificar a frase:", e);
+                console.error("Erro ao decodificar a frase:", e);
             }
         }
         // const frase = this.$route.query.phrase;
@@ -102,6 +126,10 @@ export default {
         //     this.fraseAtual = JSON.parse(decodeURIComponent(frase)); // se estiver passada como JSON codificado
         //     console.log("Frase atual:", this.fraseAtual);
         // }
+
+        // Atualiza assinatura e frases sempre que carregar a página
+        this.updateUserAssignature();
+        this.updateUserPhrases();
     },
     components: {
         NavBar,

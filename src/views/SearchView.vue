@@ -19,12 +19,12 @@ export default {
         };
     },
     computed : {
-      ...mapGetters(['getName','getSimiliarNames','getRecommededNames', 'getLat','getLon','getID', 'getActualPhrase']),
+      ...mapGetters(['getName','getSimiliarNames','getRecommededNames', 'getLat','getLon','getID', 'getPhrase']),
       name(){
         return this.getName;
       },
       phrases(){
-        return this.getActualPhrase;
+        return this.getPhrase;
       },
       similiarNames(){
         return this.getSimiliarNames;
@@ -102,12 +102,6 @@ export default {
       return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     },
 
-    clearNameResults() {
-      // Limpa os resultados de nome quando uma frase é selecionada
-      this.$store.commit('setName', null);
-      this.$store.commit('setRecommendedNames', []);
-    },
-
     },
     created() {
       
@@ -123,10 +117,8 @@ export default {
       //this.postSearchAction();
     },
     watch: {
-      phrases(newPhrase) {
+      getPhrase(newPhrase) {
         console.log('Frase atualizada:', newPhrase);
-        // Quando a frase mudar, força a atualização da interface
-        this.$forceUpdate();
       },
     },
   
@@ -141,28 +133,21 @@ export default {
       <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;"/>
 
       <!-- Recomendados por nome pesquisado -->
-      <div v-if="name && recommendedNames && recommendedNames.length > 0">
-        <h1> Nomes recomendados para <b>{{ name }}</b>:</h1>
-        <ul class="is-compact" style="list-style: none; padding: 0; margin: 0;">
-          <li v-for="(name, index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
+      <h1> Nomes recomendados para <b>{{ name }}</b>:</h1>
+      <ul class="is-compact" style="list-style: none; padding: 0; margin: 0;">
+        <li v-for="(name, index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
+          <MySearchNameResult :name="name" :indice="index" />
+        </li>
+      </ul>
+
+      <!-- Recomendados pela frase selecionada -->
+      <div v-if="phrases && phrases.associedNames && phrases.associedNames.length > 0" style="margin-top: 30px;">
+        <h2>Recomendações para a frase: <b>{{ phrases.Frase }}</b></h2>
+        <ul style="list-style: none; padding: 0;">
+          <li v-for="(name, index) in phrases.associedNames" :key="'phrase-' + index" style="margin-bottom: -20px !important;">
             <MySearchNameResult :name="name" :indice="index" />
           </li>
         </ul>
-      </div>
-
-      <!-- Recomendados pela frase selecionada -->
-      <div v-if="phrases && phrases.Frase" style="margin-top: 30px;">
-        <h2>Recomendações para a frase: <b>"{{ phrases.Frase }}"</b></h2>
-        <div v-if="phrases.associedNames && phrases.associedNames.length > 0">
-          <ul style="list-style: none; padding: 0;">
-            <li v-for="(name, index) in phrases.associedNames" :key="'phrase-' + index" style="margin-bottom: -20px !important;">
-              <MySearchNameResult :name="name" :indice="index" />
-            </li>
-          </ul>
-        </div>
-        <div v-else>
-          <p style="color: #666; font-style: italic;">Nenhum nome encontrado para esta frase ainda.</p>
-        </div>
       </div>
 
       <PhrasesNotification class="pn"/>

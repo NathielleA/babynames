@@ -20,7 +20,7 @@
         <p><strong>Assinatura:</strong> {{ assignature }}</p>
         <p><strong>Frase: </strong> 
           <template v-if="phrase && phrase.Frase">
-            <a @click="goToPhraseRecommendations" style="cursor: pointer; text-decoration: underline; color: #3273dc;" title="Clique para buscar nomes baseados nesta frase">
+            <a @click="goToPhraseRecommendations" style="cursor: pointer; text-decoration: underline;">
               {{ phrase.Frase }}
             </a>
           </template>
@@ -90,9 +90,7 @@ export default {
   methods: {
     goToPhraseRecommendations() {
       if (this.phrase && this.phrase.Frase) {
-        console.log('Clicou na frase:', this.phrase.Frase);
         this.$store.commit('setActualPhrase', this.phrase); // atualiza a frase globalmente
-        this.$store.dispatch('searchByPhrase', this.phrase); // busca nomes baseados na frase
       }
     },
   

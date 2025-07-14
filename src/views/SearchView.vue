@@ -108,27 +108,12 @@ export default {
       this.$store.commit('setRecommendedNames', []);
     },
 
-    testPhraseSearch() {
-      // Método de teste para verificar se a busca por frases está funcionando
-      console.log('Testando busca por frases...');
-      console.log('Frase atual:', this.phrases);
-      if (this.phrases) {
-        this.$store.dispatch('searchByPhrase', this.phrases);
-      }
-    },
-
     },
     created() {
       
       this.$store.commit('setPage',1);
 
       this.getNewNames()
-
-      // Garante que o usuário seja carregado primeiro
-      this.$store.dispatch('getUser').then(() => {
-        // Depois carrega as frases do usuário
-        this.$store.dispatch('getPhrases');
-      });
 
       // Atualiza assinatura e frases sempre que carregar a página
       this.updateUserAssignature();
@@ -154,17 +139,6 @@ export default {
     <NavBar class="is-hidden-mobile"/>
     <div class="container is-fluid" style="overflow: hidden;">
       <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;"/>
-
-      <!-- Botão de teste para debug -->
-      <button @click="testPhraseSearch" class="button is-small is-info" style="margin-bottom: 10px;">
-        Testar Busca por Frase
-      </button>
-
-      <!-- Informações de debug -->
-      <div v-if="phrases" style="margin-bottom: 20px; padding: 10px; background-color: #f5f5f5; border-radius: 5px;">
-        <h3>Debug - Frase Atual:</h3>
-        <pre>{{ JSON.stringify(phrases, null, 2) }}</pre>
-      </div>
 
       <!-- Recomendados por nome pesquisado -->
       <div v-if="name && recommendedNames && recommendedNames.length > 0">

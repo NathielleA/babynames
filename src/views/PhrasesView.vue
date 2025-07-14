@@ -146,14 +146,13 @@ export default {
         <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;" />
         <h2>Recomendações para a frase: <b>{{ fraseAtual?.Frase }}</b></h2>
 
-        <div v-if="fraseAtual?.associedNames?.length">
-        <ul>
-            <li v-for="(name, i) in fraseAtual.associedNames" :key="i">
-            {{ name }}
+        <!-- <div v-if="fraseAtual?.associedNames?.length"> -->
+        <ul  class="is-compact"  style="list-style: none; padding: 0; margin: 0;">
+            <li v-for="(name,index) in fraseAtual.associedNames" :key="index" style="margin-bottom: -20px !important;">
+            <MySearchNameResult :name="name" :indice="index"/>
             </li>
         </ul>
-        </div>
-
+        <!-- </div> -->
   
         <PhrasesNotification class="pn"/>
       </div>

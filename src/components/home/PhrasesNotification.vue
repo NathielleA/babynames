@@ -90,7 +90,7 @@ export default {
   methods: {
     goToPhraseRecommendations() {
       if (this.phrase && this.phrase.Frase) {
-        this.$store.commit('setPhrase', this.phrase); // atualiza a frase globalmente
+        this.$store.commit('setActualPhrase', this.phrase); // atualiza a frase globalmente
       }
     },
   

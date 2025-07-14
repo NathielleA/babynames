@@ -90,13 +90,7 @@ export default {
   methods: {
     goToPhraseRecommendations() {
       if (this.phrase && this.phrase.Frase) {
-        // Codifica o objeto inteiro como JSON na URL
-        const encodedPhrase = encodeURIComponent(JSON.stringify(this.phrase));
-
-        this.$router.push({
-          name: 'RecommendationPage',
-          query: { phrase: encodedPhrase }
-        });
+        this.$store.commit('setPhrase', this.phrase); // atualiza a frase globalmente
       }
     },
   

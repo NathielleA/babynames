@@ -113,8 +113,10 @@ export default createStore({
     },
     setOtherPhrase(state, others){
       state.otherPhrases = others;
+    },
+    setActualPhrase(state, phrase) {
+      state.actualPhrase = phrase;
     }
-
   },
   actions: {
 

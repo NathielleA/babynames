@@ -8,6 +8,7 @@ import PhrasesNotification from '@/components/home/PhrasesNotification.vue';
 //import names from '../services/names'
 import users from '@/services/users';
 import { mapGetters,mapActions } from 'vuex';
+import phrases from '@/services/phrases';
 //import MyChat from '@/components/searchs/MyChat.vue'
 export default {
     data() {
@@ -18,9 +19,12 @@ export default {
         };
     },
     computed : {
-      ...mapGetters(['getName','getSimiliarNames','getRecommededNames', 'getLat','getLon','getID']),
+      ...mapGetters(['getName','getSimiliarNames','getRecommededNames', 'getLat','getLon','getID', 'getPhrase']),
       name(){
         return this.getName;
+      },
+      phrases(){
+        return this.getPhrase;
       },
       similiarNames(){
         return this.getSimiliarNames;
@@ -122,12 +126,25 @@ export default {
     <NavBar class="is-hidden-mobile"/>
     <div class="container is-fluid" style="overflow: hidden;">
       <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;"/>
-      <h1> Nomes recomendados para <b>{{name}}</b>:</h1>
-      <ul  class="is-compact"  style="list-style: none; padding: 0; margin: 0;">
-        <li v-for="(name,index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
-          <MySearchNameResult :name="name" :indice="index"/>
+
+      <!-- Recomendados por nome pesquisado -->
+      <h1> Nomes recomendados para <b>{{ name }}</b>:</h1>
+      <ul class="is-compact" style="list-style: none; padding: 0; margin: 0;">
+        <li v-for="(name, index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
+          <MySearchNameResult :name="name" :indice="index" />
         </li>
       </ul>
+
+      <!-- Recomendados pela frase selecionada -->
+      <div v-if="phrases && phrases.associedNames && phrases.associedNames.length > 0" style="margin-top: 30px;">
+        <h2>Recomendações para a frase: <b>{{ phrases.Frase }}</b></h2>
+        <ul style="list-style: none; padding: 0;">
+          <li v-for="(name, index) in phrases.associedNames" :key="'phrase-' + index" style="margin-bottom: -20px !important;">
+            <MySearchNameResult :name="name" :indice="index" />
+          </li>
+        </ul>
+      </div>
+
       <PhrasesNotification class="pn"/>
     </div>
     <footer class="myfooter">

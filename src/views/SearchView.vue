@@ -105,7 +105,11 @@ export default {
     handleNameClick(name) {
       // Quando um nome é clicado, busca recomendações para ele
       console.log('Nome clicado:', name);
-      this.$store.commit('setName', name.name);
+      
+      // Verifica se o nome tem a propriedade 'name' ou se é uma string
+      const nomeProcurado = name.name || name;
+      
+      this.$store.commit('setName', nomeProcurado);
       this.$store.dispatch('getNewNames');
       
       // Limpa a frase atual para mostrar apenas os resultados do nome
@@ -165,7 +169,7 @@ export default {
         <div v-if="phrases.associedNames && phrases.associedNames.length > 0">
           <ul style="list-style: none; padding: 0;">
             <li v-for="(name, index) in phrases.associedNames" :key="'phrase-' + index" style="margin-bottom: -20px !important;">
-              <div @click="handleNameClick(name)" style="cursor: pointer;">
+              <div @click="handleNameClick(name)" style="cursor: pointer;" v-if="name">
                 <MySearchNameResult :name="name" :indice="index" />
               </div>
             </li>

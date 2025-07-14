@@ -235,31 +235,34 @@ export default createStore({
       }
     },
 
-    async getPhrases({commit}){
-      let userId = this.state.userToken;
-      let phrase = this.state.actualPhrase;
-      console
+    async getPhrases({commit, state}){
+      let userId = state.userToken;
+      let phrase = state.actualPhrase;
+      
       if (!phrase){
-      
-      try{
-        let response = await users.getUserId(userId);
-        let numeroAleatorio = Math.floor(Math.random() * response.data.phrases.length);
-        let frase = response.data.phrases[numeroAleatorio];
-        console.log("Frase: ", frase)
-        commit('setPhrase', frase);
-        commit('setOtherPhrase',response.data.phrases)
+        try{
+          let response = await users.getUserId(userId);
+          if (response.data && response.data.phrases && response.data.phrases.length > 0) {
+            let numeroAleatorio = Math.floor(Math.random() * response.data.phrases.length);
+            let frase = response.data.phrases[numeroAleatorio];
+            console.log("Frase carregada:", frase);
+            commit('setPhrase', frase);
+            commit('setOtherPhrase', response.data.phrases);
+          } else {
+            console.log("Usuário não possui frases");
+          }
+        }
+        catch(error){
+          console.log("Erro ao carregar frases:", error);
+        }
+      } else {
+        if (state.otherPhrases && state.otherPhrases.length > 0) {
+          let numeroAleatorio = Math.floor(Math.random() * state.otherPhrases.length);
+          let frase = state.otherPhrases[numeroAleatorio];
+          console.log("Nova frase selecionada:", frase);
+          commit('setPhrase', frase);
+        }
       }
-      catch(error){
-        console.log(error)
-      }}
-      else{
-        let numeroAleatorio = Math.floor(Math.random() * this.state.otherPhrases.length);
-        // console.log(numeroAleatorio);
-        let frase = this.state.otherPhrases[numeroAleatorio];
-        console.log("Frase: ", frase)
-        commit('setPhrase', frase);
-      }
-      
     },
 
     async searchByPhrase({commit, state}, phrase) {
@@ -279,20 +282,48 @@ export default createStore({
           return;
         }
         
-        // Caso contrário, busque nomes baseados na frase via API
-        try {
-          const response = await phrases.searchNamesByPhrase(phrase.Frase);
-          if (response.data && response.data.length > 0) {
-            // Atualiza a frase com os nomes encontrados
-            const updatedPhrase = { ...phrase, associedNames: response.data };
-            commit('setActualPhrase', updatedPhrase);
-            console.log('Nomes encontrados para a frase:', response.data);
-          } else {
-            console.log('Nenhum nome encontrado para a frase');
+        // Verifica se a frase atual tem nomes para buscar
+        if (phrase.names && phrase.names.length > 0) {
+          console.log('Buscando detalhes dos nomes da frase:', phrase.names);
+          try {
+            const nameDetailsResponse = await phrases.getPhraseNames(phrase.names);
+            if (nameDetailsResponse.data && nameDetailsResponse.data.length > 0) {
+              const updatedPhrase = { ...phrase, associedNames: nameDetailsResponse.data };
+              commit('setActualPhrase', updatedPhrase);
+              console.log('Nomes encontrados para a frase:', nameDetailsResponse.data);
+            } else {
+              console.log('Nenhum nome encontrado para a frase');
+            }
+          } catch (apiError) {
+            console.warn('Erro na API de busca por nomes da frase:', apiError);
           }
-        } catch (apiError) {
-          console.warn('Erro na API de busca por frase:', apiError);
-          // Mantém a frase sem nomes associados
+        } else {
+          // Se a frase não tem nomes, busca uma nova frase com nomes associados
+          console.log('Frase não possui nomes, buscando nova frase...');
+          try {
+            let userId = state.userToken;
+            if (userId) {
+              const response = await phrases.getActualPhrase(userId);
+              console.log('Resposta da API para nova frase:', response.data);
+              
+              if (response.data) {
+                // Atualiza a frase com os dados da API
+                commit('setActualPhrase', response.data);
+                
+                // Se a nova frase tem nomes associados, busca os detalhes
+                if (response.data.names && response.data.names.length > 0) {
+                  const nameDetailsResponse = await phrases.getPhraseNames(response.data.names);
+                  if (nameDetailsResponse.data && nameDetailsResponse.data.length > 0) {
+                    const updatedPhrase = { ...response.data, associedNames: nameDetailsResponse.data };
+                    commit('setActualPhrase', updatedPhrase);
+                    console.log('Nomes encontrados para a nova frase:', nameDetailsResponse.data);
+                  }
+                }
+              }
+            }
+          } catch (apiError) {
+            console.warn('Erro na API de busca por nova frase:', apiError);
+          }
         }
         
       } catch (error) {

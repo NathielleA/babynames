@@ -91,6 +91,7 @@ export default {
     goToPhraseRecommendations() {
       if (this.phrase && this.phrase.Frase) {
         console.log('Clicou na frase:', this.phrase.Frase);
+        console.log('Estrutura completa da frase:', this.phrase);
         this.$store.commit('setActualPhrase', this.phrase); // atualiza a frase globalmente
         this.$store.dispatch('searchByPhrase', this.phrase); // busca nomes baseados na frase
       }

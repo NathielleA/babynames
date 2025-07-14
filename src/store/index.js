@@ -3,6 +3,7 @@ import newNames from '@/services/names'
 import action from '@/services/action';
 import createPersistedState from 'vuex-persistedstate';
 import users from '@/services/users';
+import phrases from '@/services/phrases';
 
 export default createStore({
   state: {
@@ -259,11 +260,45 @@ export default createStore({
         commit('setPhrase', frase);
       }
       
+    },
+
+    async searchByPhrase({commit, state}, phrase) {
+      try {
+        console.log('Buscando nomes para a frase:', phrase);
+        
+        // Limpa os resultados de nome anterior
+        commit('setName', null);
+        commit('setRecommendedNames', []);
+        
+        // Atualiza a frase atual
+        commit('setActualPhrase', phrase);
+        
+        // Se a frase já tem nomes associados, use-os
+        if (phrase.associedNames && phrase.associedNames.length > 0) {
+          console.log('Usando nomes já associados à frase');
+          return;
+        }
+        
+        // Caso contrário, busque nomes baseados na frase via API
+        try {
+          const response = await phrases.searchNamesByPhrase(phrase.Frase);
+          if (response.data && response.data.length > 0) {
+            // Atualiza a frase com os nomes encontrados
+            const updatedPhrase = { ...phrase, associedNames: response.data };
+            commit('setActualPhrase', updatedPhrase);
+            console.log('Nomes encontrados para a frase:', response.data);
+          } else {
+            console.log('Nenhum nome encontrado para a frase');
+          }
+        } catch (apiError) {
+          console.warn('Erro na API de busca por frase:', apiError);
+          // Mantém a frase sem nomes associados
+        }
+        
+      } catch (error) {
+        console.error('Erro ao buscar nomes por frase:', error);
+      }
     }
-
-
-
-
   },
 
 })

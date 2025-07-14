@@ -116,6 +116,11 @@ export default {
     mounted(){
       //this.postSearchAction();
     },
+    watch: {
+      getPhrase(newPhrase) {
+        console.log('Frase atualizada:', newPhrase);
+      },
+    },
   
     components: { NavBar, MyTopSearchBar, MySearchNameResult,  PhrasesNotification}
 };

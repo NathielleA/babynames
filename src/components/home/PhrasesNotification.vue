@@ -90,7 +90,19 @@ export default {
   methods: {
     goToPhraseRecommendations() {
       if (this.phrase && this.phrase.Frase) {
-        this.$store.commit('setActualPhrase', this.phrase); // atualiza a frase globalmente
+        console.log('Clicou na frase:', this.phrase.Frase);
+        console.log('Estrutura completa da frase:', this.phrase);
+        
+        // Atualiza a frase globalmente
+        this.$store.commit('setActualPhrase', this.phrase);
+        
+        // Busca nomes baseados na frase
+        this.$store.dispatch('searchByPhrase', this.phrase);
+        
+        // Navega para a SearchView se não estiver nela
+        if (this.$route.name !== 'search') {
+          this.$router.push({ name: 'search' });
+        }
       }
     },
   

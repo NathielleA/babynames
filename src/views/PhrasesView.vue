@@ -1,4 +1,3 @@
-@ -1,175 +1,174 @@
 <script>
 import MyTopSearchBar from '@/components/searchs/MyTopSearchBar.vue';
 import NavBar from '@/components/home/NavBar.vue';
@@ -129,8 +128,8 @@ export default {
         }
 
         // Atualiza assinatura e frases sempre que carregar a página
-        this.updateUserAssignature();
-        this.updateUserPhrases();
+        // this.updateUserAssignature();
+        // this.updateUserPhrases();
     },
     components: {
         NavBar,

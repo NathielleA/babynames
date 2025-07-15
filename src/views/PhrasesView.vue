@@ -121,7 +121,7 @@ export default {
                 console.error("Erro ao decodificar a frase:", e);
             }
         }
-        //const frase = this.$route.query.phrase;
+        const frase = this.$route.query.phrase;
         if (frase) {
             this.fraseAtual = JSON.parse(decodeURIComponent(frase)); // se estiver passada como JSON codificado
             console.log("Frase atual:", this.fraseAtual);

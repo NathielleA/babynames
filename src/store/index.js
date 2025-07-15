@@ -236,26 +236,25 @@ export default createStore({
       let userId = this.state.userToken;
       let phrase = this.state.actualPhrase;
       console
-      if (!phrase){
-      
-      try{
-        let response = await users.getUserId(userId);
-        let numeroAleatorio = Math.floor(Math.random() * response.data.phrases.length);
-        let frase = response.data.phrases[numeroAleatorio];
-        console.log("Frase: ", frase)
-        commit('setPhrase', frase);
-        commit('setOtherPhrase',response.data.phrases)
-      }
-      catch(error){
-        console.log(error)
-      }}
-      else{
-        let numeroAleatorio = Math.floor(Math.random() * this.state.otherPhrases.length);
-        // console.log(numeroAleatorio);
-        let frase = this.state.otherPhrases[numeroAleatorio];
-        console.log("Frase: ", frase)
-        commit('setPhrase', frase);
-      }
+      // if (!phrase){
+        try{
+          let response = await users.getUserId(userId);
+          let numeroAleatorio = Math.floor(Math.random() * response.data.phrases.length);
+          let frase = response.data.phrases[numeroAleatorio];
+          console.log("Frase: ", frase)
+          commit('setPhrase', frase);
+          commit('setOtherPhrase',response.data.phrases)
+        }
+        catch(error){
+          console.log(error)
+        }}
+      // else{
+      //   let numeroAleatorio = Math.floor(Math.random() * this.state.otherPhrases.length);
+      //   // console.log(numeroAleatorio);
+      //   let frase = this.state.otherPhrases[numeroAleatorio];
+      //   console.log("Frase: ", frase)
+      //   commit('setPhrase', frase);
+      // }
       
     }
 

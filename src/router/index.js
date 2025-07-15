@@ -54,11 +54,11 @@ const router = createRouter({
       component: () => import('../views/SearchView.vue')
     },
 
-    // {
-    //   path: '/phrase-recommendations',
-    //   name: 'RecommendationPage',
-    //   component: () => import('../views/PhrasesView.vue')
-    // },
+    {
+      path: '/phrase-recommendations',
+      name: 'RecommendationPage',
+      component: () => import('../views/PhrasesView.vue')
+    },
     
     {
 

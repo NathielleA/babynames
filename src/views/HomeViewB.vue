@@ -1,7 +1,7 @@
 <script>
 import SearchBar from '../components/home/SearchBar.vue';
 import NavBar from '../components/home/NavBar.vue';
-import PhrasesNotification from '@/components/home/PhrasesNotification.vue';
+// import PhrasesNotification from '@/components/home/PhrasesNotification.vue';
 
 export default {
   components: { SearchBar, NavBar, PhrasesNotification },
@@ -14,7 +14,7 @@ export default {
     <div class="container is-fluid" style="overflow: hidden; position: fixed;">
       <div class="column is-offset-1 is-10 is-offset-1" style="min-height: 100vh;">
         <SearchBar/>
-           <PhrasesNotification class="pn"/>
+           <!-- <PhrasesNotification class="pn"/> -->
       </div>
     </div>
     <RouterView/>

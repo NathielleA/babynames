@@ -247,7 +247,7 @@ export default createStore({
         }
         catch(error){
           console.log(error)
-        }}
+        }
       // else{
       //   let numeroAleatorio = Math.floor(Math.random() * this.state.otherPhrases.length);
       //   // console.log(numeroAleatorio);

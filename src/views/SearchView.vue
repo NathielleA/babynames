@@ -78,7 +78,7 @@ export default {
             }
         },
 
-        async updateUserPhrases() {
+      async updateUserPhrases() {
             try {
             const userId = localStorage.getItem("userID");
             if (!userId) return;
@@ -88,17 +88,24 @@ export default {
             } catch (error) {
             console.error("Erro ao atualizar frases:", error);
             }
-        },
+      },
 
-    async searchRecommendedNames(){
-      this.getNewNames();
+      async searchRecommendedNames(){
+        this.getNewNames();
+      },
+
+      generateUserID() {
+        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      },
+
+      refreshPopup() {
+        this.$refs.popup?.refreshData(); // se usar ref
+        // ou:
+        this.$store.dispatch('fetchUserAssignature');
+        this.$store.dispatch('getPhrases');
+      },
     },
 
-    generateUserID() {
-      return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    },
-
-    },
     created() {
       
       this.$store.commit('setPage',1);
@@ -128,7 +135,7 @@ export default {
           <MySearchNameResult :name="name" :indice="index"/>
         </li>
       </ul>
-      <PhrasesNotification class="pn"/>
+      <PhrasesNotification class="pn" @refresh-phrases="refreshPopup"/>
     </div>
     <footer class="myfooter">
   <div class="content has-text-centered">

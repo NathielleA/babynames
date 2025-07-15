@@ -87,6 +87,13 @@ export default {
     return this.getUserAssignature; // Retorna a assinatura do usuário
     },
   },
+  watch: {
+    $route(to, from) {
+      // Atualiza sempre que a rota mudar
+      this.refreshData();
+    }
+  },
+
   methods: {
     goToPhraseRecommendations() {
       if (this.phrase && this.phrase.Frase) {
@@ -98,6 +105,11 @@ export default {
           query: { phrase: encodedPhrase }
         });
       }
+    },
+
+    refreshData() {
+      this.$store.dispatch('fetchUserAssignature');
+      this.$store.dispatch('getPhrases');
     },
   
     startDrag(event) {
@@ -158,7 +170,8 @@ export default {
   created() {
       this.$store.dispatch('fetchUserAssignature'); // Busca a assinatura do usuário
       this.$store.dispatch("getPhrases");
-    },
+      this.refreshData();
+  },
 
   mounted() {
     window.addEventListener('resize', this.handleResize);

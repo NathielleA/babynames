@@ -19,12 +19,12 @@ export default {
         };
     },
     computed : {
-      ...mapGetters(['getName','getSimiliarNames','getRecommededNames', 'getLat','getLon','getID', 'getActualPhrase']),
+      ...mapGetters(['getName','getSimiliarNames','getRecommededNames', 'getLat','getLon','getID', 'getPhrase']),
       name(){
         return this.getName;
       },
       phrases(){
-        return this.getActualPhrase;
+        return this.getPhrase;
       },
       similiarNames(){
         return this.getSimiliarNames;
@@ -102,31 +102,12 @@ export default {
       return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     },
 
-    handleNameClick(name) {
-      // Quando um nome é clicado, busca recomendações para ele
-      console.log('Nome clicado:', name);
-      
-      // Verifica se o nome tem a propriedade 'name' ou se é uma string
-      const nomeProcurado = name.name || name;
-      
-      this.$store.commit('setName', nomeProcurado);
-      this.$store.dispatch('getNewNames');
-      
-      // Limpa a frase atual para mostrar apenas os resultados do nome
-      this.$store.commit('setActualPhrase', null);
-    },
     },
     created() {
       
       this.$store.commit('setPage',1);
 
       this.getNewNames()
-
-      // Garante que o usuário seja carregado primeiro
-      this.$store.dispatch('getUser').then(() => {
-        // Depois carrega as frases do usuário
-        this.$store.dispatch('getPhrases');
-      });
 
       // Atualiza assinatura e frases sempre que carregar a página
       this.updateUserAssignature();
@@ -136,10 +117,8 @@ export default {
       //this.postSearchAction();
     },
     watch: {
-      phrases(newPhrase) {
+      getPhrase(newPhrase) {
         console.log('Frase atualizada:', newPhrase);
-        // Quando a frase mudar, força a atualização da interface
-        this.$forceUpdate();
       },
     },
   
@@ -154,30 +133,21 @@ export default {
       <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;"/>
 
       <!-- Recomendados por nome pesquisado -->
-      <div v-if="name && recommendedNames && recommendedNames.length > 0">
-        <h1> Nomes recomendados para <b>{{ name }}</b>:</h1>
-        <ul class="is-compact" style="list-style: none; padding: 0; margin: 0;">
-          <li v-for="(name, index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
+      <h1> Nomes recomendados para <b>{{ name }}</b>:</h1>
+      <ul class="is-compact" style="list-style: none; padding: 0; margin: 0;">
+        <li v-for="(name, index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
+          <MySearchNameResult :name="name" :indice="index" />
+        </li>
+      </ul>
+
+      <!-- Recomendados pela frase selecionada -->
+      <div v-if="phrases && phrases.associedNames && phrases.associedNames.length > 0" style="margin-top: 30px;">
+        <h2>Recomendações para a frase: <b>{{ phrases.Frase }}</b></h2>
+        <ul style="list-style: none; padding: 0;">
+          <li v-for="(name, index) in phrases.associedNames" :key="'phrase-' + index" style="margin-bottom: -20px !important;">
             <MySearchNameResult :name="name" :indice="index" />
           </li>
         </ul>
-      </div>
-
-      <!-- Recomendados pela frase selecionada -->
-      <div v-if="phrases && phrases.Frase" style="margin-top: 30px;">
-        <h2>Recomendações para a frase: <b>"{{ phrases.Frase }}"</b></h2>
-        <div v-if="phrases.associedNames && phrases.associedNames.length > 0">
-          <ul style="list-style: none; padding: 0;">
-            <li v-for="(name, index) in phrases.associedNames" :key="'phrase-' + index" style="margin-bottom: -20px !important;">
-              <div @click="handleNameClick(name)" style="cursor: pointer;" v-if="name">
-                <MySearchNameResult :name="name" :indice="index" />
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div v-else>
-          <p style="color: #666; font-style: italic;">Nenhum nome encontrado para esta frase ainda.</p>
-        </div>
       </div>
 
       <PhrasesNotification class="pn"/>

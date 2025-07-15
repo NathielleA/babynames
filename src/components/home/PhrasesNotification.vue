@@ -156,8 +156,14 @@ export default {
   },
 
   created() {
+      // Verifica se há userToken no localStorage
+      const userToken = localStorage.getItem("userID");
+      if (userToken) {
+        this.$store.commit('setUserToken', userToken);
+      }
+      
       this.$store.dispatch('fetchUserAssignature'); // Busca a assinatura do usuário
-      this.$store.dispatch("getPhrases");
+      this.$store.dispatch("getActualPhrase"); // Usa a nova action para buscar a frase atual
     },
 
   mounted() {

@@ -78,14 +78,29 @@
 
     watch : {
       '$store.state.recommendedNames'(novoValor){
-        if (novoValor){
+        if (novoValor && novoValor[this.indice]) {
           this.clear();
 
-          console.log("Olhem o array " + novoValor);
-          this.origin = novoValor[this.indice].origin;
-          this.meaning = novoValor[this.indice].meaning;
+          console.log("Olhem o array recommendedNames:", novoValor);
+          console.log("Indice atual:", this.indice);
+          console.log("Item atual:", novoValor[this.indice]);
+          
+          this.origin = novoValor[this.indice].origin || '';
+          this.meaning = novoValor[this.indice].meaning || '';
           //this.similiarNames = novoValor[this.indice].similiarNames;
          // this.recommendNames = novoValor[this.indice].recommendNames;
+        }
+      },
+      
+      '$store.state.actualPhrase'(novaFrase){
+        if (novaFrase && novaFrase.associedNames && novaFrase.associedNames[this.indice]) {
+          this.clear();
+          console.log("Nomes da frase:", novaFrase.associedNames);
+          console.log("Indice atual para frase:", this.indice);
+          console.log("Item atual da frase:", novaFrase.associedNames[this.indice]);
+          
+          this.origin = novaFrase.associedNames[this.indice].origin || '';
+          this.meaning = novaFrase.associedNames[this.indice].meaning || '';
         }
       },
     },
@@ -123,8 +138,26 @@
       clear(){
         
           this.showMessage = false
+        },
+
+      initializeData() {
+        const recommendedNames = this.$store.state.recommendedNames;
+        const actualPhrase = this.$store.state.actualPhrase;
+        
+        if (recommendedNames && recommendedNames[this.indice]) {
+          this.origin = recommendedNames[this.indice].origin || '';
+          this.meaning = recommendedNames[this.indice].meaning || '';
+        } else if (actualPhrase && actualPhrase.associedNames && actualPhrase.associedNames[this.indice]) {
+          this.origin = actualPhrase.associedNames[this.indice].origin || '';
+          this.meaning = actualPhrase.associedNames[this.indice].meaning || '';
         }
-      },
+      }
+    },
+
+    created() {
+      // Inicializa os dados quando o componente é criado
+      this.initializeData();
+    },
     
   
     props:["indice"],
@@ -167,4 +200,3 @@
   /* Outros estilos personalizados, se necessário */
 }
   </style>
-  

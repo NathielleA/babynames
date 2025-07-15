@@ -2,7 +2,6 @@
 import MyTopSearchBar from '@/components/searchs/MyTopSearchBar.vue';
 import NavBar from '@/components/home/NavBar.vue';
 import PhrasesNotification from '@/components/home/PhrasesNotification.vue';
-import MySearchNameResult from '@/components/searchs/MySearchNameResult.vue';
 import users from '@/services/users';
 import { mapGetters, mapActions } from 'vuex';
 
@@ -135,8 +134,7 @@ export default {
     components: {
         NavBar,
         MyTopSearchBar,
-        PhrasesNotification,
-        MySearchNameResult
+        PhrasesNotification
     }
 };
 </script>

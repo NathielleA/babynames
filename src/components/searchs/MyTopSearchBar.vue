@@ -31,11 +31,6 @@ export default {
       this.setNameQuery(this.querys);
       this.$emit('search',this.querys);
       this.querys = ''
-      
-      // Redireciona para SearchView se estiver na página de frases
-      if (this.$route.name === 'RecommendationPage') {
-        this.$router.push('/search/');
-      }
     }
   },
 }

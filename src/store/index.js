@@ -3,7 +3,6 @@ import newNames from '@/services/names'
 import action from '@/services/action';
 import createPersistedState from 'vuex-persistedstate';
 import users from '@/services/users';
-import phrases from '@/services/phrases';
 
 export default createStore({
   state: {
@@ -49,8 +48,7 @@ export default createStore({
     getRelationaName : state => state.relationalName,
     getRelationalNameID : state => state.relationalNameID,
     getActualPhrase : state => state.actualPhrase,
-    getOtherPhrases : state =>state.otherPhrases,
-    getPhrase : state => state.actualPhrase
+    getOtherPhrases : state =>state.otherPhrases
   },
   mutations: {
     setName(state, name){
@@ -237,79 +235,28 @@ export default createStore({
     async getPhrases({commit}){
       let userId = this.state.userToken;
       let phrase = this.state.actualPhrase;
-      
+      console
       if (!phrase){
-        try{
-          let response = await users.getUserId(userId);
-          let numeroAleatorio = Math.floor(Math.random() * response.data.phrases.length);
-          let frase = response.data.phrases[numeroAleatorio];
-          console.log("Frase: ", frase)
-          commit('setPhrase', frase);
-          commit('setOtherPhrase',response.data.phrases)
-        }
-        catch(error){
-          console.log(error)
-        }
+      
+      try{
+        let response = await users.getUserId(userId);
+        let numeroAleatorio = Math.floor(Math.random() * response.data.phrases.length);
+        let frase = response.data.phrases[numeroAleatorio];
+        console.log("Frase: ", frase)
+        commit('setPhrase', frase);
+        commit('setOtherPhrase',response.data.phrases)
       }
+      catch(error){
+        console.log(error)
+      }}
       else{
         let numeroAleatorio = Math.floor(Math.random() * this.state.otherPhrases.length);
+        // console.log(numeroAleatorio);
         let frase = this.state.otherPhrases[numeroAleatorio];
         console.log("Frase: ", frase)
         commit('setPhrase', frase);
       }
-    },
-
-    async getActualPhrase({commit}){
-      let userId = this.state.userToken;
       
-      if (!userId) {
-        console.error('UserId não encontrado');
-        return;
-      }
-      
-      try {
-        const response = await phrases.getActualPhrase(userId);
-        
-        if (response.data) {
-          console.log("Frase atual:", response.data);
-          commit('setPhrase', response.data);
-        } else {
-          console.error('Erro ao buscar frase atual');
-        }
-      } catch (error) {
-        console.error('Erro ao buscar frase atual:', error);
-      }
-    },
-
-    async loadPhraseWithNames({commit}, phrase) {
-      try {
-        if (phrase.associedNames && phrase.associedNames.length > 0) {
-          // Extrai apenas os nomes da lista
-          const namesList = phrase.associedNames.map(item => 
-            typeof item === 'string' ? item : item.name
-          );
-          
-          // Busca os detalhes dos nomes
-          const response = await phrases.getNamesFromPhrase(namesList);
-          
-          if (response.data) {
-            console.log('Nomes da frase carregados:', response.data);
-            
-            // Atualiza a frase com os detalhes completos dos nomes
-            const updatedPhrase = {
-              ...phrase,
-              associedNames: response.data
-            };
-            
-            commit('setPhrase', updatedPhrase);
-            return updatedPhrase;
-          }
-        }
-        return phrase;
-      } catch (error) {
-        console.error('Erro ao carregar nomes da frase:', error);
-        return phrase;
-      }
     }
 
 

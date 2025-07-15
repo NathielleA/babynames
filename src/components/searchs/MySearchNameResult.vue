@@ -52,11 +52,6 @@ export default {
       this.$store.commit('setClickedName',1);
       this.$emit('search',this.name.name);
       this.getNewNames();
-      
-      // Redireciona para SearchView se estiver na página de frases
-      if (this.$route.name === 'RecommendationPage') {
-        this.$router.push('/search/');
-      }
     },
 
     toggleActiveLink() {

@@ -1,10 +1,9 @@
+@ -1,175 +1,174 @@
 <script>
 import MyTopSearchBar from '@/components/searchs/MyTopSearchBar.vue';
 import NavBar from '@/components/home/NavBar.vue';
-import MySearchNameResult from '@/components/searchs/MySearchNameResult.vue'
 import PhrasesNotification from '@/components/home/PhrasesNotification.vue';
 import users from '@/services/users';
-import phrases from '@/services/phrases';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -25,7 +24,7 @@ export default {
           'getLat',
           'getLon',
           'getID',
-          'getActualPhrase'
+          'getPhrase'
         ]),
         name() {
             return this.getName;
@@ -45,14 +44,13 @@ export default {
         ID() {
             return this.getID;
         },
-        phrase() {
-            return this.getActualPhrase;
+        phrases() {
+            return this.$store.getters.getPhrase;
         }
+
     },
-    
     methods: {
-        ...mapActions(['getNewNames','getPosix','setMainResultID','setNameQuery', 'loadPhraseWithNames']),
-        
+        ...mapActions(['getNewNames','getPosix','setMainResultID','setNameQuery']),
         async checkUserID() {
             const userLocalStorage = localStorage.getItem("userID");
 
@@ -77,30 +75,6 @@ export default {
             }
         },
 
-        async updateUserAssignature() {
-            try {
-                const userId = localStorage.getItem("userID");
-                if (!userId) return;
-                const response = await fetch(`https://adam-serveless-babynames.vercel.app/update_user_assignature?userId=${userId}`);
-                const data = await response.json();
-                console.log("Assinatura atualizada:", data);
-            } catch (error) {
-                console.error("Erro ao atualizar assinatura:", error);
-            }
-        },
-
-        async updateUserPhrases() {
-            try {
-                const userId = localStorage.getItem("userID");
-                if (!userId) return;
-                const response = await fetch(`https://adam-serveless-babynames.vercel.app/update_user_phrases?userId=${userId}`);
-                const data = await response.json();
-                console.log("Frases atualizadas:", data);
-            } catch (error) {
-                console.error("Erro ao atualizar frases:", error);
-            }
-        },
-
         async searchRecommendedNames() {
             this.getNewNames();
         },
@@ -108,39 +82,59 @@ export default {
         generateUserID() {
             return Math.random().toString(36).substring(2, 15) +
                    Math.random().toString(36).substring(2, 15);
+        },
+
+        async updateUserAssignature() {
+            try {
+            const userId = localStorage.getItem("userID");
+            if (!userId) return;
+            const response = await fetch(`https://adam-serveless-babynames.vercel.app/update_user_assignature?userId=${userId}`);
+            const data = await response.json();
+            console.log("Assinatura atualizada:", data);
+            } catch (error) {
+            console.error("Erro ao atualizar assinatura:", error);
+            }
+        },
+
+        async updateUserPhrases() {
+            try {
+            const userId = localStorage.getItem("userID");
+            if (!userId) return;
+            const response = await fetch(`https://adam-serveless-babynames.vercel.app/update_user_phrases?userId=${userId}`);
+            const data = await response.json();
+            console.log("Frases atualizadas:", data);
+            } catch (error) {
+            console.error("Erro ao atualizar frases:", error);
+            }
         }
     },
-    
     created() {
         this.$store.commit('setPage', 1);
-        
-        // Pega a frase da query string
+        this.getNewNames();
         const phraseQuery = this.$route.query.phrase;
         console.log('Frase recebida:', phraseQuery);
 
         if (phraseQuery) {
             try {
                 const parsedPhrase = JSON.parse(decodeURIComponent(phraseQuery));
-                this.fraseAtual = parsedPhrase;
-                
-                // Busca os nomes associados à frase usando o store
-                this.loadPhraseWithNames(parsedPhrase).then(updatedPhrase => {
-                    this.fraseAtual = updatedPhrase;
-                });
+                this.$store.commit('setPhrase', parsedPhrase); // se estiver usando Vuex
             } catch (e) {
                 console.error("Erro ao decodificar a frase:", e);
             }
+        }
+        const frase = this.$route.query.phrase;
+        if (frase) {
+            this.fraseAtual = JSON.parse(decodeURIComponent(frase)); // se estiver passada como JSON codificado
+            console.log("Frase atual:", this.fraseAtual);
         }
 
         // Atualiza assinatura e frases sempre que carregar a página
         this.updateUserAssignature();
         this.updateUserPhrases();
     },
-    
-    components: { 
-        NavBar, 
-        MyTopSearchBar, 
-        MySearchNameResult, 
+    components: {
+        NavBar,
+        MyTopSearchBar,
         PhrasesNotification
     }
 };
@@ -151,24 +145,16 @@ export default {
       <NavBar class="is-hidden-mobile"/>
       <div class="container is-fluid" style="overflow: hidden;">
         <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;" />
-        <h2>Recomendações para a frase: <b>{{ fraseAtual?.Frase || fraseAtual?.phrase }}</b></h2>
+        <h2>Recomendações para a frase: <b>{{ fraseAtual?.Frase }}</b></h2>
 
-        <div v-if="fraseAtual?.associedNames?.length" class="names-container">
-            <ul class="is-compact" style="list-style: none; padding: 0; margin: 0;">
-                <li v-for="(name,index) in fraseAtual.associedNames" :key="index" style="margin-bottom: -20px !important;">
-                  <MySearchNameResult :name="name" :indice="index"/>
-                </li>
-            </ul>
-        </div>
-        
-        <div v-else-if="fraseAtual?.Frase || fraseAtual?.phrase" class="notification is-info">
-            <p>Carregando nomes para a frase: <strong>{{ fraseAtual.Frase || fraseAtual.phrase }}</strong></p>
-        </div>
-        
-        <div v-else class="notification is-warning">
-            <p>Nenhuma frase selecionada.</p>
-        </div>
-        
+        <ul  class="is-compact"  style="list-style: none; padding: 0; margin: 0;">
+            <li v-for="(name,index) in fraseAtual.associedNames" :key="index" style="margin-bottom: -20px !important;">
+            <MySearchNameResult :name="name" :indice="index"/>
+            </li>
+        </ul>
+
+        <!-- </div> -->
+  
         <PhrasesNotification class="pn"/>
       </div>
   
@@ -185,10 +171,5 @@ export default {
         </div>
       </footer>
     </div>
-</template>
-
-<style>
-.myfooter{
-  margin-top: 5%
-}
-</style>
+  </template>
+  

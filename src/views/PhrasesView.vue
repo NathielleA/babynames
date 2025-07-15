@@ -1,7 +1,6 @@
 <script>
 import MyTopSearchBar from '@/components/searchs/MyTopSearchBar.vue';
 import NavBar from '@/components/home/NavBar.vue';
-import MySearchNameResult from '@/components/searchs/MySearchNameResult.vue';
 import PhrasesNotification from '@/components/home/PhrasesNotification.vue';
 import users from '@/services/users';
 import { mapGetters, mapActions } from 'vuex';
@@ -48,24 +47,6 @@ export default {
             return this.$store.getters.getPhrase;
         }
 
-    },
-    
-    watch: {
-        '$route'(to, from) {
-            // Atualiza os dados quando a rota mudar
-            const phraseQuery = to.query.phrase;
-            if (phraseQuery) {
-                try {
-                    const parsedPhrase = JSON.parse(decodeURIComponent(phraseQuery));
-                    this.fraseAtual = parsedPhrase;
-                    this.$store.commit('setPhrase', parsedPhrase);
-                    console.log("Frase atualizada via watch:", this.fraseAtual);
-                    this.debugFraseAtual();
-                } catch (e) {
-                    console.error("Erro ao decodificar a frase no watch:", e);
-                }
-            }
-        }
     },
     methods: {
         ...mapActions(['getNewNames','getPosix','setMainResultID','setNameQuery']),
@@ -124,58 +105,26 @@ export default {
             } catch (error) {
             console.error("Erro ao atualizar frases:", error);
             }
-        },
-
-        // Método para debug
-        debugFraseAtual() {
-            console.log("=== DEBUG FRASE ATUAL ===");
-            console.log("fraseAtual:", this.fraseAtual);
-            console.log("Query da rota:", this.$route.query.phrase);
-            console.log("Tem associedNames?", this.fraseAtual?.associedNames);
-            console.log("Quantidade de nomes:", this.fraseAtual?.associedNames?.length);
-            
-            // Verifica outras propriedades possíveis
-            if (this.fraseAtual) {
-                console.log("Todas as propriedades da frase:", Object.keys(this.fraseAtual));
-            }
-        },
-
-        // Método para obter nomes associados de forma mais robusta
-        getAssociatedNames() {
-            if (!this.fraseAtual) return [];
-            
-            // Verifica diferentes possibilidades de estrutura
-            return this.fraseAtual.associedNames || 
-                   this.fraseAtual.associatedNames || 
-                   this.fraseAtual.names || 
-                   this.fraseAtual.nomes || 
-                   [];
         }
     },
     created() {
         this.$store.commit('setPage', 1);
-        
-        // Processa a frase da query string
+        this.getNewNames();
         const phraseQuery = this.$route.query.phrase;
         console.log('Frase recebida:', phraseQuery);
 
         if (phraseQuery) {
             try {
                 const parsedPhrase = JSON.parse(decodeURIComponent(phraseQuery));
-                this.fraseAtual = parsedPhrase;
-                this.$store.commit('setPhrase', parsedPhrase);
-                console.log("Frase atual:", this.fraseAtual);
-                
-                // Chama o método de debug
-                this.debugFraseAtual();
+                this.$store.commit('setPhrase', parsedPhrase); // se estiver usando Vuex
             } catch (e) {
                 console.error("Erro ao decodificar a frase:", e);
             }
         }
-
-        // Só busca novos nomes se não tiver uma frase específica
-        if (!this.fraseAtual) {
-            this.getNewNames();
+        const frase = this.$route.query.phrase;
+        if (frase) {
+            this.fraseAtual = JSON.parse(decodeURIComponent(frase)); // se estiver passada como JSON codificado
+            console.log("Frase atual:", this.fraseAtual);
         }
 
         // Atualiza assinatura e frases sempre que carregar a página
@@ -185,7 +134,6 @@ export default {
     components: {
         NavBar,
         MyTopSearchBar,
-        MySearchNameResult,
         PhrasesNotification
     }
 };
@@ -196,29 +144,13 @@ export default {
       <NavBar class="is-hidden-mobile"/>
       <div class="container is-fluid" style="overflow: hidden;">
         <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;" />
-        
-        <!-- Botão para debug (remover depois) -->
-        <button @click="debugFraseAtual" class="button is-small is-info" style="margin-bottom: 10px;">
-            Debug Frase Atual
-        </button>
-        
-        <h2>Recomendações para a frase: <b>{{ fraseAtual?.Frase || 'Carregando...' }}</b></h2>
+        <h2>Recomendações para a frase: <b>{{ fraseAtual?.Frase }}</b></h2>
 
-        <div v-if="fraseAtual && getAssociatedNames().length > 0">
-            <ul class="is-compact" style="list-style: none; padding: 0; margin: 0;">
-                <li v-for="(name,index) in getAssociatedNames()" :key="index" style="margin-bottom: -20px !important;">
-                    <MySearchNameResult :name="name" :indice="index"/>
-                </li>
-            </ul>
-        </div>
-        
-        <div v-else-if="fraseAtual && getAssociatedNames().length === 0">
-            <p>Nenhum nome associado encontrado para esta frase.</p>
-        </div>
-        
-        <div v-else>
-            <p>Carregando recomendações...</p>
-        </div>
+        <ul  class="is-compact"  style="list-style: none; padding: 0; margin: 0;">
+            <li v-for="(name,index) in fraseAtual.associedNames" :key="index" style="margin-bottom: -20px !important;">
+            <MySearchNameResult :name="name" :indice="index"/>
+            </li>
+        </ul>
 
         <!-- </div> -->
   

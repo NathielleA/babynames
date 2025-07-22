@@ -23,6 +23,10 @@
             <a @click="goToPhraseRecommendations" style="cursor: pointer; text-decoration: underline;">
               {{ phrase.Frase }}
             </a>
+            <p>Nomes recomendados: 
+              <a>{{ phrase.NomesRecomendados.join(', ') }}</a>
+            </p>
+
           </template>
           <template v-else>
             Nenhuma frase associada ainda.

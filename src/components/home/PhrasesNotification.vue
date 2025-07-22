@@ -14,7 +14,7 @@
       <div class="message-body">
         <p><strong>Frase: </strong> 
           <template v-if="phrase && phrase.Frase">
-            <a @click="goToPhraseRecommendations" style="cursor: pointer; text-decoration: underline;">
+            <a @click="toggleNames" style="cursor: pointer; text-decoration: underline;">
               {{ phrase.Frase }}
             </a>
           </template>
@@ -23,27 +23,16 @@
           </template>
         </p>
 
-        <!-- Lista dos nomes recomendados -->
-        <div v-if="phrase && phrase.associedNames && phrase.associedNames.length > 0" class="names-container">
-          <div class="column">
-            <div 
-              v-for="(name, index) in firstColumn" 
-              :key="'left-' + index"
-              class="name-item"
-              @click="searchName(name)">
-              {{ name }}
-            </div>
+        <!-- Lista animada dos nomes recomendados -->
+        <transition-group name="chat" tag="div" class="chat-container" v-if="showNames">
+          <div 
+            v-for="(name, index) in phrase.associedNames"
+            :key="name"
+            class="chat-bubble"
+            @click="searchName(name)">
+            {{ name }}
           </div>
-          <div class="column">
-            <div 
-              v-for="(name, index) in secondColumn" 
-              :key="'right-' + index"
-              class="name-item"
-              @click="searchName(name)">
-              {{ name }}
-            </div>
-          </div>
-        </div>
+        </transition-group>
       </div>
      </article>
   </div>
@@ -60,7 +49,8 @@ export default {
       left: null,
       offsetX: 0,
       offsetY: 0,
-      isVisible : true
+      isVisible : true,
+      showNames: false // controla se os nomes estão visíveis
     };
   },
   computed: {
@@ -74,33 +64,18 @@ export default {
     },
 
     phrase() { return this.getActualPhrase; },
-
-    firstColumn() {
-      return this.phrase?.associedNames?.slice(0, 5) || [];
-    },
-    secondColumn() {
-      return this.phrase?.associedNames?.slice(5, 10) || [];
-    }
   },
 
   methods: {
     ...mapActions(['setNameQuery', 'getNewNames']),
 
-    goToPhraseRecommendations() {
-      if (this.phrase && this.phrase.Frase) {
-        const encodedPhrase = encodeURIComponent(JSON.stringify(this.phrase));
-        this.$router.push({ name: 'RecommendationPage', query: { phrase: encodedPhrase } });
-      }
+    toggleNames() {
+      this.showNames = !this.showNames;
     },
 
     searchName(name) {
       this.setNameQuery(name);
       this.getNewNames();
-    },
-
-    refreshData() {
-      this.$store.dispatch('fetchUserAssignature');
-      this.$store.dispatch('getPhrases');
     },
 
     startDrag(event) {
@@ -135,7 +110,6 @@ export default {
   created() {
     this.$store.dispatch('fetchUserAssignature');
     this.$store.dispatch('getPhrases');
-    this.refreshData();
   },
 
   mounted() { window.addEventListener('resize', this.handleResize); },
@@ -155,30 +129,39 @@ export default {
   overflow: hidden;
 }
 
-.names-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.column {
-  width: 48%;
+.chat-container {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  margin-top: 10px;
+  gap: 8px;
 }
 
-.name-item {
-  padding: 4px 6px;
-  border: 1px solid #3273dc;
-  border-radius: 4px;
-  text-align: center;
-  cursor: pointer;
+/* bolhas de chat */
+.chat-bubble {
+  align-self: flex-start;
   background-color: #f5faff;
-  transition: background-color 0.2s;
+  border: 1px solid #3273dc;
+  border-radius: 12px;
+  padding: 6px 10px;
+  max-width: 80%;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.name-item:hover {
+.chat-bubble:hover {
   background-color: #e1ecf9;
+}
+
+/* animação */
+.chat-enter-active, .chat-leave-active {
+  transition: all 0.3s ease;
+}
+.chat-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.chat-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
 }
 </style>

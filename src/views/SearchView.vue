@@ -104,6 +104,15 @@ export default {
         this.$store.dispatch('fetchUserAssignature');
         this.$store.dispatch('getPhrases');
       },
+
+      async handleNameClick(name) {
+        // atualiza a assinatura do usuário
+        await this.updateUserAssignature();
+
+        // atualiza as frases do usuário
+        await this.updateUserPhrases();
+      }
+
     },
 
     created() {
@@ -113,8 +122,8 @@ export default {
       this.getNewNames()
 
       // Atualiza assinatura e frases sempre que carregar a página
-      this.updateUserAssignature();
-      this.updateUserPhrases();
+      // this.updateUserAssignature();
+      // this.updateUserPhrases();
     },
     mounted(){
       //this.postSearchAction();
@@ -132,7 +141,7 @@ export default {
       <h1> Nomes recomendados para <b>{{name}}</b>:</h1>
       <ul  class="is-compact"  style="list-style: none; padding: 0; margin: 0;">
         <li v-for="(name,index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
-          <MySearchNameResult :name="name" :indice="index"/>
+          <MySearchNameResult :name="name" :indice="index" @click.native="handleNameClick(name)"/>
         </li>
       </ul>
       <PhrasesNotification class="pn" @refresh-phrases="refreshPopup"/>

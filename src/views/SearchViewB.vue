@@ -98,12 +98,6 @@ export default {
         return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
       },
 
-      refreshPopup() {
-        this.$refs.popup?.refreshData(); // se usar ref
-        // ou:
-        this.$store.dispatch('fetchUserAssignature');
-        this.$store.dispatch('getPhrases');
-      },
     },
 
     created() {
@@ -120,7 +114,7 @@ export default {
       //this.postSearchAction();
     },
   
-    components: { NavBar, MyTopSearchBar, MySearchNameResult,  PhrasesNotification}
+    components: { NavBar, MyTopSearchBar, MySearchNameResult}
 };
 </script>
 

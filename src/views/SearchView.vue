@@ -120,7 +120,7 @@ export default {
       //this.postSearchAction();
     },
   
-    components: { NavBar, MyTopSearchBar, MySearchNameResult,  PhrasesNotification}
+    components: { NavBar, MyTopSearchBar, MySearchNameResult, PhrasesNotification}
 };
 </script>
 

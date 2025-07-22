@@ -25,7 +25,7 @@
 
         <transition-group name="chat" tag="div" v-if="showNames" class="names-grid">
           <div 
-            v-for="(name, index) in phrase.associedNames"
+            v-for="(name, index) in visibleNames"
             :key="name"
             class="name-item"
             @click="searchName(name)">
@@ -49,13 +49,13 @@ export default {
       offsetX: 0,
       offsetY: 0,
       isVisible : true,
-      showNames: false
+      showNames: false,
+      visibleNames: [] // nomes que aparecem gradualmente
     };
   },
   computed: {
     ...mapGetters(['getActualPhrase']),
     draggingStyle() {
-      // Se os nomes estão visíveis, sobe o pop-up
       const offsetY = this.showNames ? 200 : 0;
       if (this.top !== null && this.left !== null) {
         return { top: this.top - offsetY + 'px', left: this.left + 'px', position: 'fixed' };
@@ -66,7 +66,20 @@ export default {
   },
   methods: {
     ...mapActions(['setNameQuery', 'getNewNames']),
-    toggleNames() { this.showNames = !this.showNames; },
+    toggleNames() {
+      this.showNames = !this.showNames;
+      if (this.showNames) {
+        this.visibleNames = [];
+        this.revealNames();
+      }
+    },
+    revealNames(index = 0) {
+      if (!this.phrase || !this.phrase.associedNames) return;
+      if (index < this.phrase.associedNames.length) {
+        this.visibleNames.push(this.phrase.associedNames[index]);
+        setTimeout(() => this.revealNames(index + 1), 150); // atraso entre nomes
+      }
+    },
     searchName(name) {
       this.setNameQuery(name);
       this.getNewNames();
@@ -137,14 +150,11 @@ export default {
   background-color: #e1ecf9;
 }
 
-.chat-enter-active, .chat-leave-active {
+/* Animação estilo chat */
+.chat-enter-active {
   transition: all 0.3s ease;
 }
 .chat-enter-from {
-  opacity: 0;
-  transform: translateY(20px);
-}
-.chat-leave-to {
   opacity: 0;
   transform: translateY(20px);
 }

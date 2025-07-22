@@ -12,10 +12,10 @@
         <button @click="close" class="delete" aria-label="delete"></button>
       </div>
       <div class="message-body">
-        <p><strong>Frase: </strong> 
+        <p> 
           <template v-if="phrase && phrase.Frase">
             <a @click="toggleNames" style="cursor: pointer; text-decoration: underline;">
-              {{ phrase.Frase }}
+              <strong>{{ phrase.Frase }}</strong>
             </a>
           </template>
           <template v-else>

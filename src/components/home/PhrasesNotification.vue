@@ -6,7 +6,6 @@
     @mouseleave="stopDrag"
     v-if="this.isVisible"
     :style="draggingStyle">
-    <!-- Conteúdo do componente -->
      <article class="message is-info">    
       <div class="message-header">  
         Olá, eu sou Hera.  
@@ -23,119 +22,111 @@
             <a @click="goToPhraseRecommendations" style="cursor: pointer; text-decoration: underline;">
               {{ phrase.Frase }}
             </a>
-            <p>Nomes recomendados: 
-              <a>{{ phrase.NomesRecomendados.join(', ') }}</a>
-            </p>
-
           </template>
           <template v-else>
             Nenhuma frase associada ainda.
           </template>
         </p>
 
-        <!-- <a @click="callstate" style="text-decoration: none;">{{ phrase }}</a> -->
+        <!-- Lista dos nomes recomendados -->
+        <div v-if="phrase && phrase.NomesRecomendados && phrase.NomesRecomendados.length > 0" class="names-container">
+          <div class="column">
+            <div 
+              v-for="(name, index) in firstColumn" 
+              :key="'left-' + index"
+              class="name-item"
+              @click="searchName(name)">
+              {{ name }}
+            </div>
+          </div>
+          <div class="column">
+            <div 
+              v-for="(name, index) in secondColumn" 
+              :key="'right-' + index"
+              class="name-item"
+              @click="searchName(name)">
+              {{ name }}
+            </div>
+          </div>
+        </div>
       </div>
      </article>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   data() {
     return {
       isDragging: false,
-      top: null, // Inicialmente na parte inferior
-      left: null, // Inicialmente na parte direita
+      top: null,
+      left: null,
       offsetX: 0,
       offsetY: 0,
       isVisible : true
     };
   },
   computed: {
-    ...mapGetters(['getActualPhrase', 'userToken', 'userObjectId', 'getLat', 'getLon', 'getUserAssignature']), // Adicione os getters de latitude e longitude
+    ...mapGetters(['getActualPhrase', 'userToken', 'userObjectId', 'getLat', 'getLon', 'getUserAssignature']),
     
     draggingStyle() {
       if (this.top !== null && this.left !== null) {
-        return {
-          top: this.top + 'px',
-          left: this.left + 'px',
-          position: 'fixed'
-        };
+        return { top: this.top + 'px', left: this.left + 'px', position: 'fixed' };
       }
-      // Posição padrão no canto inferior direito
-      return {
-        bottom: '20px',
-        right: '20px',
-        position: 'fixed'
-      };
+      return { bottom: '20px', right: '20px', position: 'fixed' };
     },
 
-    phrase() {
-      return this.getActualPhrase;
+    phrase() { return this.getActualPhrase; },
+    token() { return this.userToken; },
+    objectId() { return this.userObjectId; },
+    latitude() { return this.getLat; },
+    longitude() { return this.getLon; },
+    assignature() { return this.getUserAssignature; },
+
+    firstColumn() {
+      return this.phrase?.NomesRecomendados?.slice(0, 5) || [];
     },
-    token() {
-      return this.userToken; // Retorna o token do usuário
-    },
-    objectId() {
-    return this.userObjectId; // Retorna o ID do objeto do usuário
-    },
-    latitude() {
-      return this.getLat; // Retorna a latitude do usuário
-    },
-    longitude() {
-      return this.getLon; // Retorna a longitude do usuário
-    },
-    assignature() {
-    return this.getUserAssignature; // Retorna a assinatura do usuário
-    },
-  },
-  watch: {
-    $route(to, from) {
-      // Atualiza sempre que a rota mudar
-      this.refreshData();
+    secondColumn() {
+      return this.phrase?.NomesRecomendados?.slice(5, 10) || [];
     }
   },
 
   methods: {
+    ...mapActions(['setNameQuery', 'getNewNames']),
+
     goToPhraseRecommendations() {
       if (this.phrase && this.phrase.Frase) {
-        // Codifica o objeto inteiro como JSON na URL
         const encodedPhrase = encodeURIComponent(JSON.stringify(this.phrase));
-
-        this.$router.push({
-          name: 'RecommendationPage',
-          query: { phrase: encodedPhrase }
-        });
+        this.$router.push({ name: 'RecommendationPage', query: { phrase: encodedPhrase } });
       }
+    },
+
+    searchName(name) {
+      this.setNameQuery(name);
+      this.getNewNames();
     },
 
     refreshData() {
       this.$store.dispatch('fetchUserAssignature');
       this.$store.dispatch('getPhrases');
     },
-  
+
     startDrag(event) {
-        if (this.top === null || this.left === null) {
+      if (this.top === null || this.left === null) {
         const rect = event.currentTarget.getBoundingClientRect();
         this.top = rect.top;
         this.left = rect.left;
       }
-
       this.isDragging = true;
       this.offsetX = event.clientX - this.left;
       this.offsetY = event.clientY - this.top;
       window.addEventListener('mousemove', this.onDrag);
-
-      // this.isDragging = true;
-      // this.offsetX = event.clientX - this.left;
-      // this.offsetY = event.clientY - this.top;
-      // window.addEventListener('mousemove', this.onDrag);
     },
     onDrag(event) {
       if (this.isDragging) {
-        this.left = Math.min(Math.max(event.clientX - this.offsetX, 0), window.innerWidth - 200); // Ajuste para o tamanho da caixa
+        this.left = Math.min(Math.max(event.clientX - this.offsetX, 0), window.innerWidth - 200);
         this.top = Math.min(Math.max(event.clientY - this.offsetY, 0), window.innerHeight - 100);
       }
     },
@@ -143,48 +134,22 @@ export default {
       this.isDragging = false;
       window.removeEventListener('mousemove', this.onDrag);
     },
-    close() {
-      console.log('close')
-      this.isVisible = false;
-    },
-    callstate(){
-
-    },
-
-    
-
+    close() { this.isVisible = false; },
 
     handleResize() {
-      // margem mínima visível
-
-      const outOfBounds =
-        this.left + 100 > window.innerWidth || // passou pra direita
-        this.top + 100 > window.innerHeight || // passou pra baixo
-        this.left < -100 || // muito à esquerda
-        this.top < -100;    // muito acima
-
-      if (outOfBounds) {
-        // Reseta pra canto inferior direito
-        this.top = null;
-        this.left = null;
-      }
+      const outOfBounds = this.left + 100 > window.innerWidth || this.top + 100 > window.innerHeight || this.left < -100 || this.top < -100;
+      if (outOfBounds) { this.top = null; this.left = null; }
     },
   },
 
   created() {
-      this.$store.dispatch('fetchUserAssignature'); // Busca a assinatura do usuário
-      this.$store.dispatch("getPhrases");
-      this.refreshData();
+    this.$store.dispatch('fetchUserAssignature');
+    this.$store.dispatch('getPhrases');
+    this.refreshData();
   },
 
-  mounted() {
-    window.addEventListener('resize', this.handleResize);
-  },
-
-  beforeUnmount() {
-    window.removeEventListener('resize', this.handleResize);
-  },
-    
+  mounted() { window.addEventListener('resize', this.handleResize); },
+  beforeUnmount() { window.removeEventListener('resize', this.handleResize); },
 };
 </script>
 
@@ -195,9 +160,36 @@ export default {
   padding: 10px;
   cursor: move;
   user-select: none;
-  width: 300px;
+  width: 350px;
   max-width: 90vw;
   overflow: hidden;
 }
 
+.names-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.column {
+  width: 48%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.name-item {
+  padding: 4px 6px;
+  border: 1px solid #3273dc;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #f5faff;
+  transition: background-color 0.2s;
+}
+
+.name-item:hover {
+  background-color: #e1ecf9;
+}
 </style>
+

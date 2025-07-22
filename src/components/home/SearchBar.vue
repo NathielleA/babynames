@@ -13,7 +13,7 @@ export default {
         return this.getName
       }
     },
-    props : ['lat','lon','userId'],
+    props : ['lat','lon','userId', 'searchRoute'],
 
     methods: {
         ...mapActions(['setNameQuery']),
@@ -22,7 +22,8 @@ export default {
             console.log('Pesquisar por:', this.querys);
 
             this.setNameQuery(this.querys);
-            this.$router.push(`/search`)
+            const route = this.searchRoute || '/search';
+            this.$router.push(route)
         }
     }
   

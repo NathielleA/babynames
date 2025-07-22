@@ -135,7 +135,7 @@ export default {
           <MySearchNameResult :name="name" :indice="index"/>
         </li>
       </ul>
-      <PhrasesNotification class="pn" @refresh-phrases="refreshPopup"/>
+    
     </div>
     <footer class="myfooter">
   <div class="content has-text-centered">

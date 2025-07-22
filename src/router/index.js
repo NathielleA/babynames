@@ -45,6 +45,7 @@ const router = createRouter({
       name: 'InterfaceB',
       component: ()=>import('../views/HomeViewB.vue'),
     },
+
     {
       path: '/search/',
       name: 'search',
@@ -52,6 +53,15 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/SearchView.vue')
+    },
+
+    {
+      path: '/search-b/',
+      name: 'search-b',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/SearchViewB.vue')
     },
 
     {

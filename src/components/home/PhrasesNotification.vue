@@ -12,11 +12,6 @@
         <button @click="close" class="delete" aria-label="delete"></button>
       </div>
       <div class="message-body">
-        <p><strong>Token do Usuário:</strong> {{ token }}</p>
-        <p><strong>ID do Usuário:</strong> {{ objectId }}</p>
-        <p><strong>Latitude:</strong> {{ latitude }}</p>
-        <p><strong>Longitude:</strong> {{ longitude }}</p>
-        <p><strong>Assinatura:</strong> {{ assignature }}</p>
         <p><strong>Frase: </strong> 
           <template v-if="phrase && phrase.Frase">
             <a @click="goToPhraseRecommendations" style="cursor: pointer; text-decoration: underline;">
@@ -29,7 +24,7 @@
         </p>
 
         <!-- Lista dos nomes recomendados -->
-        <div v-if="phrase && phrase.NomesRecomendados && phrase.NomesRecomendados.length > 0" class="names-container">
+        <div v-if="phrase && phrase.associedNames && phrase.associedNames.length > 0" class="names-container">
           <div class="column">
             <div 
               v-for="(name, index) in firstColumn" 
@@ -69,7 +64,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getActualPhrase', 'userToken', 'userObjectId', 'getLat', 'getLon', 'getUserAssignature']),
+    ...mapGetters(['getActualPhrase']),
     
     draggingStyle() {
       if (this.top !== null && this.left !== null) {
@@ -79,17 +74,12 @@ export default {
     },
 
     phrase() { return this.getActualPhrase; },
-    token() { return this.userToken; },
-    objectId() { return this.userObjectId; },
-    latitude() { return this.getLat; },
-    longitude() { return this.getLon; },
-    assignature() { return this.getUserAssignature; },
 
     firstColumn() {
-      return this.phrase?.NomesRecomendados?.slice(0, 5) || [];
+      return this.phrase?.associedNames?.slice(0, 5) || [];
     },
     secondColumn() {
-      return this.phrase?.NomesRecomendados?.slice(5, 10) || [];
+      return this.phrase?.associedNames?.slice(5, 10) || [];
     }
   },
 
@@ -192,4 +182,3 @@ export default {
   background-color: #e1ecf9;
 }
 </style>
-

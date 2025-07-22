@@ -113,8 +113,8 @@ export default {
       this.getNewNames()
 
       // Atualiza assinatura e frases sempre que carregar a página
-      // this.updateUserAssignature();
-      // this.updateUserPhrases();
+      this.updateUserAssignature();
+      this.updateUserPhrases();
     },
     mounted(){
       //this.postSearchAction();

@@ -120,7 +120,7 @@ export default {
 
 <template>
   <div>
-    <NavBar class="is-hidden-mobile"/>
+    <NavBar class="is-hidden-mobile" homeRoute="/interface-b"/>
     <div class="container is-fluid" style="overflow: hidden;">
       <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;"/>
       <h1> Nomes recomendados para <b>{{name}}</b>:</h1>

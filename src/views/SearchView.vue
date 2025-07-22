@@ -111,6 +111,9 @@ export default {
 
         // atualiza as frases do usuário
         await this.updateUserPhrases();
+
+        // atualiza o popup
+        this.refreshPopup();
       }
 
     },

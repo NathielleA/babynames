@@ -70,7 +70,7 @@ export default {
             try {
             const userId = localStorage.getItem("userID");
             if (!userId) return;
-            const response = await fetch(`https://adam-serveless-babynames.vercel.app/update_user_assignature?userId=${userId}`);
+            const response = await fetch(`https://adam-serveless-babynames.vercel.app/update_user_assignature?userId=${userId}&timestamp=${Date.now()}`);
             const data = await response.json();
             console.log("Assinatura atualizada:", data);
             } catch (error) {
@@ -82,7 +82,7 @@ export default {
             try {
             const userId = localStorage.getItem("userID");
             if (!userId) return;
-            const response = await fetch(`https://adam-serveless-babynames.vercel.app/update_user_phrases?userId=${userId}`);
+            const response = await fetch(`https://adam-serveless-babynames.vercel.app/update_user_phrases?userId=${userId}&timestamp=${Date.now()}`);
             const data = await response.json();
             console.log("Frases atualizadas:", data);
             } catch (error) {

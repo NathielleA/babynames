@@ -96,14 +96,12 @@ export default {
 
   methods: {
     goToPhraseRecommendations() {
-      if (this.phrase && this.phrase.Frase) {
-        // Codifica o objeto inteiro como JSON na URL
-        const encodedPhrase = encodeURIComponent(JSON.stringify(this.phrase));
+      if (this.phrase && this.phrase.associedNames) {
+        this.$store.commit('setRecommededNames', this.phrase.associedNames);
+        this.$store.commit('setName', this.phrase.Frase);
+        this.$store.commit('setIsPhraseSearch', true); // <<< novo estado
 
-        this.$router.push({
-          name: 'RecommendationPage',
-          query: { phrase: encodedPhrase }
-        });
+        this.$router.push({ name: 'SearchView' });
       }
     },
 

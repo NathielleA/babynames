@@ -25,8 +25,8 @@ export default createStore({
     relationalName : null,
     clickedName : 0,
     actualPhrase : null,
-    otherPhrases : null
-
+    otherPhrases : null,
+    isPhraseSearch: false, // Novo estado para indicar se é uma busca por frase
   },
   plugins : [createPersistedState()],
 
@@ -48,7 +48,8 @@ export default createStore({
     getRelationaName : state => state.relationalName,
     getRelationalNameID : state => state.relationalNameID,
     getActualPhrase : state => state.actualPhrase,
-    getOtherPhrases : state =>state.otherPhrases
+    getOtherPhrases : state =>state.otherPhrases,
+    getIsPhraseSearch: state => state.isPhraseSearch
   },
   mutations: {
     setName(state, name){
@@ -113,6 +114,9 @@ export default createStore({
     },
     setOtherPhrase(state, others){
       state.otherPhrases = others;
+    },
+    setIsPhraseSearch(state, value) {
+      state.isPhraseSearch = value;
     }
 
   },

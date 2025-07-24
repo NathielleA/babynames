@@ -18,7 +18,7 @@ export default {
         };
     },
     computed : {
-      ...mapGetters(['getName','getSimiliarNames','getRecommededNames', 'getLat','getLon','getID']),
+      ...mapGetters(['getName','getSimiliarNames','getRecommededNames', 'getLat','getLon','getID', 'getIsPhraseSearch']),
       name(){
         return this.getName;
       },
@@ -36,7 +36,8 @@ export default {
       },
       ID(){
         return this.getID;
-      }
+      },
+      isPhraseSearch() { return this.getIsPhraseSearch; }
 
     },
     methods: {
@@ -91,6 +92,7 @@ export default {
       },
 
       async searchRecommendedNames(){
+        this.$store.commit('setIsPhraseSearch', false);
         this.getNewNames();
       },
 
@@ -141,7 +143,12 @@ export default {
     <NavBar class="is-hidden-mobile" homeRoute="/interface-a"/>
     <div class="container is-fluid" style="overflow: hidden;">
       <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;"/>
-      <h1> Nomes recomendados para <b>{{name}}</b>:</h1>
+
+      <h1>
+        Nomes recomendados para 
+        <b>{{ isPhraseSearch ? `"${name}" (Frase)` : name }}</b>:
+      </h1>
+
       <ul  class="is-compact"  style="list-style: none; padding: 0; margin: 0;">
         <li v-for="(name,index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
           <MySearchNameResult :name="name" :indice="index" @click.native="handleNameClick(name)"/>

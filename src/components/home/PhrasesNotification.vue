@@ -99,7 +99,7 @@ export default {
       if (this.phrase && this.phrase.associedNames) {
         this.$store.commit('setIsPhraseSearch', true);  // muda o header
         this.$store.commit('setSelectedPhrase', this.phrase);  // guarda a frase
-        this.$store.commit('setRecommededNames', this.phrase.associedNames);
+        this.$store.commit('setRecommendedNames', this.phrase.associedNames);
 
         this.$router.push('/search');
       }

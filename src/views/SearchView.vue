@@ -92,12 +92,12 @@ export default {
       },
 
       async searchRecommendedNames(){
-        
+        this.$store.commit('setIsPhraseSearch', false);
         if (this.$store.state.isPhraseSearch) {
           // Se for frase, não chama a API
           return;
         }
-        this.$store.commit('setIsPhraseSearch', false);
+        
         await this.getNewNames(); // continua chamando a API quando for nome
       },
 

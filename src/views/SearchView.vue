@@ -151,7 +151,7 @@ export default {
 
       <h1>
         Nomes recomendados para 
-        <b>{{ isPhraseSearch ? `"${name}" (Frase)` : name }}</b>:
+        <b>{{ isPhraseSearch ? `${name}` : name }}</b>:
       </h1>
 
       <ul  class="is-compact"  style="list-style: none; padding: 0; margin: 0;">

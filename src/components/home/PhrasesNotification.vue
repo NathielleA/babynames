@@ -6,16 +6,22 @@
     @mouseleave="stopDrag"
     v-if="this.isVisible"
     :style="draggingStyle">
+    <!-- Conteúdo do componente -->
      <article class="message is-info">    
       <div class="message-header">  
         Olá, eu sou Hera.  
         <button @click="close" class="delete" aria-label="delete"></button>
       </div>
       <div class="message-body">
-        <p> 
+        <p><strong>Token do Usuário:</strong> {{ token }}</p>
+        <p><strong>ID do Usuário:</strong> {{ objectId }}</p>
+        <p><strong>Latitude:</strong> {{ latitude }}</p>
+        <p><strong>Longitude:</strong> {{ longitude }}</p>
+        <p><strong>Assinatura:</strong> {{ assignature }}</p>
+        <p><strong>Frase: </strong> 
           <template v-if="phrase && phrase.Frase">
-            <a @click="toggleNames" style="cursor: pointer; text-decoration: underline;">
-              <strong>{{ phrase.Frase }}</strong>
+            <a @click="goToPhraseRecommendations" style="cursor: pointer; text-decoration: underline;">
+              {{ phrase.Frase }}
             </a>
           </template>
           <template v-else>
@@ -23,97 +29,158 @@
           </template>
         </p>
 
-        <transition-group name="chat" tag="div" v-if="showNames" class="names-grid">
-          <div 
-            v-for="(name, index) in visibleNames"
-            :key="name"
-            class="name-item"
-            @click="searchName(name)">
-            {{ name }}
-          </div>
-        </transition-group>
+        <!-- <a @click="callstate" style="text-decoration: none;">{{ phrase }}</a> -->
       </div>
      </article>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   data() {
     return {
       isDragging: false,
-      top: null,
-      left: null,
+      top: null, // Inicialmente na parte inferior
+      left: null, // Inicialmente na parte direita
       offsetX: 0,
       offsetY: 0,
-      isVisible : true,
-      showNames: false,
-      visibleNames: [] // nomes que aparecem gradualmente
+      isVisible : true
     };
   },
   computed: {
-    ...mapGetters(['getActualPhrase']),
+    ...mapGetters(['getActualPhrase', 'userToken', 'userObjectId', 'getLat', 'getLon', 'getUserAssignature']), // Adicione os getters de latitude e longitude
+    
     draggingStyle() {
-      const offsetY = this.showNames ? 200 : 0;
       if (this.top !== null && this.left !== null) {
-        return { top: this.top - offsetY + 'px', left: this.left + 'px', position: 'fixed' };
+        return {
+          top: this.top + 'px',
+          left: this.left + 'px',
+          position: 'fixed'
+        };
       }
-      return { bottom: 20 + offsetY + 'px', right: '20px', position: 'fixed' };
+      // Posição padrão no canto inferior direito
+      return {
+        bottom: '20px',
+        right: '20px',
+        position: 'fixed'
+      };
     },
-    phrase() { return this.getActualPhrase; },
+
+    phrase() {
+      return this.getActualPhrase;
+    },
+    token() {
+      return this.userToken; // Retorna o token do usuário
+    },
+    objectId() {
+    return this.userObjectId; // Retorna o ID do objeto do usuário
+    },
+    latitude() {
+      return this.getLat; // Retorna a latitude do usuário
+    },
+    longitude() {
+      return this.getLon; // Retorna a longitude do usuário
+    },
+    assignature() {
+    return this.getUserAssignature; // Retorna a assinatura do usuário
+    },
   },
+  watch: {
+    $route(to, from) {
+      // Atualiza sempre que a rota mudar
+      this.refreshData();
+    }
+  },
+
   methods: {
-    ...mapActions(['setNameQuery', 'getNewNames']),
-    toggleNames() {
-      this.showNames = !this.showNames;
-      if (this.showNames) {
-        this.visibleNames = [];
-        this.revealNames();
+    goToPhraseRecommendations() {
+      if (this.phrase && this.phrase.Frase) {
+        // Codifica o objeto inteiro como JSON na URL
+        const encodedPhrase = encodeURIComponent(JSON.stringify(this.phrase));
+
+        this.$router.push({
+          name: 'RecommendationPage',
+          query: { phrase: encodedPhrase }
+        });
       }
     },
-    revealNames(index = 0) {
-      if (!this.phrase || !this.phrase.associedNames) return;
-      if (index < this.phrase.associedNames.length) {
-        this.visibleNames.push(this.phrase.associedNames[index]);
-        setTimeout(() => this.revealNames(index + 1), 150); // atraso entre nomes
-      }
+
+    refreshData() {
+      this.$store.dispatch('fetchUserAssignature');
+      this.$store.dispatch('getPhrases');
     },
-    searchName(name) {
-      this.setNameQuery(name);
-      this.getNewNames();
-    },
+  
     startDrag(event) {
-      if (this.top === null || this.left === null) {
+        if (this.top === null || this.left === null) {
         const rect = event.currentTarget.getBoundingClientRect();
         this.top = rect.top;
         this.left = rect.left;
       }
+
       this.isDragging = true;
       this.offsetX = event.clientX - this.left;
       this.offsetY = event.clientY - this.top;
       window.addEventListener('mousemove', this.onDrag);
+
+      // this.isDragging = true;
+      // this.offsetX = event.clientX - this.left;
+      // this.offsetY = event.clientY - this.top;
+      // window.addEventListener('mousemove', this.onDrag);
     },
     onDrag(event) {
       if (this.isDragging) {
-        this.left = Math.min(Math.max(event.clientX - this.offsetX, 0), window.innerWidth - 200);
+        this.left = Math.min(Math.max(event.clientX - this.offsetX, 0), window.innerWidth - 200); // Ajuste para o tamanho da caixa
         this.top = Math.min(Math.max(event.clientY - this.offsetY, 0), window.innerHeight - 100);
       }
     },
-    stopDrag() { this.isDragging = false; window.removeEventListener('mousemove', this.onDrag); },
-    close() { this.isVisible = false; },
+    stopDrag() {
+      this.isDragging = false;
+      window.removeEventListener('mousemove', this.onDrag);
+    },
+    close() {
+      console.log('close')
+      this.isVisible = false;
+    },
+    callstate(){
+
+    },
+
+    
+
+
     handleResize() {
-      const outOfBounds = this.left + 100 > window.innerWidth || this.top + 100 > window.innerHeight || this.left < -100 || this.top < -100;
-      if (outOfBounds) { this.top = null; this.left = null; }
+      // margem mínima visível
+
+      const outOfBounds =
+        this.left + 100 > window.innerWidth || // passou pra direita
+        this.top + 100 > window.innerHeight || // passou pra baixo
+        this.left < -100 || // muito à esquerda
+        this.top < -100;    // muito acima
+
+      if (outOfBounds) {
+        // Reseta pra canto inferior direito
+        this.top = null;
+        this.left = null;
+      }
     },
   },
+
   created() {
-    this.$store.dispatch('fetchUserAssignature');
-    this.$store.dispatch('getPhrases');
+      this.$store.dispatch('fetchUserAssignature'); // Busca a assinatura do usuário
+      this.$store.dispatch("getPhrases");
+      this.refreshData();
   },
-  mounted() { window.addEventListener('resize', this.handleResize); },
-  beforeUnmount() { window.removeEventListener('resize', this.handleResize); },
+
+  mounted() {
+    window.addEventListener('resize', this.handleResize);
+  },
+
+  beforeUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+    
 };
 </script>
 
@@ -124,38 +191,9 @@ export default {
   padding: 10px;
   cursor: move;
   user-select: none;
-  width: 350px;
+  width: 300px;
   max-width: 90vw;
-  overflow: visible;
+  overflow: hidden;
 }
 
-.names-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  margin-top: 10px;
-}
-
-.name-item {
-  border: 1px solid #3273dc;
-  border-radius: 8px;
-  padding: 5px 8px;
-  text-align: center;
-  cursor: pointer;
-  background-color: #f5faff;
-  transition: background-color 0.3s;
-}
-
-.name-item:hover {
-  background-color: #e1ecf9;
-}
-
-/* Animação estilo chat */
-.chat-enter-active {
-  transition: all 0.3s ease;
-}
-.chat-enter-from {
-  opacity: 0;
-  transform: translateY(20px);
-}
 </style>

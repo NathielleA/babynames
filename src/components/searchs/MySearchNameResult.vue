@@ -48,6 +48,7 @@ export default {
 
     ...mapActions(['setNameQuery','getNewNames']),
     search() {      
+      this.$store.commit('setIsPhraseSearch', false); // <- reseta para busca normal
       this.setNameQuery(this.name.name);
       this.$store.commit('setClickedName',1);
       this.$emit('search',this.name.name);

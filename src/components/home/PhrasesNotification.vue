@@ -101,7 +101,7 @@ export default {
         this.$store.commit('setName', this.phrase.Frase);
         this.$store.commit('setIsPhraseSearch', true); // <<< novo estado
 
-        this.$router.push({ name: 'SearchView' });
+        this.$router.push('/search');
       }
     },
 

@@ -98,7 +98,7 @@ export default {
     goToPhraseRecommendations() {
       if (this.phrase && this.phrase.associedNames) {
         this.$store.commit('setRecommededNames', this.phrase.associedNames);
-        this.$store.commit('setName', this.phrase.Frase);
+        //this.$store.commit('setName', this.phrase.Frase);
         this.$store.commit('setIsPhraseSearch', true); // <<< novo estado
 
         this.$router.push('/search');

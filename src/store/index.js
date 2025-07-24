@@ -260,9 +260,21 @@ export default createStore({
         commit('setPhrase', frase);
       }
       
+    },
+
+    async fetchNamesFromPhrase({ commit }, names) {
+      try {
+        // `names` será um array de strings: ["Maria", "João", ...]
+        const results = [];
+        for (const name of names) {
+          const response = await newNames.getNames(name); // mesma chamada usada na busca normal
+          results.push(response.data.associedDetails[0]); // pega o primeiro detalhe retornado
+        }
+        commit('setRecommendedNames', results);
+      } catch (error) {
+        console.error('Erro ao buscar nomes da frase:', error);
+      }
     }
-
-
 
 
   },

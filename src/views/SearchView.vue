@@ -150,8 +150,12 @@ export default {
       <MyTopSearchBar @search="getNewNames" style="margin-bottom: 10px;"/>
 
       <h1>
-        Nomes recomendados para 
-        <b>{{ isPhraseSearch ? `${name}` : name }}</b>:
+        <template v-if="$store.getters.getIsPhraseSearch">
+          Nomes recomendados para a frase <b>{{ $store.getters.getActualPhrase.Frase }}</b>:
+        </template>
+        <template v-else>
+          Nomes recomendados para <b>{{ name }}</b>:
+        </template>
       </h1>
 
       <ul  class="is-compact"  style="list-style: none; padding: 0; margin: 0;">

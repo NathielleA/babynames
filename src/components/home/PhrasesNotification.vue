@@ -96,12 +96,13 @@ export default {
 
   methods: {
     goToPhraseRecommendations() {
-      if (this.phrase && this.phrase.associedNames) {
-        this.$store.commit('setIsPhraseSearch', true);  // muda o header
-        this.$store.commit('setName', this.phrase.Frase);
-        this.$store.commit('setRecommendedNames', this.phrase.associedNames);
+      if (this.phrase && this.phrase.Frase) {
+        // indica que a pesquisa é de frase
+        this.$store.commit('setIsPhraseSearch', true);
+        this.$store.commit('setPhrase', this.phrase);
 
-        this.$router.push('/search');
+        // busca detalhes dos nomes recomendados da frase
+        this.$store.dispatch('fetchNamesFromPhrase', this.phrase.associedNames);
       }
     },
 

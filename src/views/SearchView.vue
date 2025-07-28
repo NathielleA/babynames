@@ -90,8 +90,7 @@ export default {
     },
 
     async searchRecommendedNames() {
-      // pesquisa normal por nome
-      this.$store.commit('setIsPhraseSearch', false);
+      this.$store.commit('setIsPhraseSearch', false); // Explicitly set to false for normal search
       this.getNewNames();
     },
 
@@ -113,13 +112,20 @@ export default {
 
   created() {
     this.$store.commit('setPage', 1);
-    this.getNewNames(); // busca inicial
+    // MODIFIED: Check if it's a phrase search before fetching names
+    if (this.isPhraseSearch && this.phrase && this.phrase.associedNames) {
+      // If it's a phrase search, ensure names are loaded via the list
+      this.$store.dispatch('getNamesByList', this.phrase.associedNames);
+    } else {
+      // Otherwise, perform a regular name search
+      this.getNewNames(); // busca inicial
+      this.$store.commit('setIsPhraseSearch', false); // Ensure it's false
+    }
   },
 
   components: { NavBar, MyTopSearchBar, MySearchNameResult, PhrasesNotification }
 };
 </script>
-
 <template>
   <div>
     <NavBar class="is-hidden-mobile" homeRoute="/interface-a"/>

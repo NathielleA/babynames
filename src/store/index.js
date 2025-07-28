@@ -28,8 +28,11 @@ export default createStore({
     otherPhrases : null,
     isPhraseSearch: false, // Novo estado para indicar se é uma busca por frase
   },
-  plugins : [createPersistedState()],
-
+  // MODIFIED: Configure vuex-persistedstate to save only userToken and userObjectId
+  plugins : [createPersistedState({
+    paths: ['userToken', 'userObjectId']
+  })],
+  // ... rest of your store code
   getters: {
     getName : state => state.name,
     // getSimiliarNames : state => state.similiarNames,
@@ -156,7 +159,7 @@ export default createStore({
 
           let response = await newNames.getNames(this.state.name)
           console.log(response)
-          
+
           let n = response.data.name;
           let associedDetails = response.data.associedDetails;
           //let similiarNames = response.data.similiarNames;
@@ -221,7 +224,7 @@ export default createStore({
           } else {
             console.log("Usuário reconhecido! ID: " + userLocalStorage);
             commit('setUserToken',userLocalStorage);
-          
+
           }
           try {
             let response = await users.setUserId(this.state.userToken);
@@ -236,7 +239,7 @@ export default createStore({
     async fetchUserAssignature({commit, state}) {
       console.log("processando assinatura")
       try {
-        
+
         let response = await users.getUserId(state.userToken); // Faz a requisição ao servidor
         let assignature = response.data.assignature; // Obtém a assinatura do usuário
         console.log("Assinatura do usuário: ", assignature)
@@ -269,7 +272,7 @@ export default createStore({
         console.log("Frase: ", frase)
         commit('setPhrase', frase);
       }
-      
+
     },
 
     async fetchNamesFromPhrase({ commit }, associedNames) {

@@ -18,19 +18,17 @@ export default {
     methods: {
         ...mapActions(['setNameQuery']),
         search() {
-            // Adicione a lógica de pesquisa aqui (pode redirecionar para uma página de resultados, etc.)
             console.log('Pesquisar por:', this.querys);
 
             this.setNameQuery(this.querys);
+            this.$store.commit('setIsPhraseSearch', false); // ADDED: Explicitly set to false for new name searches
             const route = this.searchRoute || '/search';
             this.$router.push(route)
         }
     }
-  
+
 };
 </script>
-
-
 <template>
   <div class="search-bar" style="margin-top: 10%;">
     <div class="block">
@@ -76,16 +74,16 @@ export default {
 .search-input {
   display: flex;
   align-items: center;
-  justify-content: center; /* Adicionado para centralizar horizontalmente */
+  justify-content: center; /* Added to horizontally center */
 }
 
-/* Adicionado margin-right para criar espaço entre o botão e a barra de pesquisa */
+/* Added margin-right to create space between the button and the search bar */
 .input {
-  margin-right: 8px; /* Você pode ajustar o valor conforme necessário */
+  margin-right: 8px; /* You can adjust the value as needed */
 }
 
 
-/* Estilo adicional para a imagem do ícone, se necessário */
+/* Additional style for the icon image, if necessary */
 .icon {
   width: 24px;
   height: 24px;
@@ -93,13 +91,13 @@ export default {
 
 .is-custom-color {
   background-color: #b43e61
-; /* Substitua pela cor desejada */
-  color: #fff; /* Cor do texto no botão */
-  /* Adicione qualquer estilo adicional desejado */
+; /* Replace with desired color */
+  color: #fff; /* Text color on the button */
+  /* Add any additional desired styles */
 }
 
-/* Estilo adicional para a cor do botão ao passar o mouse */
+/* Additional style for button color on hover */
 .is-custom-color:hover {
-  background-color: #420024; /* Substitua pela cor desejada ao passar o mouse */
+  background-color: #420024; /* Replace with desired color on hover */
 }
 </style>

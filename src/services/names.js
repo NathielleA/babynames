@@ -8,8 +8,8 @@ export default{
         return api.get(url)
     },
 
-    getNamesByList(names) {
-        return api.post(`/getNamesByList`, { names }); // rota nova no backend
-    }
+    // getNamesByList(names) {
+    //     return api.post(`/getNamesByList`, { names }); // rota nova no backend
+    // }
 
 }

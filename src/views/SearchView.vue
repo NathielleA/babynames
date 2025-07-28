@@ -90,7 +90,8 @@ export default {
     },
 
     async searchRecommendedNames() {
-      this.$store.commit('setIsPhraseSearch', false); // Explicitly set to false for normal search
+      // pesquisa normal por nome
+      this.$store.commit('setIsPhraseSearch', false);
       this.getNewNames();
     },
 
@@ -104,28 +105,21 @@ export default {
     },
 
     async handleNameClick(name) {
-      // await this.updateUserAssignature();
-      // await this.updateUserPhrases();
+      await this.updateUserAssignature();
+      await this.updateUserPhrases();
       this.refreshPopup();
     }
   },
 
   created() {
     this.$store.commit('setPage', 1);
-    // MODIFIED: Check if it's a phrase search before fetching names
-    if (this.isPhraseSearch && this.phrase && this.phrase.associedNames) {
-      // If it's a phrase search, ensure names are loaded via the list
-      this.$store.dispatch('getNamesByList', this.phrase.associedNames);
-    } else {
-      // Otherwise, perform a regular name search
-      this.getNewNames(); // busca inicial
-      this.$store.commit('setIsPhraseSearch', false); // Ensure it's false
-    }
+    this.getNewNames(); // busca inicial
   },
 
   components: { NavBar, MyTopSearchBar, MySearchNameResult, PhrasesNotification }
 };
 </script>
+
 <template>
   <div>
     <NavBar class="is-hidden-mobile" homeRoute="/interface-a"/>
@@ -137,7 +131,7 @@ export default {
       </h1>
       <ul class="is-compact" style="list-style: none; padding: 0; margin: 0;">
         <li v-for="(name, index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
-          <MySearchNameResult :name="name" :indice="index"/>
+          <MySearchNameResult :name="name" :indice="index" @click.native="handleNameClick(name)"/>
         </li>
       </ul>
       <PhrasesNotification class="pn" @refresh-phrases="refreshPopup"/>

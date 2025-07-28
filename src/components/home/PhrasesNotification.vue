@@ -83,17 +83,11 @@ export default {
     },
   },
   methods: {
-    async goToPhraseRecommendations() {
-      if (!this.phrase || !this.phrase.associedNames) return;
-
-      try {
-        const response = await this.$store.$names.getNamesByList(this.phrase.associedNames);
-        this.$store.commit('setRecommendedNames', response.data);
-        this.$store.commit('setPhrase', this.phrase);
+    goToPhraseRecommendations() {
+      if (this.phrase && this.phrase.Frase && this.phrase.associedNames) {
         this.$store.commit('setIsPhraseSearch', true);
-        this.$router.push('/search');
-      } catch (error) {
-        console.error('Erro ao buscar recomendações da frase:', error);
+        this.$store.commit('setPhrase', this.phrase.Frase);
+        this.$store.dispatch('getNamesByList', this.phrase.associedNames);
       }
     },
 

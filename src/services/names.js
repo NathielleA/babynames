@@ -6,6 +6,10 @@ export default{
 
         const url = `${API_BASE_URL}/getNames?name=${name}`;
         return api.get(url)
+    },
+
+    getNamesByList(names) {
+        return api.post(`/getNamesByList`, { names }); // rota nova no backend
     }
 
 }

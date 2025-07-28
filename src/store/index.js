@@ -136,6 +136,16 @@ export default createStore({
 
     },
 
+    async getNamesByList({ commit }, namesList) {
+      try {
+        let response = await newNames.getNamesByList(namesList);
+        console.log("Resposta getNamesByList:", response.data);
+        commit('setRecommendedNames', response.data); // atualiza a lista como na busca normal
+      } catch (error) {
+        console.error('Erro ao buscar nomes por lista:', error);
+      }
+    },
+
     async updateNames({commit}){
       console.log('getasyncNames called');
       try {

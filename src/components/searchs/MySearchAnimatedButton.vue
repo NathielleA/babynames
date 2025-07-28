@@ -82,8 +82,8 @@
           this.clear();
 
           console.log("Olhem o array recommendedNames:", novoValor);
-          console.log("Indice atual:", this.indice);
-          console.log("Item atual:", novoValor[this.indice]);
+          // console.log("Indice atual:", this.indice);
+          // console.log("Item atual:", novoValor[this.indice]);
           
           this.origin = novoValor[this.indice].origin || '';
           this.meaning = novoValor[this.indice].meaning || '';

@@ -262,21 +262,18 @@ export default createStore({
       
     },
 
-    async fetchNamesFromPhrase({ commit }, names) {
+    async fetchNamesFromPhrase({ commit }, associedNames) {
       try {
-        // `names` será um array de strings: ["Maria", "João", ...]
-        const results = [];
-        for (const name of names) {
-          const response = await newNames.getNames(name); // mesma chamada usada na busca normal
-          results.push(response.data.associedDetails[0]); // pega o primeiro detalhe retornado
-        }
-        commit('setRecommendedNames', results);
+        const results = await Promise.all(
+          associedNames.map(name => newNames.getNames(name))
+        );
+        const allNames = results.map(r => r.data);
+        commit('setRecommendedNames', allNames);
       } catch (error) {
         console.error('Erro ao buscar nomes da frase:', error);
+        commit('setRecommendedNames', []);
       }
     }
-
-
-  },
+  }
 
 })

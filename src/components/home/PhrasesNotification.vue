@@ -4,10 +4,10 @@
     @mousedown="startDrag" 
     @mouseup="stopDrag" 
     @mouseleave="stopDrag"
-    v-if="this.isVisible"
-    :style="draggingStyle">
-    <!-- Conteúdo do componente -->
-     <article class="message is-info">    
+    v-if="isVisible"
+    :style="draggingStyle"
+  >
+    <article class="message is-info">    
       <div class="message-header">  
         Olá, eu sou Hera.  
         <button @click="close" class="delete" aria-label="delete"></button>
@@ -28,109 +28,100 @@
             Nenhuma frase associada ainda.
           </template>
         </p>
-
-        <!-- <a @click="callstate" style="text-decoration: none;">{{ phrase }}</a> -->
       </div>
-     </article>
+    </article>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import newNames from '@/services/names'; // serviço já usado no store para pegar nomes
 
 export default {
   data() {
     return {
       isDragging: false,
-      top: null, // Inicialmente na parte inferior
-      left: null, // Inicialmente na parte direita
+      top: null,
+      left: null,
       offsetX: 0,
       offsetY: 0,
-      isVisible : true
+      isVisible: true
     };
   },
   computed: {
-    ...mapGetters(['getActualPhrase', 'userToken', 'userObjectId', 'getLat', 'getLon', 'getUserAssignature']), // Adicione os getters de latitude e longitude
-    
+    ...mapGetters([
+      'getActualPhrase',
+      'userToken',
+      'userObjectId',
+      'getLat',
+      'getLon',
+      'getUserAssignature'
+    ]),
     draggingStyle() {
       if (this.top !== null && this.left !== null) {
-        return {
-          top: this.top + 'px',
-          left: this.left + 'px',
-          position: 'fixed'
-        };
+        return { top: this.top + 'px', left: this.left + 'px', position: 'fixed' };
       }
-      // Posição padrão no canto inferior direito
-      return {
-        bottom: '20px',
-        right: '20px',
-        position: 'fixed'
-      };
+      return { bottom: '20px', right: '20px', position: 'fixed' };
     },
-
     phrase() {
       return this.getActualPhrase;
     },
     token() {
-      return this.userToken; // Retorna o token do usuário
+      return this.userToken;
     },
     objectId() {
-    return this.userObjectId; // Retorna o ID do objeto do usuário
+      return this.userObjectId;
     },
     latitude() {
-      return this.getLat; // Retorna a latitude do usuário
+      return this.getLat;
     },
     longitude() {
-      return this.getLon; // Retorna a longitude do usuário
+      return this.getLon;
     },
     assignature() {
-    return this.getUserAssignature; // Retorna a assinatura do usuário
+      return this.getUserAssignature;
     },
   },
-  watch: {
-    $route(to, from) {
-      // Atualiza sempre que a rota mudar
-      this.refreshData();
-    }
-  },
-
   methods: {
-    goToPhraseRecommendations() {
-      if (this.phrase && this.phrase.Frase) {
-        // indica que a pesquisa é de frase
-        this.$store.commit('setIsPhraseSearch', true);
-        this.$store.commit('setPhrase', this.phrase);
+    async goToPhraseRecommendations() {
+      if (!this.phrase || !this.phrase.associedNames) return;
 
-        // busca detalhes dos nomes recomendados da frase
-        this.$store.dispatch('fetchNamesFromPhrase', this.phrase.associedNames);
+      // Buscar detalhes dos nomes recomendados pela frase
+      const namesDetails = [];
+      for (const n of this.phrase.associedNames) {
+        try {
+          const response = await newNames.getNames(n);
+          namesDetails.push(response.data); // formato igual ao da pesquisa por nome
+        } catch (err) {
+          console.error(`Erro ao buscar detalhes para o nome ${n}:`, err);
+        }
       }
+
+      // Atualiza o estado Vuex
+      this.$store.commit('setRecommendedNames', namesDetails);
+      this.$store.commit('setPhrase', this.phrase);
+      this.$store.commit('setIsPhraseSearch', true);
     },
 
     refreshData() {
       this.$store.dispatch('fetchUserAssignature');
       this.$store.dispatch('getPhrases');
     },
-  
+
     startDrag(event) {
-        if (this.top === null || this.left === null) {
+      if (this.top === null || this.left === null) {
         const rect = event.currentTarget.getBoundingClientRect();
         this.top = rect.top;
         this.left = rect.left;
       }
-
       this.isDragging = true;
       this.offsetX = event.clientX - this.left;
       this.offsetY = event.clientY - this.top;
       window.addEventListener('mousemove', this.onDrag);
-
-      // this.isDragging = true;
-      // this.offsetX = event.clientX - this.left;
-      // this.offsetY = event.clientY - this.top;
-      // window.addEventListener('mousemove', this.onDrag);
     },
     onDrag(event) {
       if (this.isDragging) {
-        this.left = Math.min(Math.max(event.clientX - this.offsetX, 0), window.innerWidth - 200); // Ajuste para o tamanho da caixa
+        this.left = Math.min(Math.max(event.clientX - this.offsetX, 0), window.innerWidth - 200);
         this.top = Math.min(Math.max(event.clientY - this.offsetY, 0), window.innerHeight - 100);
       }
     },
@@ -139,47 +130,29 @@ export default {
       window.removeEventListener('mousemove', this.onDrag);
     },
     close() {
-      console.log('close')
       this.isVisible = false;
     },
-    callstate(){
-
-    },
-
-    
-
-
     handleResize() {
-      // margem mínima visível
-
       const outOfBounds =
-        this.left + 100 > window.innerWidth || // passou pra direita
-        this.top + 100 > window.innerHeight || // passou pra baixo
-        this.left < -100 || // muito à esquerda
-        this.top < -100;    // muito acima
-
+        this.left + 100 > window.innerWidth ||
+        this.top + 100 > window.innerHeight ||
+        this.left < -100 ||
+        this.top < -100;
       if (outOfBounds) {
-        // Reseta pra canto inferior direito
         this.top = null;
         this.left = null;
       }
-    },
+    }
   },
-
   created() {
-      this.$store.dispatch('fetchUserAssignature'); // Busca a assinatura do usuário
-      this.$store.dispatch("getPhrases");
-      this.refreshData();
+    this.refreshData();
   },
-
   mounted() {
     window.addEventListener('resize', this.handleResize);
   },
-
   beforeUnmount() {
     window.removeEventListener('resize', this.handleResize);
-  },
-    
+  }
 };
 </script>
 
@@ -194,5 +167,4 @@ export default {
   max-width: 90vw;
   overflow: hidden;
 }
-
 </style>

@@ -89,7 +89,7 @@ export default {
       // Buscar detalhes dos nomes recomendados pela frase
       const namesDetails = [];
       for (const name of this.phrase.associedNames) {
-        if (n != null){
+        if (name != null) {
           try {
             const promises = this.phrase.associedNames.map(name => newNames.getNames(name));
             const responses = await Promise.all(promises);

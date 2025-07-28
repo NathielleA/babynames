@@ -104,8 +104,8 @@ export default {
     },
 
     async handleNameClick(name) {
-      await this.updateUserAssignature();
-      await this.updateUserPhrases();
+      // await this.updateUserAssignature();
+      // await this.updateUserPhrases();
       this.refreshPopup();
     }
   },

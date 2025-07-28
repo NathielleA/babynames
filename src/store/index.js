@@ -286,6 +286,26 @@ export default createStore({
         console.error('Erro ao buscar nomes da frase:', error);
         commit('setRecommendedNames', []);
       }
+    },
+
+    async updateUserAssignature({ state }) {
+      try {
+        const userId = state.userToken || localStorage.getItem("userID");
+        if (!userId) return;
+        await fetch(`https://adam-serveless-babynames.vercel.app/update_user_assignature?userId=${userId}&timestamp=${Date.now()}`);
+      } catch (error) {
+        console.error("Erro ao atualizar assinatura:", error);
+      }
+    },
+
+    async updateUserPhrases({ state }) {
+      try {
+        const userId = state.userToken || localStorage.getItem("userID");
+        if (!userId) return;
+        await fetch(`https://adam-serveless-babynames.vercel.app/update_user_phrases?userId=${userId}&timestamp=${Date.now()}`);
+      } catch (error) {
+        console.error("Erro ao atualizar frases:", error);
+      }
     }
   }
 

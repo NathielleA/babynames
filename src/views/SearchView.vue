@@ -47,7 +47,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getNewNames', 'getPosix', 'setMainResultID', 'setNameQuery']),
+    ...mapActions(['getNewNames', 'getPosix', 'setMainResultID', 'setNameQuery', 'updateUserAssignature', 'updateUserPhrases']),
 
     async checkUserID() {
       const userLocalStorage = localStorage.getItem("userID");
@@ -69,26 +69,6 @@ export default {
       }
     },
 
-    async updateUserAssignature() {
-      try {
-        const userId = localStorage.getItem("userID");
-        if (!userId) return;
-        await fetch(`https://adam-serveless-babynames.vercel.app/update_user_assignature?userId=${userId}&timestamp=${Date.now()}`);
-      } catch (error) {
-        console.error("Erro ao atualizar assinatura:", error);
-      }
-    },
-
-    async updateUserPhrases() {
-      try {
-        const userId = localStorage.getItem("userID");
-        if (!userId) return;
-        await fetch(`https://adam-serveless-babynames.vercel.app/update_user_phrases?userId=${userId}&timestamp=${Date.now()}`);
-      } catch (error) {
-        console.error("Erro ao atualizar frases:", error);
-      }
-    },
-
     async searchRecommendedNames() {
       // pesquisa normal por nome
       this.$store.commit('setIsPhraseSearch', false);
@@ -105,9 +85,9 @@ export default {
     },
 
     async handleNameClick(name) {
-      await this.updateUserAssignature();
-      await this.updateUserPhrases();
-      this.refreshPopup();
+      await this.$store.dispatch('updateUserAssignature');
+      await this.$store.dispatch('updateUserPhrases');
+      //this.refreshPopup();
     }
   },
 
@@ -131,7 +111,7 @@ export default {
       </h1>
       <ul class="is-compact" style="list-style: none; padding: 0; margin: 0;">
         <li v-for="(name, index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
-          <MySearchNameResult :name="name" :indice="index"/>
+          <MySearchNameResult :name="name" :indice="index" @click.native="handleNameClick(name)"/>
         </li>
       </ul>
       <PhrasesNotification class="pn" @refresh-phrases="refreshPopup"/>

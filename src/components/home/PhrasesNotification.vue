@@ -18,6 +18,7 @@
         <p><strong>Latitude:</strong> {{ latitude }}</p>
         <p><strong>Longitude:</strong> {{ longitude }}</p>
         <p><strong>Assinatura:</strong> {{ assignature }}</p>
+
         <p><strong>Frase: </strong> 
           <template v-if="phrase && phrase.Frase">
             <a @click="goToPhraseRecommendations" style="cursor: pointer; text-decoration: underline;">
@@ -28,6 +29,12 @@
             Nenhuma frase associada ainda.
           </template>
         </p>
+
+        <!-- Loader -->
+        <div v-if="loading" class="loading-container">
+          <div class="spinner"></div>
+          <span>Carregando nomes...</span>
+        </div>
       </div>
     </article>
   </div>
@@ -35,7 +42,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import newNames from '@/services/names'; // serviço já usado no store para pegar nomes
+import newNames from '@/services/names';
 
 export default {
   data() {
@@ -45,7 +52,8 @@ export default {
       left: null,
       offsetX: 0,
       offsetY: 0,
-      isVisible: true
+      isVisible: true,
+      loading: false
     };
   },
   computed: {
@@ -85,44 +93,33 @@ export default {
   methods: {
     async goToPhraseRecommendations() {
       if (!this.phrase || !this.phrase.associedNames) return;
+      this.loading = true;
 
-      // Buscar detalhes dos nomes recomendados pela 
-      const names = []
+      const names = [];
       const namesDetails = [];
       for (const n of this.phrase.associedNames) {
-        if (n != null){
-          try {
-            names.push(n);
-          } catch (err) {
-            console.error(`Erro ao buscar detalhes para o nome ${n}:`, err);
-          }
-        } else {
-          console.warn("Nome nulo encontrado na frase, pulando...");
+        if (n != null) {
+          names.push(n);
         }
       }
-      // Buscar detalhes dos nomes recomendados pela frase
-      const promises = names.map(name => newNames.getNames(name));
+
       try {
-        const responses = await Promise.all(promises);
-        responses.forEach(response => {
-          namesDetails.push(response.data);
-        });
+        const responses = await Promise.all(names.map(name => newNames.getNames(name)));
+        responses.forEach(response => namesDetails.push(response.data));
+
+        this.$store.commit('setRecommendedNames', namesDetails);
+        this.$store.commit('setPhrase', this.phrase);
+        this.$store.commit('setIsPhraseSearch', true);
       } catch (err) {
         console.error("Erro ao buscar detalhes dos nomes:", err);
+      } finally {
+        this.loading = false;
       }
-
-
-      // Atualiza o estado Vuex
-      this.$store.commit('setRecommendedNames', namesDetails);
-      this.$store.commit('setPhrase', this.phrase);
-      this.$store.commit('setIsPhraseSearch', true);
     },
-
     refreshData() {
       this.$store.dispatch('fetchUserAssignature');
       this.$store.dispatch('getPhrases');
     },
-
     startDrag(event) {
       if (this.top === null || this.left === null) {
         const rect = event.currentTarget.getBoundingClientRect();
@@ -181,5 +178,28 @@ export default {
   width: 300px;
   max-width: 90vw;
   overflow: hidden;
+}
+
+.loading-container {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #3273dc;
+  font-weight: bold;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3273dc;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

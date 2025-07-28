@@ -28,8 +28,11 @@ export default createStore({
     otherPhrases : null,
     isPhraseSearch: false, // Novo estado para indicar se é uma busca por frase
   },
-  plugins : [createPersistedState()],
-
+  // MODIFIED: Configure vuex-persistedstate to save userToken, userObjectId, name, actualPhrase, and isPhraseSearch
+  plugins : [createPersistedState({
+    paths: ['userToken', 'userObjectId', 'name', 'actualPhrase', 'isPhraseSearch'] //
+  })],
+  // ... rest of your store code
   getters: {
     getName : state => state.name,
     // getSimiliarNames : state => state.similiarNames,
@@ -135,7 +138,16 @@ export default createStore({
       await dispatch('postNewAction');
 
     },
-    
+
+    // async getNamesByList({ commit }, namesList) {
+    //   try {
+    //     let response = await newNames.getNamesByList(namesList);
+    //     console.log("Resposta getNamesByList:", response.data);
+    //     commit('setRecommendedNames', response.data); // atualiza a lista como na busca normal
+    //   } catch (error) {
+    //     console.error('Erro ao buscar nomes por lista:', error);
+    //   }
+    // },
 
     async updateNames({commit}){
       console.log('getasyncNames called');

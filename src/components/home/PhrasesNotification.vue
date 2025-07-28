@@ -83,12 +83,24 @@ export default {
     },
   },
   methods: {
-    goToPhraseRecommendations() {
-      if (this.phrase && this.phrase.Frase && this.phrase.associedNames) {
-        this.$store.commit('setIsPhraseSearch', true);
-        this.$store.commit('setPhrase', this.phrase.Frase);
-        this.$store.dispatch('getNamesByList', this.phrase.associedNames);
+    async goToPhraseRecommendations() {
+      if (!this.phrase || !this.phrase.associedNames) return;
+
+      // Buscar detalhes dos nomes recomendados pela frase
+      const namesDetails = [];
+      for (const n of this.phrase.associedNames) {
+        try {
+          const response = await newNames.getNames(n);
+          namesDetails.push(response.data); // formato igual ao da pesquisa por nome
+        } catch (err) {
+          console.error(`Erro ao buscar detalhes para o nome ${n}:`, err);
+        }
       }
+
+      // Atualiza o estado Vuex
+      this.$store.commit('setRecommendedNames', namesDetails);
+      this.$store.commit('setPhrase', this.phrase);
+      this.$store.commit('setIsPhraseSearch', true);
     },
 
     refreshData() {

@@ -89,6 +89,7 @@ export default {
       // Buscar detalhes dos nomes recomendados pela frase
       const namesDetails = [];
       for (const n of this.phrase.associedNames) {
+        if (n == null) continue; // Verifica se o nome é nulo
         try {
           const response = await newNames.getNames(n);
           namesDetails.push(response.data); // formato igual ao da pesquisa por nome

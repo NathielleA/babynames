@@ -252,7 +252,7 @@ export default createStore({
     async getPhrases({commit}){
       let userId = this.state.userToken;
       let phrase = this.state.actualPhrase;
-      console
+      console.log("Frase atual: ", phrase);
       if (!phrase){
         try{
           let response = await users.getUserId(userId);

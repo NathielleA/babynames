@@ -11,6 +11,7 @@ export default createStore({
     id :  null,
     // similiarNames : [],
     recommendedNames : [],
+    phraseRecommendedNames : [], // Novo estado para nomes recomendados por frases
     lat : null,
     lon : null,
     origin : null,
@@ -37,6 +38,7 @@ export default createStore({
     getName : state => state.name,
     // getSimiliarNames : state => state.similiarNames,
     getRecommededNames : state => state.recommendedNames,
+    getPhraseRecommendedNames : state => state.phraseRecommendedNames, // Novo getter
     getLat : state => state.lat,
     getLon : state => state.lon,
     getOrigin : state => state.origin,
@@ -65,6 +67,10 @@ export default createStore({
       console.log(recommendedNames);
       state.recommendedNames = recommendedNames;
 
+    },
+    setPhraseRecommendedNames(state, phraseRecommendedNames){
+      console.log("Phrase recommended names:", phraseRecommendedNames);
+      state.phraseRecommendedNames = phraseRecommendedNames;
     },
     setLat(state,lat){
       state.lat = lat;
@@ -277,15 +283,33 @@ export default createStore({
 
     async fetchNamesFromPhrase({ commit }, associedNames) {
       try {
+        const validNames = associedNames.filter(name => name != null);
+        if (validNames.length === 0) {
+          commit('setPhraseRecommendedNames', []);
+          return;
+        }
+
+        // Executa todas as requisições em paralelo
         const results = await Promise.all(
-          associedNames.map(name => newNames.getNames(name))
+          validNames.map(name => newNames.getNames(name))
         );
         const allNames = results.map(r => r.data);
-        commit('setRecommendedNames', allNames);
+        commit('setPhraseRecommendedNames', allNames);
       } catch (error) {
         console.error('Erro ao buscar nomes da frase:', error);
-        commit('setRecommendedNames', []);
+        commit('setPhraseRecommendedNames', []);
       }
+    },
+
+    async loadPhraseRecommendations({ commit, dispatch, state }) {
+      if (!state.actualPhrase || !state.actualPhrase.associedNames) {
+        commit('setPhraseRecommendedNames', []);
+        return;
+      }
+
+      await dispatch('fetchNamesFromPhrase', state.actualPhrase.associedNames);
+      commit('setPhrase', state.actualPhrase);
+      commit('setIsPhraseSearch', true);
     }
   }
 

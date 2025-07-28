@@ -86,25 +86,8 @@ export default {
     async goToPhraseRecommendations() {
       if (!this.phrase || !this.phrase.associedNames) return;
 
-      // Buscar detalhes dos nomes recomendados pela frase
-      const namesDetails = [];
-      for (const n of this.phrase.associedNames) {
-        if (n != null){
-          try {
-            const response = await newNames.getNames(n);
-            namesDetails.push(response.data); // formato igual ao da pesquisa por nome
-          } catch (err) {
-            console.error(`Erro ao buscar detalhes para o nome ${n}:`, err);
-          }
-        } else {
-          console.warn("Nome nulo encontrado na frase, pulando...");
-        }
-      }
-
-      // Atualiza o estado Vuex
-      this.$store.commit('setRecommendedNames', namesDetails);
-      this.$store.commit('setPhrase', this.phrase);
-      this.$store.commit('setIsPhraseSearch', true);
+      // Use a action otimizada do store em vez de fazer requisições individuais
+      await this.$store.dispatch('loadPhraseRecommendations');
     },
 
     refreshData() {

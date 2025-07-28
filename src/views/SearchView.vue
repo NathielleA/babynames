@@ -87,7 +87,7 @@ export default {
     async handleNameClick(name) {
       await this.$store.dispatch('updateUserAssignature');
       await this.$store.dispatch('updateUserPhrases');
-      //this.refreshPopup();
+      this.refreshPopup();
     }
   },
 

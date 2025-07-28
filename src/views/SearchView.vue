@@ -81,7 +81,7 @@ export default {
 
     refreshPopup() {
       this.$store.dispatch('fetchUserAssignature');
-      this.$store.dispatch('getPhrases');
+      //this.$store.dispatch('getPhrases');
     },
 
     async handleNameClick(name) {

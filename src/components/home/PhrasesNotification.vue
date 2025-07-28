@@ -86,15 +86,21 @@ export default {
     async goToPhraseRecommendations() {
       if (!this.phrase || !this.phrase.associedNames) return;
 
-      try {
-        const response = await this.$store.$names.getNamesByList(this.phrase.associedNames);
-        this.$store.commit('setRecommendedNames', response.data);
-        this.$store.commit('setPhrase', this.phrase);
-        this.$store.commit('setIsPhraseSearch', true);
-        this.$router.push('/search');
-      } catch (error) {
-        console.error('Erro ao buscar recomendações da frase:', error);
+      // Buscar detalhes dos nomes recomendados pela frase
+      const namesDetails = [];
+      for (const n of this.phrase.associedNames) {
+        try {
+          const response = await newNames.getNames(n);
+          namesDetails.push(response.data); // formato igual ao da pesquisa por nome
+        } catch (err) {
+          console.error(`Erro ao buscar detalhes para o nome ${n}:`, err);
+        }
       }
+
+      // Atualiza o estado Vuex
+      this.$store.commit('setRecommendedNames', namesDetails);
+      this.$store.commit('setPhrase', this.phrase);
+      this.$store.commit('setIsPhraseSearch', true);
     },
 
     refreshData() {

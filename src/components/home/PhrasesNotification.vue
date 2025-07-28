@@ -87,14 +87,15 @@ export default {
       if (!this.phrase || !this.phrase.associedNames) return;
 
       // Buscar detalhes dos nomes recomendados pela frase
+      const namesDetails = [];
       try {
-        const validNames = (this.phrase.associedNames || []).filter(Boolean);
-        const promises = validNames.map(name => newNames.getNames(name));
+        const promises = this.phrase.associedNames.map(name => newNames.getNames(name));
         const responses = await Promise.all(promises);
-        const namesDetails = responses.map(response => response.data);
+        responses.forEach(response => {
+          namesDetails.push(response.data);
+        });
       } catch (err) {
-        console.error("Erro ao buscar detalhes dos nomes:", err);
-        return;
+        console.error(`Erro ao buscar detalhes para o nome :`, err);
       }
 
       // Atualiza o estado Vuex

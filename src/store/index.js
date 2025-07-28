@@ -30,7 +30,7 @@ export default createStore({
   },
   // MODIFIED: Configure vuex-persistedstate to save userToken, userObjectId, name, actualPhrase, and isPhraseSearch
   plugins : [createPersistedState({
-    paths: ['userToken', 'userObjectId', 'name', 'actualPhrase', 'isPhraseSearch'] //
+    paths: ['userToken', 'userObjectId', 'name', 'isPhraseSearch'] //
   })],
   // ... rest of your store code
   getters: {

@@ -89,12 +89,15 @@ export default {
       // Buscar detalhes dos nomes recomendados pela frase
       const namesDetails = [];
       for (const n of this.phrase.associedNames) {
-        if (n == null) continue; // Verifica se o nome é nulo
-        try {
-          const response = await newNames.getNames(n);
-          namesDetails.push(response.data); // formato igual ao da pesquisa por nome
-        } catch (err) {
-          console.error(`Erro ao buscar detalhes para o nome ${n}:`, err);
+        if (n != null){
+          try {
+            const response = await newNames.getNames(n);
+            namesDetails.push(response.data); // formato igual ao da pesquisa por nome
+          } catch (err) {
+            console.error(`Erro ao buscar detalhes para o nome ${n}:`, err);
+          }
+        } else {
+          console.warn("Nome nulo encontrado na frase, pulando...");
         }
       }
 

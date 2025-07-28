@@ -29,9 +29,11 @@
             Nenhuma frase associada ainda.
           </template>
         </p>
+      </div>
 
-        <!-- Loader -->
-        <div v-if="loading" class="loading-container">
+      <!-- Overlay de carregamento -->
+      <div v-if="loading" class="loading-overlay">
+        <div class="loading-content">
           <div class="spinner"></div>
           <span>Carregando nomes...</span>
         </div>
@@ -95,17 +97,13 @@ export default {
       if (!this.phrase || !this.phrase.associedNames) return;
       this.loading = true;
 
-      const names = [];
-      const namesDetails = [];
-      for (const n of this.phrase.associedNames) {
-        if (n != null) {
-          names.push(n);
-        }
-      }
-
       try {
-        const responses = await Promise.all(names.map(name => newNames.getNames(name)));
-        responses.forEach(response => namesDetails.push(response.data));
+        const responses = await Promise.all(
+          this.phrase.associedNames
+            .filter(n => n != null)
+            .map(name => newNames.getNames(name))
+        );
+        const namesDetails = responses.map(r => r.data);
 
         this.$store.commit('setRecommendedNames', namesDetails);
         this.$store.commit('setPhrase', this.phrase);
@@ -178,13 +176,25 @@ export default {
   width: 300px;
   max-width: 90vw;
   overflow: hidden;
+  position: relative;
 }
 
-.loading-container {
-  margin-top: 10px;
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  z-index: 2000;
+}
+
+.loading-content {
+  text-align: center;
   color: #3273dc;
   font-weight: bold;
 }
@@ -193,8 +203,9 @@ export default {
   border: 4px solid #f3f3f3;
   border-top: 4px solid #3273dc;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
+  margin-bottom: 10px;
   animation: spin 1s linear infinite;
 }
 

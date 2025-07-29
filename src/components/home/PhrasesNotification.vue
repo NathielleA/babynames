@@ -117,7 +117,7 @@ export default {
     },
     refreshData() {
       this.$store.dispatch('fetchUserAssignature');
-      //this.$store.dispatch('getPhrases');
+      this.$store.dispatch('getPhrases');
     },
     startDrag(event) {
       if (this.top === null || this.left === null) {
@@ -156,7 +156,7 @@ export default {
     }
   },
   created() {
-    this.refreshData();
+    //this.refreshData();
   },
   mounted() {
     window.addEventListener('resize', this.handleResize);

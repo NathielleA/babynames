@@ -28,9 +28,9 @@ export default createStore({
     otherPhrases : null,
     isPhraseSearch: false, // Novo estado para indicar se é uma busca por frase
   },
-  // MODIFIED: Configure vuex-persistedstate to save userToken, userObjectId, and isPhraseSearch
+  // MODIFIED: Configure vuex-persistedstate to save userToken, userObjectId, name and isPhraseSearch
   plugins : [createPersistedState({
-    paths: ['userToken', 'userObjectId', 'isPhraseSearch'] //
+    paths: ['userToken', 'userObjectId', 'name', 'isPhraseSearch'] //
   })],
   
   getters: {

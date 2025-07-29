@@ -112,12 +112,10 @@ export default {
         console.error("Erro ao buscar detalhes dos nomes:", err);
       } finally {
         this.loading = false;
+        if (this.$router.currentRoute.path !== '/search') {
+          this.$router.push({ path: '/search' });
+        }
       }
-
-      if (this.$router.currentRoute.path !== '/search') {
-        this.$router.push({ path: '/search' });
-      }
-
     },
     refreshData() {
       this.$store.dispatch('fetchUserAssignature');

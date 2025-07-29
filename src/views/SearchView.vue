@@ -81,7 +81,7 @@ export default {
 
     refreshPopup() {
       this.$store.dispatch('fetchUserAssignature');
-      this.$store.dispatch('getPhrases');
+      //this.$store.dispatch('getPhrases');
     },
 
     async handleNameClick() {
@@ -114,7 +114,7 @@ export default {
           <MySearchNameResult :name="name" :indice="index" @click.native="handleNameClick()"/>
         </li>
       </ul>
-      <PhrasesNotification class="pn"/>
+      <PhrasesNotification class="pn" @refresh="refreshPopup"/>
     </div>
     <footer class="myfooter">
       <div class="content has-text-centered">

@@ -259,9 +259,8 @@ export default createStore({
           let numeroAleatorio = Math.floor(Math.random() * response.data.phrases.length);
           let frase = response.data.phrases[numeroAleatorio];
           console.log("Frase: ", frase)
-          if (!isPhraseSearch) {
-            commit('setPhrase', frase);
-          }
+          
+          commit('setPhrase', frase);
           commit('setOtherPhrase',response.data.phrases)
         }
         catch(error){
@@ -272,9 +271,8 @@ export default createStore({
         // console.log(numeroAleatorio);
         let frase = this.state.otherPhrases[numeroAleatorio];
         console.log("Frase: ", frase)
-        if (!isPhraseSearch) {
-          commit('setPhrase', frase);
-        }
+        
+        commit('setPhrase', frase);
       }
       
     },

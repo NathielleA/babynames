@@ -112,8 +112,12 @@ export default {
         console.error("Erro ao buscar detalhes dos nomes:", err);
       } finally {
         this.loading = false;
-        this.refreshData();
       }
+
+      if (this.$router.currentRoute.path !== '/search') {
+        this.$router.push({ path: '/search' });
+      }
+
     },
     refreshData() {
       this.$store.dispatch('fetchUserAssignature');
@@ -156,7 +160,7 @@ export default {
     }
   },
   created() {
-    //this.refreshData();
+    this.refreshData();
   },
   mounted() {
     window.addEventListener('resize', this.handleResize);

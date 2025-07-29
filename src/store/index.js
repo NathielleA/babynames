@@ -30,7 +30,7 @@ export default createStore({
   },
   // MODIFIED: Configure vuex-persistedstate to save userToken, userObjectId, name, and isPhraseSearch
   plugins : [createPersistedState({
-    paths: ['userToken', 'userObjectId', 'isPhraseSearch', 'actualPhrase'] //
+    paths: ['userToken', 'userObjectId', 'isPhraseSearch'] //
   })],
   
   getters: {
@@ -259,7 +259,7 @@ export default createStore({
           let numeroAleatorio = Math.floor(Math.random() * response.data.phrases.length);
           let frase = response.data.phrases[numeroAleatorio];
           console.log("Frase: ", frase)
-          commit('setPhrase', frase);
+          //commit('setPhrase', frase);
           commit('setOtherPhrase',response.data.phrases)
         }
         catch(error){
@@ -270,7 +270,7 @@ export default createStore({
         // console.log(numeroAleatorio);
         let frase = this.state.otherPhrases[numeroAleatorio];
         console.log("Frase: ", frase)
-        commit('setPhrase', frase);
+        //commit('setPhrase', frase);
       }
       
     },

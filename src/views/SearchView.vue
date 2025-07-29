@@ -81,10 +81,10 @@ export default {
 
     refreshPopup() {
       this.$store.dispatch('fetchUserAssignature');
-      //this.$store.dispatch('getPhrases');
+      this.$store.dispatch('getPhrases');
     },
 
-    async handleNameClick(name) {
+    async handleNameClick() {
       await this.$store.dispatch('updateUserAssignature');
       await this.$store.dispatch('updateUserPhrases');
       this.refreshPopup();
@@ -111,7 +111,7 @@ export default {
       </h1>
       <ul class="is-compact" style="list-style: none; padding: 0; margin: 0;">
         <li v-for="(name, index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">
-          <MySearchNameResult :name="name" :indice="index" @click.native="handleNameClick(name)"/>
+          <MySearchNameResult :name="name" :indice="index" @click.native="handleNameClick()"/>
         </li>
       </ul>
       <PhrasesNotification class="pn" @refresh-phrases="refreshPopup"/>

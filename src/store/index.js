@@ -275,6 +275,7 @@ export default createStore({
       
     },
 
+    // ATENÇÃO ESSA FUNÇÃO E A DE PEGAR OS NOMES DAS FRASES NA API (PARA VER A QUESTÃO DA DEMORA E TIRAR O CARREGAMENTO----)
     async fetchNamesFromPhrase({ commit }, associedNames) {
       try {
         const results = await Promise.all(

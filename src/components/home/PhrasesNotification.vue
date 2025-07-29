@@ -112,6 +112,7 @@ export default {
         console.error("Erro ao buscar detalhes dos nomes:", err);
       } finally {
         this.loading = false;
+        this.refreshData();
       }
     },
     refreshData() {

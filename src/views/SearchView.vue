@@ -106,8 +106,12 @@ export default {
     <div class="container is-fluid" style="overflow: hidden;">
       <MyTopSearchBar @search="searchRecommendedNames" style="margin-bottom: 10px;"/>
       <h1>
-        Nomes recomendados para
-        <b>{{ isPhraseSearch ? phrase?.Frase : name }}</b>:
+        <template v-if="isPhraseSearch">
+          Nomes recomendados para a frase: "<b>{{ phrase?.Frase }}</b>"
+        </template>
+        <template v-else>
+          Nomes recomendados para <b>{{ name }}</b>:
+        </template>
       </h1>
       <ul class="is-compact" style="list-style: none; padding: 0; margin: 0;">
         <li v-for="(name, index) in recommendedNames" :key="index" style="margin-bottom: -20px !important;">

@@ -6,10 +6,21 @@ import store from './store'
 import { analytics } from './services/analytics'
 import ABTestingReports from './services/reports'
 import AnalyticsToggle from './services/analytics-toggle'
+import AnalyticsMigration from './services/analytics-migration'
 //import Buefy from 'buefy'
 //import 'buefy/dist/buefy.css'
 
 const app = createApp(App).use(store)
+
+// Sincronizar analytics com o sistema de usuários após montar a aplicação
+app.mixin({
+  mounted() {
+    // Sincronizar na primeira montagem de qualquer componente
+    if (this.$store && this.$store.state.userToken) {
+      analytics.syncWithUserSystem(this.$store);
+    }
+  }
+});
 
 // app.use(router)
 // //app.use(Buefy)
@@ -27,6 +38,15 @@ router.afterEach((to, from) => {
 
 // Disponibilizar analytics e relatórios globalmente
 app.config.globalProperties.$analytics = analytics;
+
+// Sincronizar analytics com o sistema de usuários após o store ser inicializado
+router.beforeEach((to, from, next) => {
+  // Sincronizar userID do analytics com o sistema principal
+  if (app.config.globalProperties.$store) {
+    analytics.syncWithUserSystem(app.config.globalProperties.$store);
+  }
+  next();
+});
 
 // Disponibilizar relatórios globalmente
 // Em desenvolvimento: sempre disponível
@@ -50,6 +70,20 @@ if (shouldEnableReports) {
 
 // Sempre disponibilizar o toggle para habilitar/desabilitar
 window.AnalyticsToggle = AnalyticsToggle;
+
+// Disponibilizar utilitário de migração
+window.AnalyticsMigration = AnalyticsMigration;
+
+// Verificar automaticamente consistência dos dados em desenvolvimento
+if (process.env.NODE_ENV === 'development') {
+  setTimeout(() => {
+    const info = AnalyticsMigration.getSystemInfo();
+    if (!info.consistent) {
+      console.warn("⚠️ UserIDs inconsistentes detectados!");
+      console.log("Execute AnalyticsMigration.help() para ver opções de correção");
+    }
+  }, 2000); // Aguardar 2 segundos para o sistema carregar
+}
 
 // Usa o router 
 app.use(router).mount('#app');

@@ -10,16 +10,56 @@ export class AnalyticsService {
     // Inicializar eventos de rastreamento
     this.initializeTracking();
     
+    // Observar mudanças no userID
+    this.watchUserIdChanges();
+    
     // Enviar evento inicial de sessão
     this.trackSession();
   }
 
-  generateUserId() {
-    let userId = this.getCookie('user_id');
-    if (!userId) {
-      userId = 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
-      this.setCookie('user_id', userId, 365); // Cookie expira em 1 ano
+  // Sincronizar com o sistema de usuários do Vuex store
+  syncWithUserSystem(store) {
+    if (store && store.state && store.state.userToken) {
+      const storeUserId = store.state.userToken;
+      if (storeUserId !== this.userId) {
+        console.log(`Analytics: Sincronizando userID ${this.userId} -> ${storeUserId}`);
+        this.userId = storeUserId;
+        
+        // Atualizar localStorage para manter consistência
+        localStorage.setItem("userID", storeUserId);
+        
+        // Re-enviar evento de sessão com o ID correto
+        this.trackSession();
+      }
     }
+  }
+
+  // Observar mudanças no localStorage do userID
+  watchUserIdChanges() {
+    // Verificar periodicamente se o userID mudou no localStorage
+    setInterval(() => {
+      const currentUserId = localStorage.getItem("userID");
+      if (currentUserId && currentUserId !== this.userId) {
+        console.log(`Analytics: userID atualizado de ${this.userId} para ${currentUserId}`);
+        this.userId = currentUserId;
+        this.trackSession(); // Re-enviar sessão com novo ID
+      }
+    }, 1000); // Verificar a cada segundo
+  }
+
+  generateUserId() {
+    // Usar o mesmo userID que já existe no sistema
+    let userId = localStorage.getItem("userID");
+    
+    if (!userId) {
+      // Se por algum motivo não existir, criar usando o mesmo padrão do sistema principal
+      userId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      localStorage.setItem("userID", userId);
+      console.log("Analytics: Novo usuário criado! ID: " + userId);
+    } else {
+      console.log("Analytics: Usuário reconhecido! ID: " + userId);
+    }
+    
     return userId;
   }
 

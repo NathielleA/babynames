@@ -2,7 +2,39 @@
 
 Este sistema permite rastrear e analisar o comportamento dos usuários nas duas interfaces (A e B) do seu site de nomes de bebês.
 
-## 📊 Funcionalidades
+## � Integração com Sistema de Usuários
+
+O sistema de analytics agora usa o mesmo `userID` que o sistema principal de usuários armazenado no localStorage. Isso garante que:
+
+- ✅ Os dados de analytics estão vinculados ao mesmo usuário do banco de dados
+- ✅ Usuários são reconhecidos corretamente entre sessões
+- ✅ Relatórios são consistentes com o sistema principal
+
+### Verificação de Consistência
+
+Para verificar se os dados estão usando o userID correto:
+
+```javascript
+// Verificar consistência dos dados
+AnalyticsMigration.checkDataConsistency()
+
+// Ver informações dos userIDs
+AnalyticsMigration.getSystemInfo()
+```
+
+### Migração de Dados Antigos
+
+Se você já coletou dados com o sistema antigo (userIDs diferentes), pode migrar:
+
+```javascript
+// Migrar dados existentes para usar o userID correto
+AnalyticsMigration.migrateToCorrectUserId()
+
+// Ou remover dados inconsistentes
+AnalyticsMigration.clearInconsistentData()
+```
+
+## �📊 Funcionalidades
 
 ### Rastreamento Automático
 - **Atribuição de Variantes**: Rastreia qual interface cada usuário recebe (A ou B)

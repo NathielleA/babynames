@@ -19,13 +19,36 @@ Este sistema permite rastrear e analisar o comportamento dos usuários nas duas 
 
 ## 🚀 Como Usar
 
-### 1. Visualização em Tempo Real (Desenvolvimento)
+### 1. Visualização em Tempo Real
 
-Durante o desenvolvimento, você pode ver estatísticas em tempo real:
-
+**Durante o Desenvolvimento:**
 1. Abra o site em modo de desenvolvimento
 2. Procure pelo ícone flutuante 📊 no canto inferior direito
 3. Clique para abrir o dashboard de analytics
+
+**Em Produção (Vercel):**
+O dashboard pode ser habilitado de 3 formas:
+
+**Opção 1 - URL com parâmetro:**
+Adicione `?analytics=true` na URL: `https://seusite.vercel.app?analytics=true`
+
+**Opção 2 - Console do navegador:**
+```javascript
+// Habilitar apenas nesta sessão
+AnalyticsToggle.enable()
+
+// Habilitar permanentemente por 30 dias
+AnalyticsToggle.enablePermanent()
+
+// Ver status atual
+AnalyticsToggle.status()
+
+// Ver ajuda
+AnalyticsToggle.help()
+```
+
+**Opção 3 - Automaticamente:**
+Se você já acessou com `?analytics=true`, o sistema lembrará nas próximas visitas.
 
 ### 2. Relatórios via Console
 
@@ -215,7 +238,38 @@ abReports.exportReport(`analytics-${new Date().toISOString().split('T')[0]}.json
 
 ## 🚨 Notas Importantes
 
-- O dashboard só aparece em modo de desenvolvimento
+- **Desenvolvimento**: O dashboard aparece automaticamente
+- **Produção**: Use `?analytics=true` na URL ou execute `AnalyticsToggle.enable()` no console
 - Dados são armazenados localmente (podem ser perdidos ao limpar o navegador)
 - Para análise estatística robusta, use os dados do Google Analytics
 - Em produção, considere implementar um backend para armazenar dados permanentemente
+
+## 🔧 Habilitação em Produção
+
+### Acesso Rápido
+Adicione `?analytics=true` na URL do seu site no Vercel:
+```
+https://seusite.vercel.app?analytics=true
+```
+
+### Comandos do Console
+Abra o console do navegador (F12) e execute:
+```javascript
+// Ver status
+AnalyticsToggle.status()
+
+// Habilitar temporariamente
+AnalyticsToggle.enable()
+
+// Habilitar por 30 dias
+AnalyticsToggle.enablePermanent()
+
+// Desabilitar
+AnalyticsToggle.disable()
+```
+
+### Segurança
+- O analytics não coleta dados pessoais
+- IDs são gerados aleatoriamente
+- Você pode desabilitar a qualquer momento
+- Dados ficam apenas no seu navegador

@@ -50,6 +50,11 @@
                 🔄 Atualizar
               </button>
             </div>
+            <div class="control" v-if="!isDevelopment">
+              <button class="button is-small is-danger" @click="disableAnalytics">
+                🔒 Desabilitar
+              </button>
+            </div>
           </div>
 
           <div class="mt-4" v-if="recentEvents.length > 0">
@@ -86,7 +91,7 @@
   
   <!-- Botão flutuante para abrir o dashboard -->
   <button 
-    v-if="!showDashboard && isDevelopment" 
+    v-if="!showDashboard && showAnalyticsButton" 
     class="floating-analytics-btn"
     @click="toggleDashboard"
     title="Abrir Analytics Dashboard"
@@ -118,6 +123,21 @@ export default {
       const aPercent = Math.round((this.variantStats.A / total) * 100);
       const bPercent = 100 - aPercent;
       return `${aPercent}% / ${bPercent}%`;
+    },
+    showAnalyticsButton() {
+      // Mostrar em desenvolvimento sempre
+      if (this.isDevelopment) return true;
+      
+      // Em produção, mostrar se:
+      // 1. URL contém parâmetro ?analytics=true
+      // 2. LocalStorage tem flag de analytics habilitado
+      // 3. Cookie de admin está presente
+      const urlParams = new URLSearchParams(window.location.search);
+      const analyticsParam = urlParams.get('analytics') === 'true';
+      const analyticsEnabled = localStorage.getItem('enable_analytics') === 'true';
+      const adminCookie = document.cookie.includes('admin_analytics=true');
+      
+      return analyticsParam || analyticsEnabled || adminCookie;
     }
   },
   mounted() {
@@ -220,6 +240,14 @@ export default {
         analytics.clearStoredAnalytics();
         localStorage.removeItem('variant_assignments');
         this.refreshStats();
+      }
+    },
+    
+    disableAnalytics() {
+      if (confirm('Desabilitar dashboard de analytics? Você pode reativá-lo usando ?analytics=true na URL.')) {
+        localStorage.removeItem('enable_analytics');
+        document.cookie = 'admin_analytics=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        this.showDashboard = false;
       }
     }
   }

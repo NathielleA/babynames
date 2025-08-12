@@ -13,6 +13,36 @@ function setCookie(name, value, days) {
   const expires = `expires=${d.toUTCString()}`;
   document.cookie = `${name}=${value}; ${expires}; path=/`;
 }
+
+// Função para rastrear atribuição de variante
+function trackVariantAssignment(variant, isNew) {
+  // Enviar evento para Google Analytics se disponível
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'ab_test_variant_assigned', {
+      custom_parameter_1: variant,
+      custom_parameter_2: isNew ? 'new_user' : 'returning_user',
+      event_category: 'ab_testing'
+    });
+  }
+  
+  // Armazenar localmente para análise posterior
+  try {
+    const assignmentData = {
+      event_name: 'variant_assignment',
+      variant: variant,
+      user_type: isNew ? 'new_user' : 'returning_user',
+      timestamp: new Date().toISOString(),
+      user_agent: navigator.userAgent
+    };
+    
+    const stored = JSON.parse(localStorage.getItem('variant_assignments') || '[]');
+    stored.push(assignmentData);
+    localStorage.setItem('variant_assignments', JSON.stringify(stored));
+  } catch (error) {
+    console.warn('Não foi possível armazenar dados de atribuição de variante:', error);
+  }
+}
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -24,10 +54,17 @@ const router = createRouter({
         if (!EXISTINGVARIANT){
             const variant = Math.random() < 0.5 ? 'A' : 'B'
             setCookie('variant', variant,7)
+            
+            // Rastrear nova atribuição de variante
+            trackVariantAssignment(variant, true);
+            
             next({name:variant == 'A' ? 'InterfaceA' : 'InterfaceB'})
             
         }
         else {
+          // Rastrear usuário retornando
+          trackVariantAssignment(EXISTINGVARIANT, false);
+          
           next({ name: EXISTINGVARIANT === 'A' ? 'InterfaceA' : 'InterfaceB' });
         }
   

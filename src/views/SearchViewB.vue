@@ -91,6 +91,11 @@ export default {
       },
 
       async searchRecommendedNames(){
+        // Rastrear evento de busca na interface B
+        if (this.$analytics && this.name) {
+          this.$analytics.trackSearch(this.name, this.recommendedNames ? this.recommendedNames.length : 0);
+        }
+        
         this.getNewNames();
       },
 

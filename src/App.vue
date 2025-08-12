@@ -1,13 +1,19 @@
 <template>
   <div id="app">
     <router-view></router-view>
+    <!-- Dashboard de Analytics (só aparece em desenvolvimento) -->
+    <AnalyticsDashboard />
   </div>
 </template>
 
 <script>
+import AnalyticsDashboard from '@/components/AnalyticsDashboard.vue'
 
 export default {
   name: 'App',
+  components: {
+    AnalyticsDashboard
+  },
 
   beforeCreate(){
     this.$store.dispatch('getUser');

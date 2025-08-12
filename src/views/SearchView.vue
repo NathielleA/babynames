@@ -72,6 +72,12 @@ export default {
     async searchRecommendedNames() {
       // pesquisa normal por nome
       this.$store.commit('setIsPhraseSearch', false);
+      
+      // Rastrear evento de busca
+      if (this.$analytics && this.name) {
+        this.$analytics.trackSearch(this.name, this.recommendedNames ? this.recommendedNames.length : 0);
+      }
+      
       this.getNewNames();
     },
 
@@ -85,6 +91,11 @@ export default {
     },
 
     async handleNameClick() {
+      // Rastrear conversão - clique em nome
+      if (this.$analytics) {
+        this.$analytics.trackConversion('name_click', this.name);
+      }
+      
       await this.$store.dispatch('updateUserAssignature');
       await this.$store.dispatch('updateUserPhrases');
       this.refreshPopup();

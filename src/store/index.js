@@ -125,9 +125,11 @@ export default createStore({
     },
     setIsPhraseSearch(state, value) {
       state.isPhraseSearch = value;
-      // Quando não for busca por frase, limpa a frase clicada
+      // Quando não for busca por frase, limpa a frase clicada e restaura a frase do pop-up
       if (!value) {
         state.clickedPhrase = null;
+        // Garante que a frase do pop-up seja mostrada novamente
+        // (opcional: pode disparar getPhrases aqui se necessário)
       }
     }
 

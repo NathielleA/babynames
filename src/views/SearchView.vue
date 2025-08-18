@@ -42,10 +42,11 @@ export default {
     },
     // Use a frase clicada se existir, senão a atual
     phrase() {
-      // Se for busca por frase, use sempre a frase clicada
-      if (this.isPhraseSearch && this.getClickedPhrase) {
-        return this.getClickedPhrase;
+      // Se for busca por frase, use sempre a frase clicada (se existir)
+      if (this.isPhraseSearch) {
+        return this.getClickedPhrase || this.getActualPhrase;
       }
+      // Fora do modo frase, mostra a frase do pop-up normalmente
       return this.getActualPhrase;
     },
     isPhraseSearch() {

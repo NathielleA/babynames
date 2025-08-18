@@ -13,13 +13,7 @@
         <button @click="close" class="delete" aria-label="delete"></button>
       </div>
       <div class="message-body">
-        <p><strong>Token do Usuário:</strong> {{ token }}</p>
-        <p><strong>ID do Usuário:</strong> {{ objectId }}</p>
-        <p><strong>Latitude:</strong> {{ latitude }}</p>
-        <p><strong>Longitude:</strong> {{ longitude }}</p>
-        <p><strong>Assinatura:</strong> {{ assignature }}</p>
-
-        <p><strong>Frase: </strong> 
+        <p><strong>
           <template v-if="phrase && phrase.Frase">
             <a @click="goToPhraseRecommendations" style="cursor: pointer; text-decoration: underline;">
               {{ phrase.Frase }}
@@ -28,6 +22,7 @@
           <template v-else>
             Nenhuma frase associada ainda.
           </template>
+          </strong> 
         </p>
       </div>
 

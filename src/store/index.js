@@ -25,6 +25,7 @@ export default createStore({
     relationalName : null,
     clickedName : 0,
     actualPhrase : null,
+    clickedPhrase : null,
     otherPhrases : null,
     isPhraseSearch: false, // Novo estado para indicar se é uma busca por frase
   },
@@ -51,6 +52,7 @@ export default createStore({
     getRelationaName : state => state.relationalName,
     getRelationalNameID : state => state.relationalNameID,
     getActualPhrase : state => state.actualPhrase,
+    getClickedPhrase : state => state.clickedPhrase,
     getOtherPhrases : state =>state.otherPhrases,
     getIsPhraseSearch: state => state.isPhraseSearch
   },
@@ -114,6 +116,9 @@ export default createStore({
     },
     setPhrase(state, phrase){
       state.actualPhrase = phrase;
+    },
+    setClickedPhrase(state, clickedPhrase) {
+      state.clickedPhrase = clickedPhrase;
     },
     setOtherPhrase(state, others){
       state.otherPhrases = others;

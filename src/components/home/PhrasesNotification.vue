@@ -51,7 +51,6 @@ export default {
       offsetY: 0,
       isVisible: true,
       loading: false,
-      clickedPhrase: null
     };
   },
   computed: {
@@ -108,7 +107,8 @@ export default {
         const namesDetails = responses.map(r => r.data);
 
         this.$store.commit('setRecommendedNames', namesDetails);
-        this.$store.commit('setPhrase', this.clickedPhrase);
+        this.$store.commit('setPhrase', this.phrase);
+        this.$store.commit('setClickedPhrase', this.clickedPhrase);
         this.$store.commit('setIsPhraseSearch', true);
       } catch (err) {
         console.error("Erro ao buscar detalhes dos nomes:", err);

@@ -261,27 +261,30 @@ export default createStore({
     async getPhrases({commit}){
       let userId = this.state.userToken;
       let phrases = this.state.actualPhrase;
-      console.log("Frases do user: ", phrases);
-      if (!phrases){
-        try{
-          let response = await users.getUserId(userId);
-          let numeroAleatorio = Math.floor(Math.random() * response.data.phrases.length);
-          let frase = response.data.phrases[numeroAleatorio];
+      // Só atualiza a frase se NÃO estiver em modo de busca por frase
+      if (!this.state.isPhraseSearch) {
+        console.log("Frases do user: ", phrases);
+        if (!phrases){
+          try{
+            let response = await users.getUserId(userId);
+            let numeroAleatorio = Math.floor(Math.random() * response.data.phrases.length);
+            let frase = response.data.phrases[numeroAleatorio];
+            console.log("Frase: ", frase)
+            
+            commit('setPhrase', frase);
+            commit('setOtherPhrase',response.data.phrases)
+          }
+          catch(error){
+            console.log(error)
+          }}
+        else{
+          let numeroAleatorio = Math.floor(Math.random() * this.state.otherPhrases.length);
+          // console.log(numeroAleatorio);
+          let frase = this.state.otherPhrases[numeroAleatorio];
           console.log("Frase: ", frase)
           
           commit('setPhrase', frase);
-          commit('setOtherPhrase',response.data.phrases)
         }
-        catch(error){
-          console.log(error)
-        }}
-      else{
-        let numeroAleatorio = Math.floor(Math.random() * this.state.otherPhrases.length);
-        // console.log(numeroAleatorio);
-        let frase = this.state.otherPhrases[numeroAleatorio];
-        console.log("Frase: ", frase)
-        
-        commit('setPhrase', frase);
       }
       
     },

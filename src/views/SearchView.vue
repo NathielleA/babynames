@@ -42,7 +42,11 @@ export default {
     },
     // Use a frase clicada se existir, senão a atual
     phrase() {
-      return this.getClickedPhrase || this.getActualPhrase;
+      // Se for busca por frase, use sempre a frase clicada
+      if (this.isPhraseSearch && this.getClickedPhrase) {
+        return this.getClickedPhrase;
+      }
+      return this.getActualPhrase;
     },
     isPhraseSearch() {
       return this.getIsPhraseSearch;

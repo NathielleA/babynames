@@ -93,8 +93,6 @@ export default {
       this.loading = true;
 
       try {
-        // Salva a frase clicada no localStorage
-        localStorage.setItem('clickedPhrase', JSON.stringify(this.phrase));
         const responses = await Promise.all(
           this.phrase.associedNames
             .filter(n => n != null)

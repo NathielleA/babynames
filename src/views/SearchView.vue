@@ -1,4 +1,4 @@
-  watch: {
+  <!-- watch: {
     // Sempre que a frase clicada mudar, busca os nomes recomendados para ela
     phrase: {
       handler(newPhrase) {
@@ -24,7 +24,7 @@
         console.error('Erro ao buscar nomes da frase clicada:', error);
         this.$store.commit('setRecommendedNames', []);
       }
-    },
+    }, -->
 <script>
 import MyTopSearchBar from '@/components/searchs/MyTopSearchBar.vue';
 import NavBar from '@/components/home/NavBar.vue';
@@ -67,18 +67,19 @@ export default {
       return this.getID;
     },
     phrase() {
-      // Se for pesquisa por frase, prioriza a frase salva no localStorage
-      if (this.isPhraseSearch) {
-        const localPhrase = localStorage.getItem('clickedPhrase');
-        if (localPhrase) {
-          try {
-            return JSON.parse(localPhrase);
-          } catch (e) {
-            return this.getActualPhrase;
-          }
-        }
-      }
-      return this.getActualPhrase;
+      const localPhrase = localStorage.getItem('clickedPhrase');
+      // // Se for pesquisa por frase, prioriza a frase salva no localStorage
+      // if (this.isPhraseSearch) {
+      //   const localPhrase = localStorage.getItem('clickedPhrase');
+      //   if (localPhrase) {
+      //     try {
+      //       return JSON.parse(localPhrase);
+      //     } catch (e) {
+      //       return this.getActualPhrase;
+      //     }
+      //   }
+      // }
+      return localPhrase;
     },
     isPhraseSearch() {
       return this.getIsPhraseSearch;

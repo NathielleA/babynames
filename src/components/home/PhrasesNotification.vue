@@ -93,6 +93,9 @@ export default {
       this.loading = true;
 
       try {
+        // Salva a frase clicada temporariamente no Vuex
+        this.$store.commit('setClickedPhrase', this.phrase);
+
         const responses = await Promise.all(
           this.phrase.associedNames
             .filter(n => n != null)

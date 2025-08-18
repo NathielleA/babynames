@@ -22,6 +22,7 @@ export default {
       'getLon',
       'getID',
       'getActualPhrase',
+      'getClickedPhrase',
       'getIsPhraseSearch'
     ]),
     name() {
@@ -39,8 +40,9 @@ export default {
     ID() {
       return this.getID;
     },
+    // Use a frase clicada se existir, senão a atual
     phrase() {
-      return this.getActualPhrase;
+      return this.getClickedPhrase || this.getActualPhrase;
     },
     isPhraseSearch() {
       return this.getIsPhraseSearch;

@@ -1,3 +1,57 @@
+      clickedPhrase: null, // local para frase clicada
+    };
+  },
+  computed: {
+    ...mapGetters([
+      'getName',
+      'getRecommededNames',
+      'getLat',
+      'getLon',
+      'getID',
+      'getActualPhrase',
+      'getIsPhraseSearch'
+    ]),
+    name() {
+      return this.getName;
+    },
+    recommendedNames() {
+      return this.getRecommededNames;
+    },
+    lat() {
+      return this.getLat;
+    },
+    lon() {
+      return this.getLon;
+    },
+    ID() {
+      return this.getID;
+    },
+    phrase() {
+      // Se for busca por frase, usa a frase clicada do localStorage
+      if (this.isPhraseSearch) {
+        return this.clickedPhrase || this.getActualPhrase;
+      }
+      return this.getActualPhrase;
+    },
+    isPhraseSearch() {
+      return this.getIsPhraseSearch;
+    }
+  },
+    // Ao carregar, busca a frase clicada do localStorage se existir
+    const storedClickedPhrase = localStorage.getItem('clickedPhrase');
+    if (storedClickedPhrase) {
+      this.clickedPhrase = JSON.parse(storedClickedPhrase);
+    }
+    this.getNewNames(); // busca inicial
+  },
+      // Limpa a frase clicada do localStorage
+      localStorage.removeItem('clickedPhrase');
+      this.clickedPhrase = null;
+      // Rastrear evento de busca
+      if (this.$analytics && this.name) {
+        this.$analytics.trackSearch(this.name, this.recommendedNames ? this.recommendedNames.length : 0);
+      }
+      this.getNewNames();
 <script>
 import MyTopSearchBar from '@/components/searchs/MyTopSearchBar.vue';
 import NavBar from '@/components/home/NavBar.vue';
@@ -22,7 +76,6 @@ export default {
       'getLon',
       'getID',
       'getActualPhrase',
-      'getClickedPhrase',
       'getIsPhraseSearch'
     ]),
     name() {
@@ -40,13 +93,7 @@ export default {
     ID() {
       return this.getID;
     },
-    // Use a frase clicada se existir, senão a atual
     phrase() {
-      // Se for busca por frase, use sempre a frase clicada (se existir)
-      if (this.isPhraseSearch) {
-        return this.getClickedPhrase || this.getActualPhrase;
-      }
-      // Fora do modo frase, mostra a frase do pop-up normalmente
       return this.getActualPhrase;
     },
     isPhraseSearch() {

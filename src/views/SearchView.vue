@@ -129,7 +129,9 @@ export default {
       <MyTopSearchBar @search="searchRecommendedNames" style="margin-bottom: 10px;"/>
       <h1>
         <template v-if="isPhraseSearch">
-          Nomes recomendados para a frase: "<b>{{ phrase?.Frase }}</b>"
+          <span :key="phrase?.Frase">
+            Nomes recomendados para a frase: "<b>{{ phrase?.Frase }}</b>"
+          </span>
         </template>
         <template v-else>
           Nomes recomendados para <b>{{ name }}</b>:

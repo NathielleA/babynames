@@ -22,7 +22,6 @@ export default {
       'getLon',
       'getID',
       'getActualPhrase',
-      'getClickedPhrase',
       'getIsPhraseSearch'
     ]),
     name() {
@@ -41,7 +40,7 @@ export default {
       return this.getID;
     },
     phrase() {
-      return this.getClickedPhrase;
+      return this.getActualPhrase;
     },
     isPhraseSearch() {
       return this.getIsPhraseSearch;

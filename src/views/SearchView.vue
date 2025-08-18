@@ -40,6 +40,17 @@ export default {
       return this.getID;
     },
     phrase() {
+      // Se for pesquisa por frase, prioriza a frase salva no localStorage
+      if (this.isPhraseSearch) {
+        const localPhrase = localStorage.getItem('clickedPhrase');
+        if (localPhrase) {
+          try {
+            return JSON.parse(localPhrase);
+          } catch (e) {
+            return this.getActualPhrase;
+          }
+        }
+      }
       return this.getActualPhrase;
     },
     isPhraseSearch() {

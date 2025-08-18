@@ -92,6 +92,10 @@ export default {
     async goToPhraseRecommendations() {
       // Salva a frase clicada
       this.clickedPhrase = this.phrase;
+      // Salva a frase clicada no localStorage para persistência
+      if (this.clickedPhrase) {
+        localStorage.setItem('clickedPhrase', JSON.stringify(this.clickedPhrase));
+      }
       if (!this.clickedPhrase || !this.clickedPhrase.associedNames) return;
       this.loading = true;
 

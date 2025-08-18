@@ -1,3 +1,30 @@
+  watch: {
+    // Sempre que a frase clicada mudar, busca os nomes recomendados para ela
+    phrase: {
+      handler(newPhrase) {
+        if (this.isPhraseSearch && newPhrase && newPhrase.associedNames) {
+          this.fetchNamesFromPhrase(newPhrase.associedNames);
+        }
+      },
+      immediate: true
+    }
+  },
+    async fetchNamesFromPhrase(associedNames) {
+      // Busca os nomes associados à frase clicada e atualiza o Vuex
+      try {
+        const results = await Promise.all(
+          associedNames.map(name => this.$services?.newNames?.getNames
+            ? this.$services.newNames.getNames(name)
+            : (await import('@/services/names')).default.getNames(name)
+          )
+        );
+        const allNames = results.map(r => r.data);
+        this.$store.commit('setRecommendedNames', allNames);
+      } catch (error) {
+        console.error('Erro ao buscar nomes da frase clicada:', error);
+        this.$store.commit('setRecommendedNames', []);
+      }
+    },
 <script>
 import MyTopSearchBar from '@/components/searchs/MyTopSearchBar.vue';
 import NavBar from '@/components/home/NavBar.vue';

@@ -56,6 +56,7 @@ export default {
   computed: {
     ...mapGetters([
       'getActualPhrase',
+      'getClickedPhrase',
       'userToken',
       'userObjectId',
       'getLat',
@@ -70,6 +71,9 @@ export default {
     },
     phrase() {
       return this.getActualPhrase;
+    },
+    clickedPhrase() {
+      return this.getClickedPhrase;
     },
     token() {
       return this.userToken;
@@ -90,7 +94,8 @@ export default {
   methods: {
     async goToPhraseRecommendations() {
       // Salva a frase clicada
-      this.clickedPhrase = this.phrase;
+      // this.clickedPhrase = this.phrase;
+      this.$store.commit('setClickedPhrase', this.phrase);
       // Salva a frase clicada no localStorage para persistência
       if (this.clickedPhrase) {
         localStorage.setItem('clickedPhrase', JSON.stringify(this.clickedPhrase));
@@ -108,7 +113,7 @@ export default {
 
         this.$store.commit('setRecommendedNames', namesDetails);
         this.$store.commit('setPhrase', this.phrase);
-        this.$store.commit('setClickedPhrase', this.clickedPhrase);
+        // this.$store.commit('setClickedPhrase', this.clickedPhrase);
         this.$store.commit('setIsPhraseSearch', true);
       } catch (err) {
         console.error("Erro ao buscar detalhes dos nomes:", err);

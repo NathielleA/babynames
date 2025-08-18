@@ -50,7 +50,8 @@ export default {
       offsetX: 0,
       offsetY: 0,
       isVisible: true,
-      loading: false
+      loading: false,
+      clickedPhrase: null
     };
   },
   computed: {
@@ -89,19 +90,21 @@ export default {
   },
   methods: {
     async goToPhraseRecommendations() {
-      if (!this.phrase || !this.phrase.associedNames) return;
+      // Salva a frase clicada
+      this.clickedPhrase = this.phrase;
+      if (!this.clickedPhrase || !this.clickedPhrase.associedNames) return;
       this.loading = true;
 
       try {
         const responses = await Promise.all(
-          this.phrase.associedNames
+          this.clickedPhrase.associedNames
             .filter(n => n != null)
             .map(name => newNames.getNames(name))
         );
         const namesDetails = responses.map(r => r.data);
 
         this.$store.commit('setRecommendedNames', namesDetails);
-        this.$store.commit('setPhrase', this.phrase);
+        this.$store.commit('setPhrase', this.clickedPhrase);
         this.$store.commit('setIsPhraseSearch', true);
       } catch (err) {
         console.error("Erro ao buscar detalhes dos nomes:", err);

@@ -31,7 +31,7 @@ export default createStore({
   },
   // MODIFIED: Configure vuex-persistedstate to save userToken, userObjectId, name and isPhraseSearch, actualPhrase, clickedPhrase
   plugins : [createPersistedState({
-    paths: ['userToken', 'userObjectId', 'name', 'isPhraseSearch', 'actualPhrase', 'clickedPhrase'] //
+    paths: ['userToken', 'userObjectId', 'name', 'isPhraseSearch', 'actualPhrase', 'clickedPhrase', 'recommendedNames'] //
   })],
   
   getters: {
@@ -157,6 +157,18 @@ export default createStore({
     async updateNames({commit}){
       console.log('getasyncNames called');
       try {
+        // Evita chamada "normal" quando estamos mostrando resultados por frase
+        if (state.isPhraseSearch) {
+          console.warn('Pulando updateNames: isPhraseSearch=true');
+          return;
+        }
+
+        // Evita chamada sem nome válido
+        if (!state.name || typeof state.name !== 'string' || !state.name.trim()) {
+          console.warn('Pulando updateNames: name vazio/indefinido');
+          return;
+        }
+
           //let n = this.$route.params.name;
           //let response = await names.getNames(this.state.name);
           commit('setRelationalNameID', this.state.id);
@@ -255,23 +267,31 @@ export default createStore({
     },
 
     async getPhrases({commit}){
-      let userId = this.state.userToken;
-      let phrases = this.state.clickedPhrase || this.state.actualPhrase;
-      if (!phrases) {
-        try {
-          let response = await users.getUserId(userId);
-          let numeroAleatorio = Math.floor(Math.random() * response.data.phrases.length);
-          let frase = response.data.phrases[numeroAleatorio];
-          
-          commit('setPhrase', frase);
-          commit('setOtherPhrase', response.data.phrases);
-        } catch(error) {
-          console.log(error);
-        }
-      } else {
-        // Se já tem frase clicada, mantém ela
-        commit('setPhrase', phrases);
+      const userId = state.userToken;
+      const chosen = state.clickedPhrase || state.actualPhrase;
+      console.log("Frase escolhida/corrente: ", chosen);
+
+      // Se já existe frase clicada, mantém (não sorteia outra)
+      if (chosen) {
+        commit('setPhrase', chosen);
+        return;
       }
+
+      // Caso contrário, sorteia uma
+      try {
+        const response = await users.getUserId(userId);
+        const list = response.data.phrases || [];
+        commit('setOtherPhrase', list);
+        if (list.length) {
+          const i = Math.floor(Math.random() * list.length);
+          commit('setPhrase', list[i]);
+        } else {
+          commit('setPhrase', null);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+
 
       
     },

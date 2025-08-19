@@ -72,6 +72,8 @@ export default {
     async searchRecommendedNames() {
       // pesquisa normal por nome
       this.$store.commit('setIsPhraseSearch', false);
+      this.$store.commit('setClickedPhrase', null); // libera a frase clicada
+      // opcional: this.$store.commit('setPhrase', null);
       
       // Rastrear evento de busca
       if (this.$analytics && this.name) {
@@ -104,7 +106,10 @@ export default {
 
   created() {
     this.$store.commit('setPage', 1);
-    this.getNewNames(); // busca inicial
+    // Só busca inicial se NÃO for pesquisa por frase e se não existirem resultados persistidos
+    if (!this.isPhraseSearch && !(this.recommendedNames && this.recommendedNames.length)) {
+      this.getNewNames();
+    }
   },
 
   components: { NavBar, MyTopSearchBar, MySearchNameResult, PhrasesNotification }

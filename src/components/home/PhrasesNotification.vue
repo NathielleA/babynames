@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import newNames from '@/services/names';
 
 export default {
@@ -60,7 +60,8 @@ export default {
       'userObjectId',
       'getLat',
       'getLon',
-      'getUserAssignature'
+      'getUserAssignature',
+      'getClickedPhrase'
     ]),
     draggingStyle() {
       if (this.top !== null && this.left !== null) {
@@ -88,23 +89,15 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['fetchNamesFromPhrase']),
     async goToPhraseRecommendations() {
       if (!this.phrase || !this.phrase.associedNames) return;
-      // Salva a frase clicada na store
       this.$store.commit('setClickedPhrase', this.phrase);
+      this.$store.commit('setPhrase', this.phrase);
+      this.$store.commit('setIsPhraseSearch', true);
       this.loading = true;
-
       try {
-        const responses = await Promise.all(
-          this.phrase.associedNames
-            .filter(n => n != null)
-            .map(name => newNames.getNames(name))
-        );
-        const namesDetails = responses.map(r => r.data);
-
-        this.$store.commit('setRecommendedNames', namesDetails);
-        this.$store.commit('setPhrase', this.phrase);
-        this.$store.commit('setIsPhraseSearch', true);
+        await this.fetchNamesFromPhrase(this.phrase.associedNames);
       } catch (err) {
         console.error("Erro ao buscar detalhes dos nomes:", err);
       } finally {
@@ -154,11 +147,19 @@ export default {
       }
     }
   },
-  created() {
-    // Se houver uma frase clicada na store, restaura ela como frase principal
-    if (this.$store.getters.getClickedPhrase) {
-      this.$store.commit('setPhrase', this.$store.getters.getClickedPhrase);
+  async created() {
+    // Se houver uma frase clicada na store, restaura ela como frase principal e busca os nomes
+    if (this.getClickedPhrase && this.getClickedPhrase.associedNames) {
+      this.$store.commit('setPhrase', this.getClickedPhrase);
       this.$store.commit('setIsPhraseSearch', true);
+      this.loading = true;
+      try {
+        await this.fetchNamesFromPhrase(this.getClickedPhrase.associedNames);
+      } catch (err) {
+        console.error("Erro ao buscar detalhes dos nomes:", err);
+      } finally {
+        this.loading = false;
+      }
     }
     this.refreshData();
   },

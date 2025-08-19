@@ -69,8 +69,13 @@ export default {
       }
       return { bottom: '20px', right: '20px', position: 'fixed' };
     },
+    // Frase exibida no pop-up (frase do dia)
     phrase() {
       return this.getActualPhrase;
+    },
+    // Frase clicada (usada para busca de nomes)
+    clickedPhrase() {
+      return this.getClickedPhrase;
     },
     token() {
       return this.userToken;
@@ -92,12 +97,13 @@ export default {
     ...mapActions(['fetchNamesFromPhrase']),
     async goToPhraseRecommendations() {
       if (!this.phrase || !this.phrase.associedNames) return;
+      // Salva a frase clicada separada
       this.$store.commit('setClickedPhrase', this.phrase);
-      this.$store.commit('setPhrase', this.phrase);
       this.$store.commit('setIsPhraseSearch', true);
       this.loading = true;
       try {
         await this.fetchNamesFromPhrase(this.phrase.associedNames);
+        // Não altera actualPhrase, só clickedPhrase
       } catch (err) {
         console.error("Erro ao buscar detalhes dos nomes:", err);
       } finally {
@@ -148,13 +154,12 @@ export default {
     }
   },
   async created() {
-    // Se houver uma frase clicada na store, restaura ela como frase principal e busca os nomes
-    if (this.getClickedPhrase && this.getClickedPhrase.associedNames) {
-      this.$store.commit('setPhrase', this.getClickedPhrase);
+    // Se houver uma frase clicada, busca nomes recomendados para ela, mas não altera a frase do pop-up
+    if (this.clickedPhrase && this.clickedPhrase.associedNames) {
       this.$store.commit('setIsPhraseSearch', true);
       this.loading = true;
       try {
-        await this.fetchNamesFromPhrase(this.getClickedPhrase.associedNames);
+        await this.fetchNamesFromPhrase(this.clickedPhrase.associedNames);
       } catch (err) {
         console.error("Erro ao buscar detalhes dos nomes:", err);
       } finally {

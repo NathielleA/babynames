@@ -90,6 +90,8 @@ export default {
   methods: {
     async goToPhraseRecommendations() {
       if (!this.phrase || !this.phrase.associedNames) return;
+      // Salva a frase clicada na store
+      this.$store.commit('setClickedPhrase', this.phrase);
       this.loading = true;
 
       try {
@@ -153,6 +155,11 @@ export default {
     }
   },
   created() {
+    // Se houver uma frase clicada na store, restaura ela como frase principal
+    if (this.$store.getters.getClickedPhrase) {
+      this.$store.commit('setPhrase', this.$store.getters.getClickedPhrase);
+      this.$store.commit('setIsPhraseSearch', true);
+    }
     this.refreshData();
   },
   mounted() {

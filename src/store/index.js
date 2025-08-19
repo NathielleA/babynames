@@ -53,8 +53,9 @@ export default createStore({
     getRelationalNameID : state => state.relationalNameID,
     getActualPhrase : state => state.actualPhrase,
     getClickedPhrase : state => state.clickedPhrase,
-    getOtherPhrases : state =>state.otherPhrases,
-    getIsPhraseSearch: state => state.isPhraseSearch
+  getOtherPhrases : state =>state.otherPhrases,
+  getIsPhraseSearch: state => state.isPhraseSearch,
+  getClickedPhrase: state => state.clickedPhrase
   },
   mutations: {
     setName(state, name){

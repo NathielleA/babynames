@@ -102,6 +102,7 @@ export default {
 
         this.$store.commit('setRecommendedNames', namesDetails);
         this.$store.commit('setPhrase', this.phrase);
+        this.$store.commit('setClickedPhrase', this.phrase);
         this.$store.commit('setIsPhraseSearch', true);
       } catch (err) {
         console.error("Erro ao buscar detalhes dos nomes:", err);

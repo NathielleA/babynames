@@ -29,9 +29,9 @@ export default createStore({
     otherPhrases : null,
     isPhraseSearch: false, // Novo estado para indicar se é uma busca por frase
   },
-  // MODIFIED: Configure vuex-persistedstate to save userToken, userObjectId, name and isPhraseSearch
+  // MODIFIED: Configure vuex-persistedstate to save userToken, userObjectId, name and isPhraseSearch, actualPhrase, clickedPhrase
   plugins : [createPersistedState({
-    paths: ['userToken', 'userObjectId', 'name', 'isPhraseSearch'] //
+    paths: ['userToken', 'userObjectId', 'name', 'isPhraseSearch', 'actualPhrase', 'clickedPhrase'] //
   })],
   
   getters: {
@@ -256,29 +256,23 @@ export default createStore({
 
     async getPhrases({commit}){
       let userId = this.state.userToken;
-      let phrases = this.state.actualPhrase;
-      console.log("Frases do user: ", phrases);
-      if (!phrases){
-        try{
+      let phrases = this.state.clickedPhrase || this.state.actualPhrase;
+      if (!phrases) {
+        try {
           let response = await users.getUserId(userId);
           let numeroAleatorio = Math.floor(Math.random() * response.data.phrases.length);
           let frase = response.data.phrases[numeroAleatorio];
-          console.log("Frase: ", frase)
           
           commit('setPhrase', frase);
-          commit('setOtherPhrase',response.data.phrases)
+          commit('setOtherPhrase', response.data.phrases);
+        } catch(error) {
+          console.log(error);
         }
-        catch(error){
-          console.log(error)
-        }}
-      else{
-        let numeroAleatorio = Math.floor(Math.random() * this.state.otherPhrases.length);
-        // console.log(numeroAleatorio);
-        let frase = this.state.otherPhrases[numeroAleatorio];
-        console.log("Frase: ", frase)
-        
-        commit('setPhrase', frase);
+      } else {
+        // Se já tem frase clicada, mantém ela
+        commit('setPhrase', phrases);
       }
+
       
     },
 

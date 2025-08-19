@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 import newNames from '@/services/names';
 
 export default {
@@ -60,8 +60,7 @@ export default {
       'userObjectId',
       'getLat',
       'getLon',
-      'getUserAssignature',
-      'getClickedPhrase'
+      'getUserAssignature'
     ]),
     draggingStyle() {
       if (this.top !== null && this.left !== null) {
@@ -69,13 +68,8 @@ export default {
       }
       return { bottom: '20px', right: '20px', position: 'fixed' };
     },
-    // Frase exibida no pop-up (frase do dia)
     phrase() {
       return this.getActualPhrase;
-    },
-    // Frase clicada (usada para busca de nomes)
-    clickedPhrase() {
-      return this.getClickedPhrase;
     },
     token() {
       return this.userToken;
@@ -94,16 +88,21 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['fetchNamesFromPhrase']),
     async goToPhraseRecommendations() {
       if (!this.phrase || !this.phrase.associedNames) return;
-      // Salva a frase clicada separada
-      this.$store.commit('setClickedPhrase', this.phrase);
-      this.$store.commit('setIsPhraseSearch', true);
       this.loading = true;
+
       try {
-        await this.fetchNamesFromPhrase(this.phrase.associedNames);
-        // Não altera actualPhrase, só clickedPhrase
+        const responses = await Promise.all(
+          this.phrase.associedNames
+            .filter(n => n != null)
+            .map(name => newNames.getNames(name))
+        );
+        const namesDetails = responses.map(r => r.data);
+
+        this.$store.commit('setRecommendedNames', namesDetails);
+        this.$store.commit('setPhrase', this.phrase);
+        this.$store.commit('setIsPhraseSearch', true);
       } catch (err) {
         console.error("Erro ao buscar detalhes dos nomes:", err);
       } finally {
@@ -153,19 +152,7 @@ export default {
       }
     }
   },
-  async created() {
-    // Se houver uma frase clicada, busca nomes recomendados para ela, mas não altera a frase do pop-up
-    if (this.clickedPhrase && this.clickedPhrase.associedNames) {
-      this.$store.commit('setIsPhraseSearch', true);
-      this.loading = true;
-      try {
-        await this.fetchNamesFromPhrase(this.clickedPhrase.associedNames);
-      } catch (err) {
-        console.error("Erro ao buscar detalhes dos nomes:", err);
-      } finally {
-        this.loading = false;
-      }
-    }
+  created() {
     this.refreshData();
   },
   mounted() {

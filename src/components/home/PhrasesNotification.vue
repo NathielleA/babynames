@@ -93,13 +93,17 @@ export default {
       this.loading = true;
 
       try {
-        // trava a frase e marca busca por frase
-        this.$store.commit('setClickedPhrase', this.phrase);
-        this.$store.commit('setPhrase', this.phrase);
-        this.$store.commit('setIsPhraseSearch', true);
+        const responses = await Promise.all(
+          this.phrase.associedNames
+            .filter(n => n != null)
+            .map(name => newNames.getNames(name))
+        );
+        const namesDetails = responses.map(r => r.data);
 
-        // busca nomes associados via action (comita setRecommendedNames)
-        await this.$store.dispatch('fetchNamesFromPhrase', this.phrase.associedNames.filter(n => n != null));
+        this.$store.commit('setRecommendedNames', namesDetails);
+        this.$store.commit('setPhrase', this.phrase);
+        this.$store.commit('setClickedPhrase', this.phrase);
+        this.$store.commit('setIsPhraseSearch', true);
       } catch (err) {
         console.error("Erro ao buscar detalhes dos nomes:", err);
       } finally {

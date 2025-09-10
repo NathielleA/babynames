@@ -270,8 +270,10 @@ export default createStore({
           console.log(error);
         }
       } else {
-        // Se já tem frase clicada, mantém ela
-        commit('setPhrase', phrases);
+        let numeroAleatorio = Math.floor(Math.random() * this.state.otherPhrases.length);
+        let frase = this.state.otherPhrases[numeroAleatorio];
+        console.log("Frase: ", frase)
+        commit('setPhrase', frase);
       }
 
       

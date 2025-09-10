@@ -256,7 +256,8 @@ export default createStore({
 
     async getPhrases({commit}){
       let userId = this.state.userToken;
-      let phrases = this.state.clickedPhrase || this.state.actualPhrase;
+      let phrases = this.state.actualPhrase;
+      console.log("Frases do user: ", phrases);
       if (!phrases) {
         try {
           let response = await users.getUserId(userId);
